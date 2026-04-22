@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>FITLOG — Asistencia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0a0a; }
+    .app {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      font-family: 'DM Sans', sans-serif;
+      color: #f0ede8; padding: 24px;
+      position: relative; overflow: hidden;
+      background: #0a0a0a;
+    }
+    .app::before {
+      content: ''; position: fixed;
+      top: -40%; left: -20%; width: 70vw; height: 70vw;
+      background: radial-gradient(circle, rgba(255,90,0,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .app::after {
+      content: ''; position: fixed;
+      bottom: -30%; right: -20%; width: 60vw; height: 60vw;
+      background: radial-gradient(circle, rgba(255,200,0,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .card { width: 100%; max-width: 380px; position: relative; z-index: 1; }
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(24px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+    @keyframes popIn {
+      from { opacity:0; transform: scale(0.3); }
+      to   { opacity:1; transform: scale(1); }
+    }
+    @keyframes pulse {
+      0%,100% { opacity:0.3; transform:scale(0.8); }
+      50%      { opacity:1;   transform:scale(1.2); }
+    }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%     { transform: translateX(-8px); }
+      40%     { transform: translateX(8px); }
+      60%     { transform: translateX(-6px); }
+      80%     { transform: translateX(6px); }
+    }
+    .fadeUp { animation: fadeUp 0.45s ease both; }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif; font-size: 52px;
+      letter-spacing: 4px; color: #ff5a00; line-height: 1;
+      cursor: pointer; user-select: none;
+      text-shadow: 0 0 40px rgba(255,90,0,0.4); margin-bottom: 4px;
+    }
+    .logo-sub { font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: #555; margin-bottom: 48px; }
+    .section-title { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: #ff5a00; margin-bottom: 16px; }
+    .big-text { font-family: 'Bebas Neue', sans-serif; font-size: 38px; letter-spacing: 2px; line-height: 1.1; margin-bottom: 8px; }
+    .sub-text { font-size: 14px; color: #777; margin-bottom: 36px; line-height: 1.6; }
+    .input {
+      width: 100%; background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+      padding: 16px 20px; font-size: 17px; font-family: 'DM Sans', sans-serif;
+      color: #f0ede8; outline: none;
+      transition: border-color 0.2s, background 0.2s; margin-bottom: 12px;
+    }
+    .input:focus { border-color: #ff5a00; background: rgba(255,90,0,0.06); }
+    .input::placeholder { color: #444; }
+    .input.error { border-color: #ff3b3b; animation: shake 0.4s ease; }
+    .error-msg { font-size: 13px; color: #ff3b3b; margin-bottom: 16px; min-height: 18px; text-align: center; }
+    .btn {
+      width: 100%; padding: 18px; border: none; border-radius: 12px;
+      font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px;
+      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+    .btn-primary { background: #ff5a00; color: #fff; box-shadow: 0 8px 32px rgba(255,90,0,0.35); }
+    .btn-primary:disabled,
+    .btn-primary.inactivo { background: #ff5a00 !important; color: rgba(255,255,255,0.4) !important; box-shadow: none; opacity: 1; cursor: not-allowed; pointer-events: none; }
+    .btn-ghost {
+      background: transparent; border: 1px solid rgba(255,255,255,0.12);
+      color: #555; font-size: 13px; letter-spacing: 2px; padding: 12px;
+      margin-top: 12px; font-family: 'DM Sans', sans-serif;
+    }
+    .btn-ghost:hover { border-color: #444; color: #888; }
+    .btn-stats {
+      background: rgba(255,90,0,0.1);
+      border: 1px solid rgba(255,90,0,0.3);
+      color: #ff5a00; font-size: 13px; letter-spacing: 2px; padding: 12px;
+      margin-top: 12px; font-family: 'DM Sans', sans-serif;
+      border-radius: 12px; width: 100%; cursor: pointer;
+      font-family: 'Bebas Neue', sans-serif; font-size: 16px;
+    }
+    .checkin-card { text-align: center; }
+    .avatar {
+      width: 88px; height: 88px; border-radius: 50%;
+      background: linear-gradient(135deg, #ff5a00, #ff9500);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: #fff;
+      margin: 0 auto 24px; box-shadow: 0 8px 32px rgba(255,90,0,0.4);
+    }
+    .greeting { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: #555; margin-bottom: 8px; }
+    .name-display { font-family: 'Bebas Neue', sans-serif; font-size: 44px; letter-spacing: 2px; margin-bottom: 6px; }
+    .date-display { font-size: 13px; color: #555; margin-bottom: 48px; text-transform: capitalize; }
+    .checkin-btn {
+      width: 100%; padding: 24px; border: none; border-radius: 16px;
+      background: #ff5a00; color: #fff;
+      font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 4px;
+      cursor: pointer; box-shadow: 0 12px 40px rgba(255,90,0,0.4);
+      transition: transform 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .checkin-btn:active { transform: scale(0.97); }
+    .checkin-btn:disabled { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
+    .success-icon {
+      width: 100px; height: 100px; border-radius: 50%;
+      background: linear-gradient(135deg, #00c851, #00a844);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 48px; margin: 0 auto 28px;
+      animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both;
+      box-shadow: 0 12px 40px rgba(0,200,80,0.4);
+    }
+    .already-icon {
+      width: 100px; height: 100px; border-radius: 50%;
+      background: linear-gradient(135deg, #ff9500, #ff5a00);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 48px; margin: 0 auto 28px;
+      animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both;
+      box-shadow: 0 12px 40px rgba(255,150,0,0.4);
+    }
+    .success-name { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 2px; margin-bottom: 8px; }
+    .success-time { font-size: 13px; color: #555; }
+
+    /* Historial personal */
+    .historial-overlay {
+      position: fixed; inset: 0; background: #0a0a0a; z-index: 100;
+      overflow-y: auto; padding: 32px 20px;
+      animation: fadeUp 0.3s ease both;
+    }
+    .historial-inner { max-width: 380px; margin: 0 auto; }
+    .historial-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .historial-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; color: #ff5a00; }
+    .close-btn { background: rgba(255,255,255,0.06); border: none; color: #888; font-size: 20px; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; }
+
+    .mes-stats {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin-bottom: 32px;
+    }
+    .mes-box {
+      background: rgba(255,90,0,0.07);
+      border: 1px solid rgba(255,90,0,0.15);
+      border-radius: 14px; padding: 20px; text-align: center;
+    }
+    .mes-num { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: #ff5a00; line-height: 1; }
+    .mes-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #444; margin-top: 4px; }
+
+    .historial-section-title {
+      font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+      color: #ff5a00; margin-bottom: 12px; padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,90,0,0.2);
+    }
+
+    .dia-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px; margin-bottom: 6px;
+    }
+    .dia-fecha { font-size: 14px; font-weight: 500; text-transform: capitalize; color: #f0ede8; }
+    .dia-hora { font-size: 12px; color: #aaa; font-variant-numeric: tabular-nums; }
+
+    .empty-state { text-align: center; color: #333; font-size: 14px; padding: 40px 0; }
+    .admin-loading { text-align: center; padding: 40px 0; color: #444; font-size: 14px; }
+
+    /* Admin */
+    .admin-overlay {
+      position: fixed; inset: 0; background: #0a0a0a; z-index: 100;
+      overflow-y: auto; padding: 32px 20px;
+      animation: fadeUp 0.3s ease both;
+    }
+    .admin-inner { max-width: 480px; margin: 0 auto; }
+    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .admin-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 3px; color: #ff5a00; }
+    .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+    .stat-box { background: rgba(255,90,0,0.07); border: 1px solid rgba(255,90,0,0.15); border-radius: 14px; padding: 16px 10px; text-align: center; }
+    .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: #ff5a00; line-height: 1; }
+    .stat-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #444; margin-top: 4px; }
+    .refresh-btn { background: rgba(255,90,0,0.1); border: 1px solid rgba(255,90,0,0.2); color: #ff5a00; font-size: 12px; letter-spacing: 2px; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-bottom: 24px; }
+    .day-block { margin-bottom: 28px; }
+    .day-label { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #ff5a00; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,90,0,0.2); }
+    .day-count { font-size: 11px; color: #444; margin-left: 8px; }
+    .attendee-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 6px; }
+    .attendee-info { display: flex; flex-direction: column; gap: 2px; }
+    .attendee-name { font-size: 15px; font-weight: 500; }
+    .attendee-rut  { font-size: 11px; color: #444; }
+    .attendee-time { font-size: 12px; color: #444; font-variant-numeric: tabular-nums; }
+
+    .loading-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ff5a00; animation: pulse 1s ease infinite; }
+    .loading-white { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #fff; animation: pulse 1s ease infinite; }
+    .rut-hint { font-size: 12px; color: #444; text-align: center; margin-bottom: 16px; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- HISTORIAL PERSONAL -->
+<div class="historial-overlay hidden" id="historialOverlay">
+  <div class="historial-inner">
+    <div class="historial-header">
+      <span class="historial-title">📅 MI ASISTENCIA</span>
+      <button class="close-btn" onclick="closeHistorial()">✕</button>
+    </div>
+    <div class="mes-stats">
+      <div class="mes-box">
+        <div class="mes-num" id="histMes">—</div>
+        <div class="mes-label">Este mes</div>
+      </div>
+      <div class="mes-box">
+        <div class="mes-num" id="histTotal">—</div>
+        <div class="mes-label">Total</div>
+      </div>
+    </div>
+    <div class="historial-section-title">Clases este mes</div>
+    <div id="historialContent"><div class="admin-loading"><span class="loading-dot"></span></div></div>
+  </div>
+</div>
+
+<!-- ADMIN OVERLAY -->
+<div class="admin-overlay hidden" id="adminOverlay">
+  <div class="admin-inner">
+    <div class="admin-header">
+      <span class="admin-title">📋 ASISTENCIA</span>
+      <button class="close-btn" onclick="closeAdmin()">✕</button>
+    </div>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num" id="statToday">—</div><div class="stat-label">Hoy</div></div>
+      <div class="stat-box"><div class="stat-num" id="statWeek">—</div><div class="stat-label">Semana</div></div>
+      <div class="stat-box"><div class="stat-num" id="statTotal">—</div><div class="stat-label">Total</div></div>
+    </div>
+    <button class="refresh-btn" onclick="loadAdminData()">↻ ACTUALIZAR</button>
+    <div id="adminContent"><div class="admin-loading"><span class="loading-dot"></span></div></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="app">
+  <div class="card">
+    <div id="logoArea" onclick="handleLogoTap()">
+      <div class="logo">FITLOG</div>
+      <div class="logo-sub">Control de Asistencia</div>
+    </div>
+
+    <div id="viewLoading" style="text-align:center;padding:40px 0">
+      <span class="loading-dot"></span>
+    </div>
+
+    <div id="viewRut" class="hidden fadeUp">
+      <div class="section-title">Bienvenido</div>
+      <div class="big-text">INGRESA<br>TU RUT</div>
+      <div class="sub-text">Solo la primera vez. Tu teléfono te recordará después.</div>
+      <input class="input" type="text" id="rutInput"
+        placeholder="Ej: 12345678-9"
+        oninput="formatRut(this); checkRutInput()"
+        onkeydown="if(event.key==='Enter') validateRut()"
+        autocomplete="off" maxlength="12" />
+      <div class="rut-hint">Sin puntos, con guión</div>
+      <div class="error-msg" id="rutError"></div>
+      <button class="btn btn-primary inactivo" id="btnValidate" onclick="validateRut()">CONTINUAR</button>
+    </div>
+
+    <div id="viewCheckin" class="checkin-card hidden fadeUp">
+      <div class="avatar" id="avatarLetter">?</div>
+      <div class="greeting">Bienvenido de vuelta</div>
+      <div class="name-display" id="nameDisplay">—</div>
+      <div class="date-display" id="dateDisplay">—</div>
+      <button class="checkin-btn" id="btnCheckin"
+        ontouchstart="handleCheckinTouch(event)"
+        onclick="handleCheckinClick(event)">⚡ REGISTRAR</button>
+      <button class="btn-stats" onclick="openHistorial()">📊 VER MI ASISTENCIA</button>
+      <button class="btn btn-ghost" id="btnNotMe" onclick="changeName()">—</button>
+    </div>
+
+    <div id="viewSuccess" class="hidden" style="text-align:center;animation:fadeUp 0.3s ease both">
+      <div class="success-icon">✓</div>
+      <div class="section-title">¡Asistencia registrada!</div>
+      <div class="success-name" id="successName">—</div>
+      <div class="success-time" id="successTime">—</div>
+    </div>
+
+    <div id="viewAlready" class="hidden" style="text-align:center;animation:fadeUp 0.3s ease both">
+      <div class="already-icon">⚡</div>
+      <div class="section-title">Ya estás registrado</div>
+      <div class="success-name" id="alreadyName">—</div>
+      <div class="success-time">Ya marcaste asistencia hoy</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API      = 'https://script.google.com/macros/s/AKfycbzLtCzzlt8eu01rPLcW9-DPS6Wx1qUl8oZgvbnPwQDKmcsnczz60vMJMbTUiwzjzcI-xQ/exec';
+  const RUT_KEY  = 'fitlog:rut';
+  const NAME_KEY = 'fitlog:nombre';
+  const LOCK_KEY = 'fitlog:lock';
+  const PROF_KEY = 'fitlog:profesor';
+
+  let _touchHandled = false;
+  let tapCount = 0, tapTimer = null;
+
+  function getLock() {
+    const stored = localStorage.getItem(LOCK_KEY);
+    if (!stored) return false;
+    const { date } = JSON.parse(stored);
+    if (date !== todayKey()) { localStorage.removeItem(LOCK_KEY); return false; }
+    return true;
+  }
+
+  function setLock() {
+    localStorage.setItem(LOCK_KEY, JSON.stringify({ date: todayKey() }));
+  }
+
+  function clearLock() {
+    localStorage.removeItem(LOCK_KEY);
+  }
+
+  function formatRut(input) {
+    let v = input.value.replace(/[^0-9kK]/g, '').toUpperCase();
+    if (v.length > 1) v = v.slice(0, -1) + '-' + v.slice(-1);
+    input.value = v;
+  }
+
+  function checkRutInput() {
+    const v = document.getElementById('rutInput').value.trim();
+    const btn = document.getElementById('btnValidate');
+    if (v.length < 3) btn.classList.add('inactivo');
+    else btn.classList.remove('inactivo');
+    document.getElementById('rutError').textContent = '';
+    document.getElementById('rutInput').classList.remove('error');
+  }
+
+  async function init() {
+    const rut  = localStorage.getItem(RUT_KEY);
+    const name = localStorage.getItem(NAME_KEY);
+    if (rut && name) {
+      // Siempre validar contra el servidor al abrir
+      try {
+        const res = await fetchAPI({ action: 'validate', rut });
+        if (res.ok) {
+          localStorage.setItem(NAME_KEY, res.nombre);
+          localStorage.setItem(PROF_KEY, res.profesor);
+          if (res.yaRegistrado) setLock();
+          else clearLock();
+          loadCheckinView(res.nombre);
+        } else {
+          // RUT ya no está autorizado
+          changeName();
+        }
+      } catch {
+        // Sin conexión — usar lock local como respaldo
+        loadCheckinView(name);
+      }
+    } else {
+      showOnly('viewRut');
+    }
+  }
+
+  function showOnly(id) {
+    ['viewLoading','viewRut','viewCheckin','viewSuccess','viewAlready'].forEach(v => {
+      document.getElementById(v).classList.toggle('hidden', v !== id);
+    });
+  }
+
+  function loadCheckinView(name) {
+    document.getElementById('avatarLetter').textContent = name.charAt(0).toUpperCase();
+    document.getElementById('nameDisplay').textContent  = name.toUpperCase();
+    document.getElementById('dateDisplay').textContent  = todayLabel();
+    document.getElementById('btnNotMe').textContent     = 'No soy ' + name.split(' ')[0];
+    const btn = document.getElementById('btnCheckin');
+    if (getLock()) {
+      btn.disabled = true;
+      btn.innerHTML = '✓ YA REGISTRADO HOY';
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = '⚡ REGISTRAR';
+    }
+    showOnly('viewCheckin');
+  }
+
+  function changeName() {
+    clearLock();
+    _touchHandled = false;
+    localStorage.removeItem(RUT_KEY);
+    localStorage.removeItem(NAME_KEY);
+    localStorage.removeItem(PROF_KEY);
+    document.getElementById('rutInput').value = '';
+    document.getElementById('rutError').textContent = '';
+    document.getElementById('btnValidate').classList.add('inactivo');
+    showOnly('viewRut');
+  }
+
+  async function validateRut() {
+    const rut = document.getElementById('rutInput').value.replace(/\./g,'').trim().toLowerCase();
+    if (!rut) return;
+    const btn = document.getElementById('btnValidate');
+    if (btn.classList.contains('inactivo')) return;
+    btn.classList.add('inactivo');
+    btn.innerHTML = 'VERIFICANDO...';
+    btn.style.opacity = '0.7';
+    try {
+      const res = await fetchAPI({ action: 'validate', rut });
+      if (res.ok) {
+        localStorage.setItem(RUT_KEY,  rut);
+        localStorage.setItem(NAME_KEY, res.nombre);
+        localStorage.setItem(PROF_KEY, res.profesor);
+        if (res.yaRegistrado) setLock();
+        else clearLock();
+        btn.classList.remove('inactivo');
+        btn.textContent = 'CONTINUAR';
+        btn.style.opacity = '1';
+        loadCheckinView(res.nombre);
+      } else {
+        showRutError('RUT no autorizado. Habla con tu profe.');
+        btn.classList.remove('inactivo');
+        btn.textContent = 'CONTINUAR';
+        btn.style.opacity = '1';
+      }
+    } catch {
+      showRutError('Sin conexión. Intenta de nuevo.');
+      btn.classList.remove('inactivo');
+      btn.textContent = 'CONTINUAR';
+      btn.style.opacity = '1';
+    }
+  }
+
+  function showRutError(msg) {
+    document.getElementById('rutError').textContent = msg;
+    const inp = document.getElementById('rutInput');
+    inp.classList.add('error');
+    setTimeout(() => inp.classList.remove('error'), 600);
+  }
+
+  function handleCheckinTouch(e) {
+    e.preventDefault();
+    _touchHandled = true;
+    doCheckIn();
+  }
+
+  function handleCheckinClick(e) {
+    if (_touchHandled) { _touchHandled = false; return; }
+    doCheckIn();
+  }
+
+  async function doCheckIn() {
+    if (getLock()) return;
+    setLock();
+
+    const rut      = localStorage.getItem(RUT_KEY);
+    const name     = localStorage.getItem(NAME_KEY);
+    const profesor = localStorage.getItem(PROF_KEY);
+    if (!rut || !name || !profesor) { clearLock(); return; }
+
+    const btn = document.getElementById('btnCheckin');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading-white"></span>';
+
+    try {
+      const res = await fetchAPI({ action: 'checkin', rut, nombre: name, profesor });
+      if (res.ok) {
+        document.getElementById('successName').textContent = name.toUpperCase();
+        document.getElementById('successTime').textContent = todayLabel() + ' · ' + timeNow();
+        showOnly('viewSuccess');
+        setTimeout(() => loadCheckinView(name), 3500);
+      } else if (res.error && res.error.includes('Ya registraste')) {
+        document.getElementById('alreadyName').textContent = name.toUpperCase();
+        showOnly('viewAlready');
+        setTimeout(() => loadCheckinView(name), 3000);
+      } else {
+        alert('Error: ' + (res.error || 'Intenta de nuevo'));
+        clearLock();
+        loadCheckinView(name);
+      }
+    } catch {
+      alert('Sin conexión. Intenta de nuevo.');
+      clearLock();
+      loadCheckinView(name);
+    }
+  }
+
+  // ── Historial personal ─────────────────────────────────────────────────────
+  async function openHistorial() {
+    document.getElementById('historialOverlay').classList.remove('hidden');
+    document.getElementById('historialContent').innerHTML =
+      '<div class="admin-loading"><span class="loading-dot"></span></div>';
+    document.getElementById('histMes').textContent = '—';
+    document.getElementById('histTotal').textContent = '—';
+
+    const rut = localStorage.getItem(RUT_KEY);
+    if (!rut) return;
+
+    try {
+      const res = await fetchAPI({ action: 'records' });
+      if (!res.ok) { document.getElementById('historialContent').innerHTML = '<div class="empty-state">Error al cargar</div>'; return; }
+
+      const records = res.records || {};
+      const mesActual = todayKey().substring(0, 7); // "2026-04"
+
+      // Filtrar solo registros de este alumno
+      let totalClases = 0;
+      let clasesMes = [];
+      let totalMes = 0;
+
+      Object.keys(records).sort((a,b) => b.localeCompare(a)).forEach(fecha => {
+        const misClases = records[fecha].filter(r =>
+          String(r.rut).trim().toLowerCase() === rut
+        );
+        if (misClases.length > 0) {
+          totalClases++;
+          if (fecha.substring(0, 7) === mesActual) {
+            totalMes++;
+            clasesMes.push({ fecha, hora: misClases[0].hora });
+          }
+        }
+      });
+
+      document.getElementById('histMes').textContent   = totalMes;
+      document.getElementById('histTotal').textContent = totalClases;
+
+      if (clasesMes.length === 0) {
+        document.getElementById('historialContent').innerHTML =
+          '<div class="empty-state">Sin clases este mes aún</div>';
+        return;
+      }
+
+      document.getElementById('historialContent').innerHTML = clasesMes.map(c => `
+        <div class="dia-row">
+          <span class="dia-fecha">${formatDateLong(c.fecha)}</span>
+          <span class="dia-hora">${c.hora}</span>
+        </div>
+      `).join('');
+
+    } catch {
+      document.getElementById('historialContent').innerHTML = '<div class="empty-state">Sin conexión</div>';
+    }
+  }
+
+  function closeHistorial() {
+    document.getElementById('historialOverlay').classList.add('hidden');
+  }
+
+  // ── Admin ──────────────────────────────────────────────────────────────────
+  function handleLogoTap() {
+    clearTimeout(tapTimer);
+    if (++tapCount >= 5) { tapCount = 0; openAdmin(); return; }
+    tapTimer = setTimeout(() => { tapCount = 0; }, 1500);
+  }
+
+  function openAdmin() {
+    document.getElementById('adminOverlay').classList.remove('hidden');
+    loadAdminData();
+  }
+
+  function closeAdmin() {
+    document.getElementById('adminOverlay').classList.add('hidden');
+  }
+
+  async function loadAdminData() {
+    document.getElementById('adminContent').innerHTML =
+      '<div class="admin-loading"><span class="loading-dot"></span> Cargando...</div>';
+    try {
+      const res = await fetchAPI({ action: 'records' });
+      if (!res.ok) { document.getElementById('adminContent').innerHTML = '<div class="empty-state">Error al cargar</div>'; return; }
+      const records  = res.records || {};
+      const allDays  = Object.keys(records).sort((a,b) => b.localeCompare(a));
+      const todayRec = records[todayKey()] || [];
+      const total    = Object.values(records).flat().length;
+      const weekStart = new Date(); weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+      let weekCount = 0;
+      Object.keys(records).forEach(d => { if (new Date(d) >= weekStart) weekCount += records[d].length; });
+      document.getElementById('statToday').textContent = todayRec.length;
+      document.getElementById('statWeek').textContent  = weekCount;
+      document.getElementById('statTotal').textContent = total;
+      if (allDays.length === 0) {
+        document.getElementById('adminContent').innerHTML = '<div class="empty-state">Sin registros aún</div>';
+        return;
+      }
+      document.getElementById('adminContent').innerHTML = allDays.map(day => `
+        <div class="day-block">
+          <div class="day-label">${formatDate(day)}<span class="day-count">· ${records[day].length} asistentes</span></div>
+          ${records[day].map(r => `
+            <div class="attendee-row">
+              <div class="attendee-info">
+                <span class="attendee-name">${r.nombre}</span>
+                <span class="attendee-rut">${r.rut}</span>
+              </div>
+              <span class="attendee-time">${r.hora}</span>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+    } catch {
+      document.getElementById('adminContent').innerHTML = '<div class="empty-state">Sin conexión</div>';
+    }
+  }
+
+  async function fetchAPI(body) {
+    const res = await fetch(API, { method: 'POST', body: JSON.stringify(body) });
+    return res.json();
+  }
+
+  function todayKey() {
+    const d = new Date();
+    return d.getFullYear() + '-' +
+           String(d.getMonth()+1).padStart(2,'0') + '-' +
+           String(d.getDate()).padStart(2,'0');
+  }
+  function timeNow() { return new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }); }
+  function todayLabel() { return new Date().toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long' }); }
+  function formatDate(key) {
+    const [y, m, d] = key.split('-').map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  }
+  function formatDateLong(key) {
+    const [y, m, d] = key.split('-').map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long' });
+  }
+
+  window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
