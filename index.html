@@ -369,8 +369,12 @@
   async function init() {
     const rut  = localStorage.getItem(RUT_KEY);
     const name = localStorage.getItem(NAME_KEY);
+
     if (rut && name) {
-      // Siempre validar contra el servidor al abrir
+      // Mostrar inmediatamente desde caché
+      loadCheckinView(name);
+
+      // Validar en segundo plano sin bloquear
       try {
         const res = await fetchAPI({ action: 'validate', rut });
         if (res.ok) {
@@ -378,14 +382,14 @@
           localStorage.setItem(PROF_KEY, res.profesor);
           if (res.yaRegistrado) setLock();
           else clearLock();
+          // Actualizar vista silenciosamente
           loadCheckinView(res.nombre);
         } else {
-          // RUT ya no está autorizado
+          // RUT ya no autorizado — pedir de nuevo
           changeName();
         }
       } catch {
-        // Sin conexión — usar lock local como respaldo
-        loadCheckinView(name);
+        // Sin conexión — mantener vista con caché, lock local como respaldo
       }
     } else {
       showOnly('viewRut');
