@@ -32,6 +32,7 @@
       pointer-events: none;
     }
     .card { width: 100%; max-width: 380px; position: relative; z-index: 1; }
+
     @keyframes fadeUp {
       from { opacity:0; transform: translateY(24px); }
       to   { opacity:1; transform: translateY(0); }
@@ -62,6 +63,7 @@
     .section-title { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: #ff5a00; margin-bottom: 16px; }
     .big-text { font-family: 'Bebas Neue', sans-serif; font-size: 38px; letter-spacing: 2px; line-height: 1.1; margin-bottom: 8px; }
     .sub-text { font-size: 14px; color: #777; margin-bottom: 36px; line-height: 1.6; }
+
     .input {
       width: 100%; background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
@@ -73,34 +75,32 @@
     .input::placeholder { color: #444; }
     .input.error { border-color: #ff3b3b; animation: shake 0.4s ease; }
     .error-msg { font-size: 13px; color: #ff3b3b; margin-bottom: 16px; min-height: 18px; text-align: center; }
+
     .btn {
       width: 100%; padding: 18px; border: none; border-radius: 12px;
       font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px;
       cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-      -webkit-appearance: none;
-      appearance: none;
+      -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+      -webkit-appearance: none; appearance: none;
     }
     .btn:active { transform: scale(0.97); }
-    .btn:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
     .btn-primary { background: #ff5a00; color: #fff; box-shadow: 0 8px 32px rgba(255,90,0,0.35); }
-    .btn-primary:disabled,
-    .btn-primary.inactivo { background: #ff5a00 !important; color: rgba(255,255,255,0.4) !important; box-shadow: none; opacity: 1; cursor: not-allowed; pointer-events: none; }
+    .btn-primary:disabled, .btn-primary.inactivo {
+      background: #ff5a00 !important; color: rgba(255,255,255,0.4) !important;
+      box-shadow: none; opacity: 1; cursor: not-allowed; pointer-events: none;
+    }
     .btn-ghost {
       background: transparent; border: 1px solid rgba(255,255,255,0.12);
       color: #555; font-size: 13px; letter-spacing: 2px; padding: 12px;
       margin-top: 12px; font-family: 'DM Sans', sans-serif;
     }
-    .btn-ghost:hover { border-color: #444; color: #888; }
     .btn-stats {
-      background: rgba(255,90,0,0.1);
-      border: 1px solid rgba(255,90,0,0.3);
-      color: #ff5a00; font-size: 13px; letter-spacing: 2px; padding: 12px;
-      margin-top: 12px; font-family: 'DM Sans', sans-serif;
+      background: rgba(255,90,0,0.1); border: 1px solid rgba(255,90,0,0.3);
+      color: #ff5a00; font-size: 16px; letter-spacing: 2px; padding: 12px;
+      margin-top: 12px; font-family: 'Bebas Neue', sans-serif;
       border-radius: 12px; width: 100%; cursor: pointer;
-      font-family: 'Bebas Neue', sans-serif; font-size: 16px;
     }
+
     .checkin-card { text-align: center; }
     .avatar {
       width: 88px; height: 88px; border-radius: 50%;
@@ -112,6 +112,7 @@
     .greeting { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: #555; margin-bottom: 8px; }
     .name-display { font-family: 'Bebas Neue', sans-serif; font-size: 44px; letter-spacing: 2px; margin-bottom: 6px; }
     .date-display { font-size: 13px; color: #555; margin-bottom: 48px; text-transform: capitalize; }
+
     .checkin-btn {
       width: 100%; padding: 24px; border: none; border-radius: 16px;
       background: #ff5a00; color: #fff;
@@ -119,11 +120,11 @@
       cursor: pointer; box-shadow: 0 12px 40px rgba(255,90,0,0.4);
       transition: transform 0.15s;
       display: flex; align-items: center; justify-content: center; gap: 12px;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent; touch-action: manipulation;
     }
     .checkin-btn:active { transform: scale(0.97); }
     .checkin-btn:disabled { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
+
     .success-icon {
       width: 100px; height: 100px; border-radius: 50%;
       background: linear-gradient(135deg, #00c851, #00a844);
@@ -143,77 +144,74 @@
     .success-name { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 2px; margin-bottom: 8px; }
     .success-time { font-size: 13px; color: #555; }
 
-    /* Historial personal */
-    .historial-overlay {
+    /* Overlays */
+    .overlay {
       position: fixed; inset: 0; background: #0a0a0a; z-index: 100;
       overflow-y: auto; padding: 32px 20px;
       animation: fadeUp 0.3s ease both;
     }
-    .historial-inner { max-width: 380px; margin: 0 auto; }
-    .historial-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
-    .historial-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; color: #ff5a00; }
+    .overlay-inner { max-width: 480px; margin: 0 auto; }
+    .overlay-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+    .overlay-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; color: #ff5a00; }
     .close-btn { background: rgba(255,255,255,0.06); border: none; color: #888; font-size: 20px; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; }
 
-    .mes-stats {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 12px; margin-bottom: 32px;
-    }
-    .mes-box {
-      background: rgba(255,90,0,0.07);
-      border: 1px solid rgba(255,90,0,0.15);
-      border-radius: 14px; padding: 20px; text-align: center;
-    }
+    /* Historial */
+    .mes-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+    .mes-box { background: rgba(255,90,0,0.07); border: 1px solid rgba(255,90,0,0.15); border-radius: 14px; padding: 20px; text-align: center; }
     .mes-num { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: #ff5a00; line-height: 1; }
     .mes-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #444; margin-top: 4px; }
-
-    .historial-section-title {
-      font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
-      color: #ff5a00; margin-bottom: 12px; padding-bottom: 8px;
-      border-bottom: 1px solid rgba(255,90,0,0.2);
-    }
-
-    .mes-selector {
-      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
-    }
-    .mes-btn {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: #888; font-size: 12px; letter-spacing: 1px;
-      padding: 7px 14px; border-radius: 20px; cursor: pointer;
-      font-family: 'DM Sans', sans-serif; transition: all 0.2s;
-      text-transform: uppercase;
-    }
-    .mes-btn.activo {
-      background: #ff5a00; border-color: #ff5a00;
-      color: #fff; font-weight: 500;
-    }
-
-    .dia-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 16px;
-      background: rgba(255,255,255,0.03);
-      border-radius: 10px; margin-bottom: 6px;
-    }
+    .historial-section-title { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #ff5a00; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,90,0,0.2); }
+    .mes-selector { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .mes-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #888; font-size: 12px; letter-spacing: 1px; padding: 7px 14px; border-radius: 20px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; text-transform: uppercase; }
+    .mes-btn.activo { background: #ff5a00; border-color: #ff5a00; color: #fff; font-weight: 500; }
+    .dia-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 6px; }
     .dia-fecha { font-size: 14px; font-weight: 500; text-transform: capitalize; color: #f0ede8; }
     .dia-hora { font-size: 12px; color: #aaa; font-variant-numeric: tabular-nums; }
 
-    .empty-state { text-align: center; color: #333; font-size: 14px; padding: 40px 0; }
-    .admin-loading { text-align: center; padding: 40px 0; color: #444; font-size: 14px; }
-
-    /* Admin */
-    .admin-overlay {
-      position: fixed; inset: 0; background: #0a0a0a; z-index: 100;
-      overflow-y: auto; padding: 32px 20px;
-      animation: fadeUp 0.3s ease both;
-    }
-    .admin-inner { max-width: 480px; margin: 0 auto; }
-    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
-    .admin-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 3px; color: #ff5a00; }
+    /* Panel profe */
     .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 24px; }
     .stat-box { background: rgba(255,90,0,0.07); border: 1px solid rgba(255,90,0,0.15); border-radius: 14px; padding: 16px 10px; text-align: center; }
     .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: #ff5a00; line-height: 1; }
     .stat-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #444; margin-top: 4px; }
-    .refresh-btn { background: rgba(255,90,0,0.1); border: 1px solid rgba(255,90,0,0.2); color: #ff5a00; font-size: 12px; letter-spacing: 2px; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-bottom: 24px; }
+
+    .profe-tabs { display: flex; gap: 8px; margin-bottom: 24px; }
+    .profe-tab { flex: 1; padding: 10px; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .profe-tab.activo { background: #ff5a00; color: #fff; }
+    .profe-tab:not(.activo) { background: rgba(255,255,255,0.05); color: #555; border: 1px solid rgba(255,255,255,0.08); }
+
+    .alumno-selector { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 14px 16px; font-size: 15px; font-family: 'DM Sans', sans-serif; color: #f0ede8; outline: none; margin-bottom: 16px; cursor: pointer; }
+    .alumno-selector option { background: #1a1a1a; color: #f0ede8; }
+
+    .alumno-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 6px; }
+    .alumno-info { display: flex; flex-direction: column; gap: 2px; }
+    .alumno-nombre { font-size: 15px; font-weight: 500; }
+    .alumno-rut { font-size: 11px; color: #444; }
+    .btn-eliminar { background: rgba(255,50,50,0.1); border: 1px solid rgba(255,50,50,0.3); color: #ff4444; font-size: 12px; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .btn-eliminar:hover { background: rgba(255,50,50,0.2); }
+
+    .form-agregar { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
+    .form-title { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: #ff5a00; margin-bottom: 16px; }
+    .input-small { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 16px; font-size: 15px; font-family: 'DM Sans', sans-serif; color: #f0ede8; outline: none; margin-bottom: 10px; }
+    .input-small:focus { border-color: #ff5a00; }
+    .input-small::placeholder { color: #444; }
+    .btn-agregar { width: 100%; padding: 14px; border: none; border-radius: 10px; background: #ff5a00; color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 2px; cursor: pointer; }
+
+    /* PIN pad */
+    .pin-display { display: flex; gap: 12px; justify-content: center; margin-bottom: 32px; }
+    .pin-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #ff5a00; transition: background 0.2s; }
+    .pin-dot.filled { background: #ff5a00; }
+    .pin-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 280px; margin: 0 auto; }
+    .pin-btn { padding: 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; background: rgba(255,255,255,0.04); color: #f0ede8; font-family: 'Bebas Neue', sans-serif; font-size: 28px; cursor: pointer; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
+    .pin-btn:active { background: rgba(255,90,0,0.2); border-color: #ff5a00; transform: scale(0.95); }
+    .pin-btn.delete { font-size: 18px; color: #555; }
+    .pin-error { font-size: 13px; color: #ff3b3b; text-align: center; margin-top: 16px; min-height: 18px; }
+
+    .loading-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ff5a00; animation: pulse 1s ease infinite; }
+    .loading-white { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #fff; animation: pulse 1s ease infinite; }
+    .empty-state { text-align: center; color: #333; font-size: 14px; padding: 40px 0; }
+    .admin-loading { text-align: center; padding: 32px 0; color: #444; font-size: 14px; }
+    .rut-hint { font-size: 12px; color: #444; text-align: center; margin-bottom: 16px; }
+    .refresh-btn { background: rgba(255,90,0,0.1); border: 1px solid rgba(255,90,0,0.2); color: #ff5a00; font-size: 12px; letter-spacing: 2px; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-bottom: 20px; }
     .day-block { margin-bottom: 28px; }
     .day-label { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #ff5a00; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,90,0,0.2); }
     .day-count { font-size: 11px; color: #444; margin-left: 8px; }
@@ -221,32 +219,23 @@
     .attendee-info { display: flex; flex-direction: column; gap: 2px; }
     .attendee-name { font-size: 15px; font-weight: 500; }
     .attendee-rut  { font-size: 11px; color: #444; }
-    .attendee-time { font-size: 12px; color: #444; font-variant-numeric: tabular-nums; }
-
-    .loading-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ff5a00; animation: pulse 1s ease infinite; }
-    .loading-white { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #fff; animation: pulse 1s ease infinite; }
-    .rut-hint { font-size: 12px; color: #444; text-align: center; margin-bottom: 16px; }
+    .attendee-time { font-size: 12px; color: #444; }
     .hidden { display: none !important; }
+    .success-msg { font-size: 13px; color: #00c851; text-align: center; margin-top: 8px; min-height: 18px; }
   </style>
 </head>
 <body>
 
-<!-- HISTORIAL PERSONAL -->
-<div class="historial-overlay hidden" id="historialOverlay">
-  <div class="historial-inner">
-    <div class="historial-header">
-      <span class="historial-title">📅 MI ASISTENCIA</span>
+<!-- HISTORIAL PERSONAL (alumno) -->
+<div class="overlay hidden" id="historialOverlay">
+  <div class="overlay-inner">
+    <div class="overlay-header">
+      <span class="overlay-title">📅 MI ASISTENCIA</span>
       <button class="close-btn" onclick="closeHistorial()">✕</button>
     </div>
     <div class="mes-stats">
-      <div class="mes-box">
-        <div class="mes-num" id="histMes">—</div>
-        <div class="mes-label">Este mes</div>
-      </div>
-      <div class="mes-box">
-        <div class="mes-num" id="histTotal">—</div>
-        <div class="mes-label">Total</div>
-      </div>
+      <div class="mes-box"><div class="mes-num" id="histMes">—</div><div class="mes-label">Este mes</div></div>
+      <div class="mes-box"><div class="mes-num" id="histTotal">—</div><div class="mes-label">Total</div></div>
     </div>
     <div class="historial-section-title" id="histSectionTitle">Clases del mes</div>
     <div class="mes-selector" id="mesSelectorContainer"></div>
@@ -254,20 +243,94 @@
   </div>
 </div>
 
-<!-- ADMIN OVERLAY -->
-<div class="admin-overlay hidden" id="adminOverlay">
-  <div class="admin-inner">
-    <div class="admin-header">
-      <span class="admin-title">📋 ASISTENCIA</span>
-      <button class="close-btn" onclick="closeAdmin()">✕</button>
+<!-- PIN PROFE -->
+<div class="overlay hidden" id="pinOverlay">
+  <div class="overlay-inner">
+    <div class="overlay-header">
+      <span class="overlay-title">🔐 ACCESO PROFE</span>
+      <button class="close-btn" onclick="closePin()">✕</button>
     </div>
-    <div class="stats-row">
-      <div class="stat-box"><div class="stat-num" id="statToday">—</div><div class="stat-label">Hoy</div></div>
-      <div class="stat-box"><div class="stat-num" id="statWeek">—</div><div class="stat-label">Semana</div></div>
-      <div class="stat-box"><div class="stat-num" id="statTotal">—</div><div class="stat-label">Total</div></div>
+    <div style="text-align:center; margin-bottom:28px;">
+      <div style="font-size:13px;letter-spacing:3px;text-transform:uppercase;color:#555;margin-bottom:20px;">Ingresa tu PIN</div>
+      <div class="pin-display" id="pinDisplay">
+        <div class="pin-dot" id="pd0"></div>
+        <div class="pin-dot" id="pd1"></div>
+        <div class="pin-dot" id="pd2"></div>
+        <div class="pin-dot" id="pd3"></div>
+      </div>
     </div>
-    <button class="refresh-btn" onclick="loadAdminData()">↻ ACTUALIZAR</button>
-    <div id="adminContent"><div class="admin-loading"><span class="loading-dot"></span></div></div>
+    <div class="pin-pad">
+      <button class="pin-btn" onclick="pinPress('1')">1</button>
+      <button class="pin-btn" onclick="pinPress('2')">2</button>
+      <button class="pin-btn" onclick="pinPress('3')">3</button>
+      <button class="pin-btn" onclick="pinPress('4')">4</button>
+      <button class="pin-btn" onclick="pinPress('5')">5</button>
+      <button class="pin-btn" onclick="pinPress('6')">6</button>
+      <button class="pin-btn" onclick="pinPress('7')">7</button>
+      <button class="pin-btn" onclick="pinPress('8')">8</button>
+      <button class="pin-btn" onclick="pinPress('9')">9</button>
+      <button class="pin-btn delete" onclick="pinDelete()">⌫</button>
+      <button class="pin-btn" onclick="pinPress('0')">0</button>
+      <button class="pin-btn delete" onclick="pinClear()">✕</button>
+    </div>
+    <div class="pin-error" id="pinError"></div>
+  </div>
+</div>
+
+<!-- PANEL PROFE -->
+<div class="overlay hidden" id="profeOverlay">
+  <div class="overlay-inner">
+    <div class="overlay-header">
+      <span class="overlay-title" id="profeTitulo">👨‍🏫 PANEL</span>
+      <button class="close-btn" onclick="closeProfe()">✕</button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="profe-tabs">
+      <button class="profe-tab activo" id="tabHoy" onclick="switchTab('hoy')">Hoy</button>
+      <button class="profe-tab" id="tabAlumnos" onclick="switchTab('alumnos')">Alumnos</button>
+      <button class="profe-tab" id="tabHistorial" onclick="switchTab('historial')">Historial</button>
+    </div>
+
+    <!-- Tab Hoy -->
+    <div id="tabContentHoy">
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-num" id="pStatToday">—</div><div class="stat-label">Hoy</div></div>
+        <div class="stat-box"><div class="stat-num" id="pStatWeek">—</div><div class="stat-label">Semana</div></div>
+        <div class="stat-box"><div class="stat-num" id="pStatTotal">—</div><div class="stat-label">Total</div></div>
+      </div>
+      <button class="refresh-btn" onclick="loadProfeData()">↻ ACTUALIZAR</button>
+      <div id="profeContent"><div class="admin-loading"><span class="loading-dot"></span></div></div>
+    </div>
+
+    <!-- Tab Alumnos -->
+    <div id="tabContentAlumnos" class="hidden">
+      <div class="form-agregar">
+        <div class="form-title">➕ Agregar alumno</div>
+        <input class="input-small" type="text" id="newRut" placeholder="RUT (ej: 12345678-9)" oninput="formatRutInput(this)" maxlength="12" />
+        <input class="input-small" type="text" id="newNombre" placeholder="Nombre completo" />
+        <button class="btn-agregar" onclick="agregarAlumno()">AGREGAR</button>
+        <div class="success-msg" id="agregarMsg"></div>
+      </div>
+      <div class="historial-section-title">Lista de alumnos</div>
+      <div id="listaAlumnos"><div class="admin-loading"><span class="loading-dot"></span></div></div>
+    </div>
+
+    <!-- Tab Historial -->
+    <div id="tabContentHistorial" class="hidden">
+      <div style="margin-bottom:16px;">
+        <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:8px;">Alumno</div>
+        <select class="alumno-selector" id="alumnoSelector" onchange="onAlumnoChange()">
+          <option value="">— Selecciona un alumno —</option>
+        </select>
+      </div>
+      <div class="mes-stats" id="profeHistStats" style="display:none">
+        <div class="mes-box"><div class="mes-num" id="profeHistMes">—</div><div class="mes-label">Este mes</div></div>
+        <div class="mes-box"><div class="mes-num" id="profeHistTotal">—</div><div class="mes-label">Total</div></div>
+      </div>
+      <div class="mes-selector" id="profeMesSelectorContainer"></div>
+      <div id="profeHistContent"></div>
+    </div>
   </div>
 </div>
 
@@ -326,7 +389,7 @@
 </div>
 
 <script>
-  const API      = 'https://script.google.com/macros/s/AKfycbzLtCzzlt8eu01rPLcW9-DPS6Wx1qUl8oZgvbnPwQDKmcsnczz60vMJMbTUiwzjzcI-xQ/exec';
+  const API      = 'https://script.google.com/macros/s/AKfycbyv29o2VOeBiQjcVyO930b1lhe5l6eU1FtNun8XLRIIsU7pOxrkkORGLq6bLuc-bkDs5g/exec';
   const RUT_KEY  = 'fitlog:rut';
   const NAME_KEY = 'fitlog:nombre';
   const LOCK_KEY = 'fitlog:lock';
@@ -334,7 +397,14 @@
 
   let _touchHandled = false;
   let tapCount = 0, tapTimer = null;
+  let _pinValue = '';
+  let _profeActual = '';
+  let _tabActual = 'hoy';
+  let _historialData = {};
+  let _profeHistorialData = {};
+  let _profeRecords = {};
 
+  // ── Lock ───────────────────────────────────────────────────────────────────
   function getLock() {
     const stored = localStorage.getItem(LOCK_KEY);
     if (!stored) return false;
@@ -342,20 +412,16 @@
     if (date !== todayKey()) { localStorage.removeItem(LOCK_KEY); return false; }
     return true;
   }
+  function setLock() { localStorage.setItem(LOCK_KEY, JSON.stringify({ date: todayKey() })); }
+  function clearLock() { localStorage.removeItem(LOCK_KEY); }
 
-  function setLock() {
-    localStorage.setItem(LOCK_KEY, JSON.stringify({ date: todayKey() }));
-  }
-
-  function clearLock() {
-    localStorage.removeItem(LOCK_KEY);
-  }
-
+  // ── RUT format ─────────────────────────────────────────────────────────────
   function formatRut(input) {
     let v = input.value.replace(/[^0-9kK]/g, '').toUpperCase();
     if (v.length > 1) v = v.slice(0, -1) + '-' + v.slice(-1);
     input.value = v;
   }
+  function formatRutInput(input) { formatRut(input); }
 
   function checkRutInput() {
     const v = document.getElementById('rutInput').value.trim();
@@ -366,15 +432,12 @@
     document.getElementById('rutInput').classList.remove('error');
   }
 
+  // ── Init ───────────────────────────────────────────────────────────────────
   async function init() {
     const rut  = localStorage.getItem(RUT_KEY);
     const name = localStorage.getItem(NAME_KEY);
-
     if (rut && name) {
-      // Mostrar inmediatamente desde caché
       loadCheckinView(name);
-
-      // Validar en segundo plano sin bloquear
       try {
         const res = await fetchAPI({ action: 'validate', rut });
         if (res.ok) {
@@ -382,18 +445,10 @@
           localStorage.setItem(PROF_KEY, res.profesor);
           if (res.yaRegistrado) setLock();
           else clearLock();
-          // Actualizar vista silenciosamente
           loadCheckinView(res.nombre);
-        } else {
-          // RUT ya no autorizado — pedir de nuevo
-          changeName();
-        }
-      } catch {
-        // Sin conexión — mantener vista con caché, lock local como respaldo
-      }
-    } else {
-      showOnly('viewRut');
-    }
+        } else { changeName(); }
+      } catch {}
+    } else { showOnly('viewRut'); }
   }
 
   function showOnly(id) {
@@ -408,22 +463,14 @@
     document.getElementById('dateDisplay').textContent  = todayLabel();
     document.getElementById('btnNotMe').textContent     = 'No soy ' + name.split(' ')[0];
     const btn = document.getElementById('btnCheckin');
-    if (getLock()) {
-      btn.disabled = true;
-      btn.innerHTML = '✓ YA REGISTRADO HOY';
-    } else {
-      btn.disabled = false;
-      btn.innerHTML = '⚡ REGISTRAR';
-    }
+    if (getLock()) { btn.disabled = true; btn.innerHTML = '✓ YA REGISTRADO HOY'; }
+    else { btn.disabled = false; btn.innerHTML = '⚡ REGISTRAR'; }
     showOnly('viewCheckin');
   }
 
   function changeName() {
-    clearLock();
-    _touchHandled = false;
-    localStorage.removeItem(RUT_KEY);
-    localStorage.removeItem(NAME_KEY);
-    localStorage.removeItem(PROF_KEY);
+    clearLock(); _touchHandled = false;
+    localStorage.removeItem(RUT_KEY); localStorage.removeItem(NAME_KEY); localStorage.removeItem(PROF_KEY);
     document.getElementById('rutInput').value = '';
     document.getElementById('rutError').textContent = '';
     document.getElementById('btnValidate').classList.add('inactivo');
@@ -431,36 +478,29 @@
   }
 
   async function validateRut() {
-    const rut = document.getElementById('rutInput').value.replace(/\./g,'').trim().toLowerCase();
-    if (!rut) return;
     const btn = document.getElementById('btnValidate');
     if (btn.classList.contains('inactivo')) return;
+    const rut = document.getElementById('rutInput').value.replace(/\./g,'').trim().toLowerCase();
+    if (!rut) return;
     btn.classList.add('inactivo');
     btn.innerHTML = 'VERIFICANDO...';
     btn.style.opacity = '0.7';
     try {
       const res = await fetchAPI({ action: 'validate', rut });
       if (res.ok) {
-        localStorage.setItem(RUT_KEY,  rut);
+        localStorage.setItem(RUT_KEY, rut);
         localStorage.setItem(NAME_KEY, res.nombre);
         localStorage.setItem(PROF_KEY, res.profesor);
-        if (res.yaRegistrado) setLock();
-        else clearLock();
-        btn.classList.remove('inactivo');
-        btn.textContent = 'CONTINUAR';
-        btn.style.opacity = '1';
+        if (res.yaRegistrado) setLock(); else clearLock();
+        btn.classList.remove('inactivo'); btn.textContent = 'CONTINUAR'; btn.style.opacity = '1';
         loadCheckinView(res.nombre);
       } else {
         showRutError('RUT no autorizado. Habla con tu profe.');
-        btn.classList.remove('inactivo');
-        btn.textContent = 'CONTINUAR';
-        btn.style.opacity = '1';
+        btn.classList.remove('inactivo'); btn.textContent = 'CONTINUAR'; btn.style.opacity = '1';
       }
     } catch {
       showRutError('Sin conexión. Intenta de nuevo.');
-      btn.classList.remove('inactivo');
-      btn.textContent = 'CONTINUAR';
-      btn.style.opacity = '1';
+      btn.classList.remove('inactivo'); btn.textContent = 'CONTINUAR'; btn.style.opacity = '1';
     }
   }
 
@@ -471,30 +511,18 @@
     setTimeout(() => inp.classList.remove('error'), 600);
   }
 
-  function handleCheckinTouch(e) {
-    e.preventDefault();
-    _touchHandled = true;
-    doCheckIn();
-  }
-
-  function handleCheckinClick(e) {
-    if (_touchHandled) { _touchHandled = false; return; }
-    doCheckIn();
-  }
+  function handleCheckinTouch(e) { e.preventDefault(); _touchHandled = true; doCheckIn(); }
+  function handleCheckinClick(e) { if (_touchHandled) { _touchHandled = false; return; } doCheckIn(); }
 
   async function doCheckIn() {
     if (getLock()) return;
     setLock();
-
     const rut      = localStorage.getItem(RUT_KEY);
     const name     = localStorage.getItem(NAME_KEY);
     const profesor = localStorage.getItem(PROF_KEY);
     if (!rut || !name || !profesor) { clearLock(); return; }
-
     const btn = document.getElementById('btnCheckin');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="loading-white"></span>';
-
+    btn.disabled = true; btn.innerHTML = '<span class="loading-white"></span>';
     try {
       const res = await fetchAPI({ action: 'checkin', rut, nombre: name, profesor });
       if (res.ok) {
@@ -508,153 +536,111 @@
         setTimeout(() => loadCheckinView(name), 3000);
       } else {
         alert('Error: ' + (res.error || 'Intenta de nuevo'));
-        clearLock();
-        loadCheckinView(name);
+        clearLock(); loadCheckinView(name);
       }
     } catch {
       alert('Sin conexión. Intenta de nuevo.');
-      clearLock();
-      loadCheckinView(name);
+      clearLock(); loadCheckinView(name);
     }
   }
 
-  // ── Historial personal ─────────────────────────────────────────────────────
-  let _historialData = {}; // cache de records del alumno
-
-  async function openHistorial() {
-    document.getElementById('historialOverlay').classList.remove('hidden');
-    document.getElementById('historialContent').innerHTML =
-      '<div class="admin-loading"><span class="loading-dot"></span></div>';
-    document.getElementById('mesSelectorContainer').innerHTML = '';
-    document.getElementById('histMes').textContent  = '—';
-    document.getElementById('histTotal').textContent = '—';
-
-    const rut = localStorage.getItem(RUT_KEY);
-    if (!rut) return;
-
-    try {
-      const res = await fetchAPI({ action: 'records' });
-      if (!res.ok) { document.getElementById('historialContent').innerHTML = '<div class="empty-state">Error al cargar</div>'; return; }
-
-      const records = res.records || {};
-
-      // Filtrar solo registros de este alumno agrupados por mes
-      const porMes = {}; // { "2026-04": [{fecha, hora}] }
-      let totalClases = 0;
-
-      Object.keys(records).sort((a,b) => b.localeCompare(a)).forEach(fecha => {
-        const misClases = records[fecha].filter(r =>
-          String(r.rut).trim().toLowerCase() === rut
-        );
-        if (misClases.length > 0) {
-          totalClases++;
-          const mes = fecha.substring(0, 7);
-          if (!porMes[mes]) porMes[mes] = [];
-          porMes[mes].push({ fecha, hora: misClases[0].hora });
-        }
-      });
-
-      _historialData = porMes;
-      document.getElementById('histTotal').textContent = totalClases;
-
-      const meses = Object.keys(porMes).sort((a,b) => b.localeCompare(a));
-
-      if (meses.length === 0) {
-        document.getElementById('histMes').textContent = '0';
-        document.getElementById('historialContent').innerHTML = '<div class="empty-state">Sin clases registradas aún</div>';
-        return;
-      }
-
-      // Generar botones de mes
-      const container = document.getElementById('mesSelectorContainer');
-      container.innerHTML = meses.map(m => `
-        <button class="mes-btn" onclick="seleccionarMes('${m}')">${formatMesCorto(m)}</button>
-      `).join('');
-
-      // Seleccionar mes actual o el más reciente
-      const mesActual = todayKey().substring(0, 7);
-      const mesInicial = porMes[mesActual] ? mesActual : meses[0];
-      seleccionarMes(mesInicial);
-
-    } catch {
-      document.getElementById('historialContent').innerHTML = '<div class="empty-state">Sin conexión</div>';
-    }
-  }
-
-  function seleccionarMes(mes) {
-    // Actualizar botones
-    document.querySelectorAll('.mes-btn').forEach(btn => {
-      btn.classList.toggle('activo', btn.textContent === formatMesCorto(mes));
-    });
-
-    const clases = _historialData[mes] || [];
-    document.getElementById('histMes').textContent = clases.length;
-    document.getElementById('histSectionTitle').textContent = 'Clases · ' + formatMesLargo(mes);
-
-    if (clases.length === 0) {
-      document.getElementById('historialContent').innerHTML = '<div class="empty-state">Sin clases este mes</div>';
-      return;
-    }
-
-    document.getElementById('historialContent').innerHTML = clases.map(c => `
-      <div class="dia-row">
-        <span class="dia-fecha">${formatDateLong(c.fecha)}</span>
-        <span class="dia-hora">${c.hora}</span>
-      </div>
-    `).join('');
-  }
-
-  function formatMesCorto(key) {
-    const [y, m] = key.split('-').map(Number);
-    return new Date(y, m - 1, 1).toLocaleDateString('es-CL', { month: 'short', year: '2-digit' }).toUpperCase();
-  }
-
-  function formatMesLargo(key) {
-    const [y, m] = key.split('-').map(Number);
-    return new Date(y, m - 1, 1).toLocaleDateString('es-CL', { month: 'long', year: 'numeric' }).toUpperCase();
-  }
-
-  function closeHistorial() {
-    document.getElementById('historialOverlay').classList.add('hidden');
-  }
-
-  // ── Admin ──────────────────────────────────────────────────────────────────
+  // ── Logo tap → PIN ─────────────────────────────────────────────────────────
   function handleLogoTap() {
     clearTimeout(tapTimer);
-    if (++tapCount >= 5) { tapCount = 0; openAdmin(); return; }
+    if (++tapCount >= 5) { tapCount = 0; openPin(); return; }
     tapTimer = setTimeout(() => { tapCount = 0; }, 1500);
   }
 
-  function openAdmin() {
-    document.getElementById('adminOverlay').classList.remove('hidden');
-    loadAdminData();
+  // ── PIN ────────────────────────────────────────────────────────────────────
+  function openPin() {
+    _pinValue = ''; updatePinDisplay();
+    document.getElementById('pinError').textContent = '';
+    document.getElementById('pinOverlay').classList.remove('hidden');
+  }
+  function closePin() { document.getElementById('pinOverlay').classList.add('hidden'); _pinValue = ''; }
+
+  function pinPress(d) {
+    if (_pinValue.length >= 4) return;
+    _pinValue += d;
+    updatePinDisplay();
+    if (_pinValue.length === 4) setTimeout(validatePin, 200);
   }
 
-  function closeAdmin() {
-    document.getElementById('adminOverlay').classList.add('hidden');
+  function pinDelete() { _pinValue = _pinValue.slice(0, -1); updatePinDisplay(); }
+  function pinClear()  { _pinValue = ''; updatePinDisplay(); }
+
+  function updatePinDisplay() {
+    for (let i = 0; i < 4; i++) {
+      document.getElementById('pd' + i).classList.toggle('filled', i < _pinValue.length);
+    }
   }
 
-  async function loadAdminData() {
-    document.getElementById('adminContent').innerHTML =
-      '<div class="admin-loading"><span class="loading-dot"></span> Cargando...</div>';
+  async function validatePin() {
+    document.getElementById('pinError').textContent = '';
+    try {
+      const res = await fetchAPI({ action: 'validarProfesor', pin: _pinValue });
+      if (res.ok) {
+        _profeActual = res.profesor;
+        closePin();
+        openProfe();
+      } else {
+        document.getElementById('pinError').textContent = 'PIN incorrecto';
+        _pinValue = ''; updatePinDisplay();
+      }
+    } catch {
+      document.getElementById('pinError').textContent = 'Sin conexión';
+      _pinValue = ''; updatePinDisplay();
+    }
+  }
+
+  // ── Panel Profe ────────────────────────────────────────────────────────────
+  function openProfe() {
+    document.getElementById('profeTitulo').textContent = '👨‍🏫 ' + _profeActual.toUpperCase();
+    document.getElementById('profeOverlay').classList.remove('hidden');
+    switchTab('hoy');
+  }
+
+  function closeProfe() { document.getElementById('profeOverlay').classList.add('hidden'); }
+
+  function switchTab(tab) {
+    _tabActual = tab;
+    ['hoy','alumnos','historial'].forEach(t => {
+      document.getElementById('tabContent' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('hidden', t !== tab);
+      document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('activo', t === tab);
+    });
+    if (tab === 'hoy') loadProfeData();
+    if (tab === 'alumnos') loadAlumnos();
+    if (tab === 'historial') loadProfeHistorial();
+  }
+
+  async function loadProfeData() {
+    document.getElementById('profeContent').innerHTML = '<div class="admin-loading"><span class="loading-dot"></span></div>';
     try {
       const res = await fetchAPI({ action: 'records' });
-      if (!res.ok) { document.getElementById('adminContent').innerHTML = '<div class="empty-state">Error al cargar</div>'; return; }
-      const records  = res.records || {};
+      if (!res.ok) { document.getElementById('profeContent').innerHTML = '<div class="empty-state">Error al cargar</div>'; return; }
+      _profeRecords = res.records || {};
+
+      // Filtrar solo registros del profe actual
+      const records = {};
+      Object.keys(_profeRecords).forEach(fecha => {
+        const misReg = _profeRecords[fecha].filter(r => r.profesor === _profeActual);
+        if (misReg.length > 0) records[fecha] = misReg;
+      });
+
       const allDays  = Object.keys(records).sort((a,b) => b.localeCompare(a));
       const todayRec = records[todayKey()] || [];
       const total    = Object.values(records).flat().length;
       const weekStart = new Date(); weekStart.setDate(weekStart.getDate() - weekStart.getDay());
       let weekCount = 0;
       Object.keys(records).forEach(d => { if (new Date(d) >= weekStart) weekCount += records[d].length; });
-      document.getElementById('statToday').textContent = todayRec.length;
-      document.getElementById('statWeek').textContent  = weekCount;
-      document.getElementById('statTotal').textContent = total;
-      if (allDays.length === 0) {
-        document.getElementById('adminContent').innerHTML = '<div class="empty-state">Sin registros aún</div>';
-        return;
-      }
-      document.getElementById('adminContent').innerHTML = allDays.map(day => `
+
+      document.getElementById('pStatToday').textContent = todayRec.length;
+      document.getElementById('pStatWeek').textContent  = weekCount;
+      document.getElementById('pStatTotal').textContent = total;
+
+      if (allDays.length === 0) { document.getElementById('profeContent').innerHTML = '<div class="empty-state">Sin registros aún</div>'; return; }
+
+      document.getElementById('profeContent').innerHTML = allDays.map(day => `
         <div class="day-block">
           <div class="day-label">${formatDate(day)}<span class="day-count">· ${records[day].length} asistentes</span></div>
           ${records[day].map(r => `
@@ -668,32 +654,195 @@
           `).join('')}
         </div>
       `).join('');
+    } catch { document.getElementById('profeContent').innerHTML = '<div class="empty-state">Sin conexión</div>'; }
+  }
+
+  async function loadAlumnos() {
+    document.getElementById('listaAlumnos').innerHTML = '<div class="admin-loading"><span class="loading-dot"></span></div>';
+    try {
+      const res = await fetchAPI({ action: 'getAlumnos', profesor: _profeActual });
+      if (!res.ok) { document.getElementById('listaAlumnos').innerHTML = '<div class="empty-state">Error</div>'; return; }
+      if (res.alumnos.length === 0) { document.getElementById('listaAlumnos').innerHTML = '<div class="empty-state">Sin alumnos</div>'; return; }
+      document.getElementById('listaAlumnos').innerHTML = res.alumnos.map(a => `
+        <div class="alumno-row">
+          <div class="alumno-info">
+            <span class="alumno-nombre">${a.nombre}</span>
+            <span class="alumno-rut">${a.rut}</span>
+          </div>
+          <button class="btn-eliminar" onclick="eliminarAlumno('${a.rut}', '${a.nombre}')">✕ Eliminar</button>
+        </div>
+      `).join('');
+
+      // Actualizar selector de historial
+      const sel = document.getElementById('alumnoSelector');
+      sel.innerHTML = '<option value="">— Selecciona un alumno —</option>' +
+        res.alumnos.map(a => `<option value="${a.rut}">${a.nombre}</option>`).join('');
+    } catch { document.getElementById('listaAlumnos').innerHTML = '<div class="empty-state">Sin conexión</div>'; }
+  }
+
+  async function agregarAlumno() {
+    const rut    = document.getElementById('newRut').value.replace(/\./g,'').trim().toLowerCase();
+    const nombre = document.getElementById('newNombre').value.trim();
+    if (!rut || !nombre) { document.getElementById('agregarMsg').style.color = '#ff3b3b'; document.getElementById('agregarMsg').textContent = 'Completa todos los campos'; return; }
+    document.getElementById('agregarMsg').textContent = '';
+    try {
+      const res = await fetchAPI({ action: 'agregarAlumno', rut, nombre, profesor: _profeActual });
+      if (res.ok) {
+        document.getElementById('agregarMsg').style.color = '#00c851';
+        document.getElementById('agregarMsg').textContent = '✓ Alumno agregado';
+        document.getElementById('newRut').value = '';
+        document.getElementById('newNombre').value = '';
+        loadAlumnos();
+        setTimeout(() => document.getElementById('agregarMsg').textContent = '', 3000);
+      } else {
+        document.getElementById('agregarMsg').style.color = '#ff3b3b';
+        document.getElementById('agregarMsg').textContent = res.error || 'Error al agregar';
+      }
     } catch {
-      document.getElementById('adminContent').innerHTML = '<div class="empty-state">Sin conexión</div>';
+      document.getElementById('agregarMsg').style.color = '#ff3b3b';
+      document.getElementById('agregarMsg').textContent = 'Sin conexión';
     }
   }
 
+  async function eliminarAlumno(rut, nombre) {
+    if (!confirm('¿Eliminar a ' + nombre + '?')) return;
+    try {
+      const res = await fetchAPI({ action: 'eliminarAlumno', rut, profesor: _profeActual });
+      if (res.ok) loadAlumnos();
+      else alert('Error: ' + (res.error || 'No se pudo eliminar'));
+    } catch { alert('Sin conexión'); }
+  }
+
+  async function loadProfeHistorial() {
+    const res = await fetchAPI({ action: 'records' });
+    if (!res.ok) return;
+    _profeRecords = res.records || {};
+  }
+
+  function onAlumnoChange() {
+    const rut = document.getElementById('alumnoSelector').value;
+    if (!rut) {
+      document.getElementById('profeHistStats').style.display = 'none';
+      document.getElementById('profeMesSelectorContainer').innerHTML = '';
+      document.getElementById('profeHistContent').innerHTML = '';
+      return;
+    }
+
+    const porMes = {};
+    let total = 0;
+    Object.keys(_profeRecords).sort((a,b) => b.localeCompare(a)).forEach(fecha => {
+      const clases = _profeRecords[fecha].filter(r =>
+        String(r.rut).trim().toLowerCase() === rut && r.profesor === _profeActual
+      );
+      if (clases.length > 0) {
+        total++;
+        const mes = fecha.substring(0, 7);
+        if (!porMes[mes]) porMes[mes] = [];
+        porMes[mes].push({ fecha, hora: clases[0].hora });
+      }
+    });
+
+    _profeHistorialData = porMes;
+    document.getElementById('profeHistTotal').textContent = total;
+    document.getElementById('profeHistStats').style.display = 'grid';
+
+    const meses = Object.keys(porMes).sort((a,b) => b.localeCompare(a));
+    if (meses.length === 0) {
+      document.getElementById('profeHistContent').innerHTML = '<div class="empty-state">Sin clases registradas</div>';
+      document.getElementById('profeMesSelectorContainer').innerHTML = '';
+      return;
+    }
+
+    document.getElementById('profeMesSelectorContainer').innerHTML = meses.map(m => `
+      <button class="mes-btn" onclick="seleccionarMesProfe('${m}')">${formatMesCorto(m)}</button>
+    `).join('');
+
+    const mesActual = todayKey().substring(0, 7);
+    seleccionarMesProfe(porMes[mesActual] ? mesActual : meses[0]);
+  }
+
+  function seleccionarMesProfe(mes) {
+    document.querySelectorAll('#profeMesSelectorContainer .mes-btn').forEach(btn => {
+      btn.classList.toggle('activo', btn.textContent === formatMesCorto(mes));
+    });
+    const clases = _profeHistorialData[mes] || [];
+    document.getElementById('profeHistMes').textContent = clases.length;
+    if (clases.length === 0) { document.getElementById('profeHistContent').innerHTML = '<div class="empty-state">Sin clases este mes</div>'; return; }
+    document.getElementById('profeHistContent').innerHTML = clases.map(c => `
+      <div class="dia-row">
+        <span class="dia-fecha">${formatDateLong(c.fecha)}</span>
+        <span class="dia-hora">${c.hora}</span>
+      </div>
+    `).join('');
+  }
+
+  // ── Historial alumno ───────────────────────────────────────────────────────
+  async function openHistorial() {
+    document.getElementById('historialOverlay').classList.remove('hidden');
+    document.getElementById('historialContent').innerHTML = '<div class="admin-loading"><span class="loading-dot"></span></div>';
+    document.getElementById('mesSelectorContainer').innerHTML = '';
+    document.getElementById('histMes').textContent  = '—';
+    document.getElementById('histTotal').textContent = '—';
+    const rut = localStorage.getItem(RUT_KEY);
+    if (!rut) return;
+    try {
+      const res = await fetchAPI({ action: 'records' });
+      if (!res.ok) { document.getElementById('historialContent').innerHTML = '<div class="empty-state">Error al cargar</div>'; return; }
+      const records = res.records || {};
+      const porMes = {}; let totalClases = 0;
+      Object.keys(records).sort((a,b) => b.localeCompare(a)).forEach(fecha => {
+        const misClases = records[fecha].filter(r => String(r.rut).trim().toLowerCase() === rut);
+        if (misClases.length > 0) {
+          totalClases++;
+          const mes = fecha.substring(0, 7);
+          if (!porMes[mes]) porMes[mes] = [];
+          porMes[mes].push({ fecha, hora: misClases[0].hora });
+        }
+      });
+      _historialData = porMes;
+      document.getElementById('histTotal').textContent = totalClases;
+      const meses = Object.keys(porMes).sort((a,b) => b.localeCompare(a));
+      if (meses.length === 0) { document.getElementById('histMes').textContent = '0'; document.getElementById('historialContent').innerHTML = '<div class="empty-state">Sin clases registradas aún</div>'; return; }
+      document.getElementById('mesSelectorContainer').innerHTML = meses.map(m => `
+        <button class="mes-btn" onclick="seleccionarMes('${m}')">${formatMesCorto(m)}</button>
+      `).join('');
+      const mesActual = todayKey().substring(0, 7);
+      seleccionarMes(porMes[mesActual] ? mesActual : meses[0]);
+    } catch { document.getElementById('historialContent').innerHTML = '<div class="empty-state">Sin conexión</div>'; }
+  }
+
+  function seleccionarMes(mes) {
+    document.querySelectorAll('#mesSelectorContainer .mes-btn').forEach(btn => {
+      btn.classList.toggle('activo', btn.textContent === formatMesCorto(mes));
+    });
+    const clases = _historialData[mes] || [];
+    document.getElementById('histMes').textContent = clases.length;
+    document.getElementById('histSectionTitle').textContent = 'Clases · ' + formatMesLargo(mes);
+    if (clases.length === 0) { document.getElementById('historialContent').innerHTML = '<div class="empty-state">Sin clases este mes</div>'; return; }
+    document.getElementById('historialContent').innerHTML = clases.map(c => `
+      <div class="dia-row">
+        <span class="dia-fecha">${formatDateLong(c.fecha)}</span>
+        <span class="dia-hora">${c.hora}</span>
+      </div>
+    `).join('');
+  }
+
+  function closeHistorial() { document.getElementById('historialOverlay').classList.add('hidden'); }
+
+  // ── API ────────────────────────────────────────────────────────────────────
   async function fetchAPI(body) {
     const res = await fetch(API, { method: 'POST', body: JSON.stringify(body) });
     return res.json();
   }
 
-  function todayKey() {
-    const d = new Date();
-    return d.getFullYear() + '-' +
-           String(d.getMonth()+1).padStart(2,'0') + '-' +
-           String(d.getDate()).padStart(2,'0');
-  }
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  function todayKey() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
   function timeNow() { return new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }); }
   function todayLabel() { return new Date().toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long' }); }
-  function formatDate(key) {
-    const [y, m, d] = key.split('-').map(Number);
-    return new Date(y, m - 1, d).toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-  }
-  function formatDateLong(key) {
-    const [y, m, d] = key.split('-').map(Number);
-    return new Date(y, m - 1, d).toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long' });
-  }
+  function formatDate(key) { const [y,m,d] = key.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); }
+  function formatDateLong(key) { const [y,m,d] = key.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long' }); }
+  function formatMesCorto(key) { const [y,m] = key.split('-').map(Number); return new Date(y,m-1,1).toLocaleDateString('es-CL', { month: 'short', year: '2-digit' }).toUpperCase(); }
+  function formatMesLargo(key) { const [y,m] = key.split('-').map(Number); return new Date(y,m-1,1).toLocaleDateString('es-CL', { month: 'long', year: 'numeric' }).toUpperCase(); }
 
   window.addEventListener('DOMContentLoaded', init);
 </script>
