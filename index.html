@@ -16,40 +16,32 @@
       font-family: 'DM Sans', sans-serif; color: #f0ede8; padding: 24px;
       position: relative; overflow: hidden; background: #0a0a0a;
     }
-    .app::before {
-      content: ''; position: fixed; top: -40%; left: -20%; width: 70vw; height: 70vw;
-      background: radial-gradient(circle, rgba(255,90,0,0.12) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .app::after {
-      content: ''; position: fixed; bottom: -30%; right: -20%; width: 60vw; height: 60vw;
-      background: radial-gradient(circle, rgba(255,200,0,0.06) 0%, transparent 70%);
-      pointer-events: none;
-    }
+    .app::before { content: ''; position: fixed; top: -40%; left: -20%; width: 70vw; height: 70vw; background: radial-gradient(circle, rgba(255,90,0,0.12) 0%, transparent 70%); pointer-events: none; }
+    .app::after  { content: ''; position: fixed; bottom: -30%; right: -20%; width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(255,200,0,0.06) 0%, transparent 70%); pointer-events: none; }
     .card { width: 100%; max-width: 380px; position: relative; z-index: 1; }
 
     @keyframes fadeUp { from { opacity:0; transform: translateY(24px); } to { opacity:1; transform: translateY(0); } }
-    @keyframes popIn { from { opacity:0; transform: scale(0.3); } to { opacity:1; transform: scale(1); } }
-    @keyframes pulse { 0%,100% { opacity:0.3; transform:scale(0.8); } 50% { opacity:1; transform:scale(1.2); } }
-    @keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } }
+    @keyframes popIn  { from { opacity:0; transform: scale(0.3); } to { opacity:1; transform: scale(1); } }
+    @keyframes pulse  { 0%,100% { opacity:0.3; transform:scale(0.8); } 50% { opacity:1; transform:scale(1.2); } }
+    @keyframes shake  { 0%,100% { transform:translateX(0); } 20% { transform:translateX(-8px); } 40% { transform:translateX(8px); } 60% { transform:translateX(-6px); } 80% { transform:translateX(6px); } }
 
     .fadeUp { animation: fadeUp 0.45s ease both; }
-    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 4px; color: #ff5a00; line-height: 1; cursor: pointer; user-select: none; text-shadow: 0 0 40px rgba(255,90,0,0.4); margin-bottom: 4px; }
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 4px; color: #ff5a00; line-height: 1; user-select: none; text-shadow: 0 0 40px rgba(255,90,0,0.4); margin-bottom: 4px; }
     .logo-sub { font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: #555; margin-bottom: 48px; }
     .section-title { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: #ff5a00; margin-bottom: 16px; }
     .big-text { font-family: 'Bebas Neue', sans-serif; font-size: 38px; letter-spacing: 2px; line-height: 1.1; margin-bottom: 8px; }
     .sub-text { font-size: 14px; color: #777; margin-bottom: 36px; line-height: 1.6; }
 
-    .input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px 20px; font-size: 17px; font-family: 'DM Sans', sans-serif; color: #f0ede8; outline: none; transition: border-color 0.2s, background 0.2s; margin-bottom: 12px; }
+    .input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px 20px; font-size: 17px; font-family: 'DM Sans', sans-serif; color: #f0ede8; outline: none; transition: border-color 0.2s; margin-bottom: 12px; }
     .input:focus { border-color: #ff5a00; background: rgba(255,90,0,0.06); }
     .input::placeholder { color: #444; }
     .input.error { border-color: #ff3b3b; animation: shake 0.4s ease; }
     .error-msg { font-size: 13px; color: #ff3b3b; margin-bottom: 16px; min-height: 18px; text-align: center; }
 
-    .btn { width: 100%; padding: 18px; border: none; border-radius: 12px; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; -webkit-tap-highlight-color: transparent; touch-action: manipulation; -webkit-appearance: none; appearance: none; }
+    .btn { width: 100%; padding: 18px; border: none; border-radius: 12px; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; cursor: pointer; transition: transform 0.15s; -webkit-tap-highlight-color: transparent; touch-action: manipulation; -webkit-appearance: none; }
     .btn:active { transform: scale(0.97); }
     .btn-primary { background: #ff5a00; color: #fff; box-shadow: 0 8px 32px rgba(255,90,0,0.35); }
-    .btn-primary:disabled, .btn-primary.inactivo { background: #ff5a00 !important; color: rgba(255,255,255,0.4) !important; box-shadow: none; opacity: 1; cursor: not-allowed; pointer-events: none; }
+    .btn-primary.inactivo { color: rgba(255,255,255,0.4) !important; box-shadow: none; cursor: not-allowed; pointer-events: none; }
     .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.12); color: #555; font-size: 13px; letter-spacing: 2px; padding: 12px; margin-top: 12px; font-family: 'DM Sans', sans-serif; }
     .btn-stats { background: rgba(255,90,0,0.1); border: 1px solid rgba(255,90,0,0.3); color: #ff5a00; font-size: 16px; letter-spacing: 2px; padding: 12px; margin-top: 12px; font-family: 'Bebas Neue', sans-serif; border-radius: 12px; width: 100%; cursor: pointer; }
 
@@ -57,34 +49,53 @@
     .avatar { width: 88px; height: 88px; border-radius: 50%; background: linear-gradient(135deg, #ff5a00, #ff9500); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: #fff; margin: 0 auto 24px; box-shadow: 0 8px 32px rgba(255,90,0,0.4); }
     .greeting { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: #555; margin-bottom: 8px; }
     .name-display { font-family: 'Bebas Neue', sans-serif; font-size: 44px; letter-spacing: 2px; margin-bottom: 6px; }
-    .date-display { font-size: 13px; color: #555; margin-bottom: 48px; text-transform: capitalize; }
+    .date-display { font-size: 13px; color: #555; margin-bottom: 32px; text-transform: capitalize; }
+
+    /* Plan badge en check-in */
+    .plan-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,90,0,0.1); border: 1px solid rgba(255,90,0,0.25); border-radius: 20px; padding: 6px 14px; margin-bottom: 24px; font-size: 13px; color: #ff9500; }
+    .plan-badge.agotado { background: rgba(255,50,50,0.1); border-color: rgba(255,50,50,0.3); color: #ff4444; }
+
     .checkin-btn { width: 100%; padding: 24px; border: none; border-radius: 16px; background: #ff5a00; color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 4px; cursor: pointer; box-shadow: 0 12px 40px rgba(255,90,0,0.4); transition: transform 0.15s; display: flex; align-items: center; justify-content: center; gap: 12px; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
     .checkin-btn:active { transform: scale(0.97); }
     .checkin-btn:disabled { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
 
     .success-icon { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #00c851, #00a844); display: flex; align-items: center; justify-content: center; font-size: 48px; margin: 0 auto 28px; animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both; box-shadow: 0 12px 40px rgba(0,200,80,0.4); }
     .already-icon { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #ff9500, #ff5a00); display: flex; align-items: center; justify-content: center; font-size: 48px; margin: 0 auto 28px; animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both; box-shadow: 0 12px 40px rgba(255,150,0,0.4); }
+    .agotado-icon { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #ff3b3b, #cc0000); display: flex; align-items: center; justify-content: center; font-size: 48px; margin: 0 auto 28px; animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both; box-shadow: 0 12px 40px rgba(255,50,50,0.4); }
     .success-name { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 2px; margin-bottom: 8px; }
     .success-time { font-size: 13px; color: #555; }
 
+    /* Barra de progreso plan */
+    .plan-info-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; margin-bottom: 20px; }
+    .plan-info-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .plan-info-title { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: #ff5a00; }
+    .plan-info-count { font-size: 13px; color: #888; }
+    .plan-progress-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+    .plan-progress-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #ff5a00, #ff9500); transition: width 0.5s ease; }
+    .plan-progress-fill.agotado { background: linear-gradient(90deg, #ff3b3b, #cc0000); }
+    .plan-restantes { font-size: 12px; color: #555; text-align: right; }
+    .plan-restantes.pocas { color: #ff9500; }
+    .plan-restantes.agotado { color: #ff3b3b; }
+
+    /* Overlays */
     .overlay { position: fixed; inset: 0; background: #0a0a0a; z-index: 100; overflow-y: auto; padding: 32px 20px; animation: fadeUp 0.3s ease both; }
     .overlay-inner { max-width: 480px; margin: 0 auto; }
     .overlay-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
     .overlay-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; color: #ff5a00; }
     .close-btn { background: rgba(255,255,255,0.06); border: none; color: #888; font-size: 20px; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; }
 
-    .mes-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+    .mes-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
     .mes-box { background: rgba(255,90,0,0.07); border: 1px solid rgba(255,90,0,0.15); border-radius: 14px; padding: 20px; text-align: center; }
     .mes-num { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: #ff5a00; line-height: 1; }
     .mes-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #444; margin-top: 4px; }
     .historial-section-title { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #ff5a00; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,90,0,0.2); }
     .mes-selector { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
-    .mes-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #888; font-size: 12px; letter-spacing: 1px; padding: 7px 14px; border-radius: 20px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; text-transform: uppercase; }
-    .mes-btn.activo { background: #ff5a00; border-color: #ff5a00; color: #fff; font-weight: 500; }
+    .mes-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #888; font-size: 12px; padding: 7px 14px; border-radius: 20px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; text-transform: uppercase; }
+    .mes-btn.activo { background: #ff5a00; border-color: #ff5a00; color: #fff; }
 
     .dia-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 6px; }
     .dia-fecha { font-size: 14px; font-weight: 500; text-transform: capitalize; color: #f0ede8; }
-    .dia-hora { font-size: 12px; color: #aaa; font-variant-numeric: tabular-nums; }
+    .dia-hora { font-size: 12px; color: #aaa; }
     .dia-row-profe { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 6px; gap: 8px; }
     .dia-info { display: flex; flex-direction: column; gap: 2px; flex: 1; }
     .dia-info .dia-fecha { font-size: 13px; }
@@ -92,38 +103,47 @@
     .dia-manual { font-size: 10px; color: #ff9500; letter-spacing: 1px; }
     .btn-elim-clase { background: rgba(255,50,50,0.1); border: 1px solid rgba(255,50,50,0.25); color: #ff4444; font-size: 11px; padding: 5px 10px; border-radius: 7px; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
 
-    /* Formulario agregar clase */
-    .form-agregar-clase { background: rgba(255,150,0,0.06); border: 1px solid rgba(255,150,0,0.2); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
-    .form-agregar-clase.hidden { display: none; }
-    .form-title { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #ff9500; margin-bottom: 12px; }
-    .input-small { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 11px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: #f0ede8; outline: none; margin-bottom: 8px; }
-    .input-small:focus { border-color: #ff5a00; }
-    .input-small::placeholder { color: #444; }
-    .btn-row { display: flex; gap: 8px; }
-    .btn-agregar-clase { flex: 1; padding: 11px; border: none; border-radius: 9px; background: #ff9500; color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 2px; cursor: pointer; }
-    .btn-cancelar-clase { flex: 1; padding: 11px; border: 1px solid rgba(255,255,255,0.1); border-radius: 9px; background: transparent; color: #555; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; }
-    .btn-toggle-clase { width: 100%; padding: 10px; border: 1px dashed rgba(255,150,0,0.4); border-radius: 10px; background: transparent; color: #ff9500; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; margin-bottom: 12px; }
-
+    /* Panel profe */
     .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 24px; }
     .stat-box { background: rgba(255,90,0,0.07); border: 1px solid rgba(255,90,0,0.15); border-radius: 14px; padding: 16px 10px; text-align: center; }
     .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: #ff5a00; line-height: 1; }
     .stat-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #444; margin-top: 4px; }
-
     .profe-tabs { display: flex; gap: 8px; margin-bottom: 24px; }
     .profe-tab { flex: 1; padding: 10px; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
     .profe-tab.activo { background: #ff5a00; color: #fff; }
     .profe-tab:not(.activo) { background: rgba(255,255,255,0.05); color: #555; border: 1px solid rgba(255,255,255,0.08); }
 
     .alumno-selector { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 14px 16px; font-size: 15px; font-family: 'DM Sans', sans-serif; color: #f0ede8; outline: none; margin-bottom: 16px; cursor: pointer; }
-    .alumno-selector option { background: #1a1a1a; color: #f0ede8; }
+    .alumno-selector option { background: #1a1a1a; }
 
     .alumno-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 6px; }
-    .alumno-info { display: flex; flex-direction: column; gap: 2px; }
+    .alumno-info { display: flex; flex-direction: column; gap: 3px; flex: 1; }
     .alumno-nombre { font-size: 15px; font-weight: 500; color: #f0ede8; }
     .alumno-rut { font-size: 11px; color: #555; }
+    .alumno-plan { font-size: 11px; color: #ff9500; }
+    .alumno-restantes { font-size: 11px; }
+    .alumno-restantes.pocas { color: #ff9500; }
+    .alumno-restantes.agotado { color: #ff4444; }
     .btn-eliminar { background: rgba(255,50,50,0.1); border: 1px solid rgba(255,50,50,0.3); color: #ff4444; font-size: 12px; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
 
     .form-agregar { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
+    .form-agregar-clase { background: rgba(255,150,0,0.06); border: 1px solid rgba(255,150,0,0.2); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
+    .form-agregar-clase.hidden { display: none; }
+    .form-title { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; }
+    .input-small { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 11px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: #f0ede8; outline: none; margin-bottom: 8px; }
+    .input-small:focus { border-color: #ff5a00; }
+    .input-small::placeholder { color: #444; }
+    .select-small { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 11px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: #f0ede8; outline: none; margin-bottom: 8px; cursor: pointer; }
+    .select-small option { background: #1a1a1a; }
+    .btn-row { display: flex; gap: 8px; }
+    .btn-agregar-clase { flex: 1; padding: 11px; border: none; border-radius: 9px; background: #ff9500; color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 2px; cursor: pointer; }
+    .btn-cancelar-clase { flex: 1; padding: 11px; border: 1px solid rgba(255,255,255,0.1); border-radius: 9px; background: transparent; color: #555; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; }
+    .btn-toggle-clase { width: 100%; padding: 10px; border: 1px dashed rgba(255,150,0,0.4); border-radius: 10px; background: transparent; color: #ff9500; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; margin-bottom: 12px; }
+
+    /* Renovar plan */
+    .renovar-box { background: rgba(255,90,0,0.06); border: 1px solid rgba(255,90,0,0.2); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
+    .renovar-box.hidden { display: none; }
+    .btn-renovar { width: 100%; padding: 12px; border: none; border-radius: 10px; background: rgba(255,90,0,0.15); border: 1px solid rgba(255,90,0,0.3); color: #ff5a00; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px; cursor: pointer; margin-bottom: 12px; }
 
     .day-block { margin-bottom: 28px; }
     .day-label { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #ff5a00; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,90,0,0.2); }
@@ -144,12 +164,12 @@
     .pin-error { font-size: 13px; color: #ff3b3b; text-align: center; margin-top: 16px; min-height: 18px; }
 
     .refresh-btn { background: rgba(255,90,0,0.1); border: 1px solid rgba(255,90,0,0.2); color: #ff5a00; font-size: 12px; letter-spacing: 2px; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-bottom: 20px; }
-    .loading-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ff5a00; animation: pulse 1s ease infinite; }
+    .loading-dot   { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ff5a00; animation: pulse 1s ease infinite; }
     .loading-white { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #fff; animation: pulse 1s ease infinite; }
     .empty-state { text-align: center; color: #333; font-size: 14px; padding: 40px 0; }
     .admin-loading { text-align: center; padding: 32px 0; color: #444; font-size: 14px; }
     .rut-hint { font-size: 12px; color: #444; text-align: center; margin-bottom: 16px; }
-    .success-msg { font-size: 13px; color: #00c851; text-align: center; margin-top: 8px; min-height: 18px; }
+    .success-msg { font-size: 13px; text-align: center; margin-top: 8px; min-height: 18px; }
     .hidden { display: none !important; }
   </style>
 </head>
@@ -161,6 +181,15 @@
     <div class="overlay-header">
       <span class="overlay-title">📅 MI ASISTENCIA</span>
       <button class="close-btn" onclick="closeHistorial()">✕</button>
+    </div>
+    <!-- Info plan alumno -->
+    <div class="plan-info-box" id="histPlanBox">
+      <div class="plan-info-header">
+        <span class="plan-info-title" id="histPlanTitle">Plan —</span>
+        <span class="plan-info-count" id="histPlanCount">— / — clases</span>
+      </div>
+      <div class="plan-progress-bar"><div class="plan-progress-fill" id="histPlanFill" style="width:0%"></div></div>
+      <div class="plan-restantes" id="histPlanRestantes">—</div>
     </div>
     <div class="mes-stats">
       <div class="mes-box"><div class="mes-num" id="histMes">—</div><div class="mes-label">Este mes</div></div>
@@ -212,9 +241,9 @@
       <button class="close-btn" onclick="closeProfe()">✕</button>
     </div>
     <div class="profe-tabs">
-      <button class="profe-tab activo" id="tabHoy" onclick="switchTab('hoy')">Hoy</button>
-      <button class="profe-tab" id="tabAlumnos" onclick="switchTab('alumnos')">Alumnos</button>
-      <button class="profe-tab" id="tabHistorial" onclick="switchTab('historial')">Historial</button>
+      <button class="profe-tab activo" id="tabHoy"      onclick="switchTab('hoy')">Hoy</button>
+      <button class="profe-tab"        id="tabAlumnos"  onclick="switchTab('alumnos')">Alumnos</button>
+      <button class="profe-tab"        id="tabHistorial" onclick="switchTab('historial')">Historial</button>
     </div>
 
     <!-- Tab Hoy -->
@@ -231,9 +260,15 @@
     <!-- Tab Alumnos -->
     <div id="tabContentAlumnos" class="hidden">
       <div class="form-agregar">
-        <div class="form-title" style="font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:16px;">➕ Agregar alumno</div>
+        <div class="form-title" style="color:#ff5a00;">➕ Agregar alumno</div>
         <input class="input-small" type="text" id="newRut" placeholder="RUT (ej: 12345678-9)" oninput="formatRutInput(this)" maxlength="12" />
         <input class="input-small" type="text" id="newNombre" placeholder="Nombre completo" />
+        <select class="select-small" id="newPlan">
+          <option value="1">Plan 1 — 2x semana (8 clases)</option>
+          <option value="2">Plan 2 — 3x semana (12 clases)</option>
+          <option value="3">Plan 3 — 4x semana (16 clases)</option>
+        </select>
+        <input class="input-small" type="date" id="newFechaInicio" />
         <button class="btn-agregar-clase" style="width:100%;background:#ff5a00;" onclick="agregarAlumno()">AGREGAR ALUMNO</button>
         <div class="success-msg" id="agregarMsg"></div>
       </div>
@@ -249,14 +284,41 @@
           <option value="">— Selecciona un alumno —</option>
         </select>
       </div>
+
+      <!-- Info plan del alumno seleccionado -->
+      <div class="plan-info-box hidden" id="profePlanBox">
+        <div class="plan-info-header">
+          <span class="plan-info-title" id="profePlanTitle">Plan —</span>
+          <span class="plan-info-count" id="profePlanCount">— / —</span>
+        </div>
+        <div class="plan-progress-bar"><div class="plan-progress-fill" id="profePlanFill" style="width:0%"></div></div>
+        <div class="plan-restantes" id="profePlanRestantes">—</div>
+      </div>
+
+      <!-- Renovar plan -->
+      <div class="renovar-box hidden" id="renovarBox">
+        <div class="form-title" style="color:#ff5a00;">🔄 Renovar plan</div>
+        <select class="select-small" id="renovarPlan">
+          <option value="1">Plan 1 — 2x semana (8 clases)</option>
+          <option value="2">Plan 2 — 3x semana (12 clases)</option>
+          <option value="3">Plan 3 — 4x semana (16 clases)</option>
+        </select>
+        <input class="input-small" type="date" id="renovarFecha" />
+        <div class="btn-row">
+          <button class="btn-agregar-clase" style="background:#ff5a00;" onclick="confirmarRenovar()">CONFIRMAR</button>
+          <button class="btn-cancelar-clase" onclick="toggleRenovar(false)">Cancelar</button>
+        </div>
+        <div class="success-msg" id="renovarMsg"></div>
+      </div>
+
       <div class="mes-stats hidden" id="profeHistStats">
         <div class="mes-box"><div class="mes-num" id="profeHistMes">—</div><div class="mes-label">Este mes</div></div>
         <div class="mes-box"><div class="mes-num" id="profeHistTotal">—</div><div class="mes-label">Total</div></div>
       </div>
 
-      <!-- Formulario agregar clase -->
+      <!-- Agregar clase manual -->
       <div class="form-agregar-clase hidden" id="formAgregarClase">
-        <div class="form-title">➕ Agregar clase manual</div>
+        <div class="form-title" style="color:#ff9500;">➕ Agregar clase manual</div>
         <input class="input-small" type="date" id="nuevaFecha" />
         <input class="input-small" type="time" id="nuevaHora" value="19:00" />
         <div class="btn-row">
@@ -276,13 +338,15 @@
 <div class="app">
   <div class="card">
     <div id="logoArea" style="position:relative;">
-      <button onclick="openPin()" style="position:absolute;top:0;right:0;background:rgba(255,255,255,0.06);border:none;color:#555;font-size:18px;width:38px;height:38px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">☰</button>
+      <button onclick="openPin()" style="position:absolute;top:0;right:0;background:rgba(255,255,255,0.06);border:none;color:#555;font-size:18px;width:38px;height:38px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;">☰</button>
       <div>
         <div class="logo">FITMOTION</div>
         <div class="logo-sub">Control de Asistencia</div>
       </div>
     </div>
+
     <div id="viewLoading" style="text-align:center;padding:40px 0"><span class="loading-dot"></span></div>
+
     <div id="viewRut" class="hidden fadeUp">
       <div class="section-title">Bienvenido</div>
       <div class="big-text">INGRESA<br>TU RUT</div>
@@ -292,36 +356,48 @@
       <div class="error-msg" id="rutError"></div>
       <button class="btn btn-primary inactivo" id="btnValidate" onclick="validateRut()">CONTINUAR</button>
     </div>
+
     <div id="viewCheckin" class="checkin-card hidden fadeUp">
       <div class="avatar" id="avatarLetter">?</div>
       <div class="greeting">Bienvenido de vuelta</div>
       <div class="name-display" id="nameDisplay">—</div>
       <div class="date-display" id="dateDisplay">—</div>
+      <div class="plan-badge" id="planBadge">— clases restantes</div>
       <button class="checkin-btn" id="btnCheckin" ontouchstart="handleCheckinTouch(event)" onclick="handleCheckinClick(event)">⚡ REGISTRAR</button>
       <button class="btn-stats" onclick="openHistorial()">📊 VER MI ASISTENCIA</button>
       <button class="btn btn-ghost" id="btnNotMe" onclick="changeName()">—</button>
     </div>
+
     <div id="viewSuccess" class="hidden" style="text-align:center;animation:fadeUp 0.3s ease both">
       <div class="success-icon">✓</div>
       <div class="section-title">¡Asistencia registrada!</div>
       <div class="success-name" id="successName">—</div>
       <div class="success-time" id="successTime">—</div>
     </div>
+
     <div id="viewAlready" class="hidden" style="text-align:center;animation:fadeUp 0.3s ease both">
       <div class="already-icon">⚡</div>
       <div class="section-title">Ya estás registrado</div>
       <div class="success-name" id="alreadyName">—</div>
       <div class="success-time">Ya marcaste asistencia hoy</div>
     </div>
+
+    <div id="viewAgotado" class="hidden" style="text-align:center;animation:fadeUp 0.3s ease both">
+      <div class="agotado-icon">⚠️</div>
+      <div class="section-title" style="color:#ff3b3b;">Plan terminado</div>
+      <div class="success-name" id="agotadoName">—</div>
+      <div class="success-time">Contacta a tu profe para renovar</div>
+    </div>
   </div>
 </div>
 
 <script>
-  const API      = 'https://script.google.com/macros/s/AKfycbyI-xOL7mGsARp6G0eJ7BM1rzPqZ9fVT7j-K6qirXcA4ZiV3vRhu3RblHAga-jnxDdcYg/exec';
+  const API      = 'https://script.google.com/macros/s/AKfycby_WWVLcLTHcMSKfQODP2KICr04_28OiFOEqvogm_AOCNU3ks-xPsqJo93zut9atiH0qg/exec';
   const RUT_KEY  = 'fitlog:rut';
   const NAME_KEY = 'fitlog:nombre';
   const LOCK_KEY = 'fitlog:lock';
   const PROF_KEY = 'fitlog:profesor';
+  const PLAN_KEY = 'fitlog:plan';
 
   let _touchHandled = false;
   let _pinValue = '';
@@ -330,14 +406,16 @@
   let _profeHistorialData = {};
   let _profeRecords = {};
   let _alumnoSeleccionado = null;
+  let _alumnoInfoCache = {};
 
-  // ── Logo tap removido — acceso profe solo por botón hamburguesa ───────────
+  const PLAN_CLASES = { 1: 8, 2: 12, 3: 16 };
+  const PLAN_NOMBRES = { 1: 'Plan 1 — 2x semana', 2: 'Plan 2 — 3x semana', 3: 'Plan 3 — 4x semana' };
 
   // ── Lock ───────────────────────────────────────────────────────────────────
   function getLock() {
-    const stored = localStorage.getItem(LOCK_KEY);
-    if (!stored) return false;
-    const { date } = JSON.parse(stored);
+    const s = localStorage.getItem(LOCK_KEY);
+    if (!s) return false;
+    const { date } = JSON.parse(s);
     if (date !== todayKey()) { localStorage.removeItem(LOCK_KEY); return false; }
     return true;
   }
@@ -347,7 +425,7 @@
   // ── RUT ────────────────────────────────────────────────────────────────────
   function formatRut(input) {
     let v = input.value.replace(/[^0-9kK]/g, '').toUpperCase();
-    if (v.length > 1) v = v.slice(0, -1) + '-' + v.slice(-1);
+    if (v.length > 1) v = v.slice(0,-1) + '-' + v.slice(-1);
     input.value = v;
   }
   function formatRutInput(input) { formatRut(input); }
@@ -365,39 +443,60 @@
     const rut  = localStorage.getItem(RUT_KEY);
     const name = localStorage.getItem(NAME_KEY);
     if (rut && name) {
-      loadCheckinView(name);
+      loadCheckinView(name, JSON.parse(localStorage.getItem(PLAN_KEY) || 'null'));
       try {
         const res = await fetchAPI({ action: 'validate', rut });
         if (res.ok) {
           localStorage.setItem(NAME_KEY, res.nombre);
           localStorage.setItem(PROF_KEY, res.profesor);
+          localStorage.setItem(PLAN_KEY, JSON.stringify({ plan: res.plan, restantes: res.restantes, total: res.total, clasesUsadas: res.clasesUsadas, planAgotado: res.planAgotado }));
           if (res.yaRegistrado) setLock(); else clearLock();
-          loadCheckinView(res.nombre);
+          loadCheckinView(res.nombre, { plan: res.plan, restantes: res.restantes, total: res.total, clasesUsadas: res.clasesUsadas, planAgotado: res.planAgotado });
         } else { changeName(); }
       } catch {}
     } else { showOnly('viewRut'); }
   }
 
   function showOnly(id) {
-    ['viewLoading','viewRut','viewCheckin','viewSuccess','viewAlready'].forEach(v => {
+    ['viewLoading','viewRut','viewCheckin','viewSuccess','viewAlready','viewAgotado'].forEach(v => {
       document.getElementById(v).classList.toggle('hidden', v !== id);
     });
   }
 
-  function loadCheckinView(name) {
+  function loadCheckinView(name, planInfo) {
     document.getElementById('avatarLetter').textContent = name.charAt(0).toUpperCase();
     document.getElementById('nameDisplay').textContent  = name.toUpperCase();
     document.getElementById('dateDisplay').textContent  = todayLabel();
     document.getElementById('btnNotMe').textContent     = 'No soy ' + name.split(' ')[0];
+
     const btn = document.getElementById('btnCheckin');
-    if (getLock()) { btn.disabled = true; btn.innerHTML = '✓ YA REGISTRADO HOY'; }
-    else { btn.disabled = false; btn.innerHTML = '⚡ REGISTRAR'; }
+    const badge = document.getElementById('planBadge');
+
+    if (planInfo) {
+      const { plan, restantes, total, planAgotado } = planInfo;
+      if (planAgotado) {
+        badge.textContent = '⚠️ Plan agotado — contacta a tu profe';
+        badge.className = 'plan-badge agotado';
+        btn.disabled = true;
+        btn.innerHTML = '⚠️ PLAN AGOTADO';
+      } else {
+        badge.textContent = `${PLAN_NOMBRES[plan] || 'Plan'} · ${restantes} clase${restantes !== 1 ? 's' : ''} restante${restantes !== 1 ? 's' : ''}`;
+        badge.className = restantes <= 2 ? 'plan-badge agotado' : 'plan-badge';
+        if (getLock()) { btn.disabled = true; btn.innerHTML = '✓ YA REGISTRADO HOY'; }
+        else { btn.disabled = false; btn.innerHTML = '⚡ REGISTRAR'; }
+      }
+    } else {
+      badge.textContent = '— clases';
+      badge.className = 'plan-badge';
+      if (getLock()) { btn.disabled = true; btn.innerHTML = '✓ YA REGISTRADO HOY'; }
+      else { btn.disabled = false; btn.innerHTML = '⚡ REGISTRAR'; }
+    }
     showOnly('viewCheckin');
   }
 
   function changeName() {
     clearLock(); _touchHandled = false;
-    localStorage.removeItem(RUT_KEY); localStorage.removeItem(NAME_KEY); localStorage.removeItem(PROF_KEY);
+    [RUT_KEY, NAME_KEY, PROF_KEY, PLAN_KEY].forEach(k => localStorage.removeItem(k));
     document.getElementById('rutInput').value = '';
     document.getElementById('rutError').textContent = '';
     document.getElementById('btnValidate').classList.add('inactivo');
@@ -413,10 +512,13 @@
     try {
       const res = await fetchAPI({ action: 'validate', rut });
       if (res.ok) {
-        localStorage.setItem(RUT_KEY, rut); localStorage.setItem(NAME_KEY, res.nombre); localStorage.setItem(PROF_KEY, res.profesor);
+        localStorage.setItem(RUT_KEY, rut);
+        localStorage.setItem(NAME_KEY, res.nombre);
+        localStorage.setItem(PROF_KEY, res.profesor);
+        localStorage.setItem(PLAN_KEY, JSON.stringify({ plan: res.plan, restantes: res.restantes, total: res.total, clasesUsadas: res.clasesUsadas, planAgotado: res.planAgotado }));
         if (res.yaRegistrado) setLock(); else clearLock();
         btn.classList.remove('inactivo'); btn.textContent = 'CONTINUAR'; btn.style.opacity = '1';
-        loadCheckinView(res.nombre);
+        loadCheckinView(res.nombre, { plan: res.plan, restantes: res.restantes, total: res.total, planAgotado: res.planAgotado });
       } else {
         showRutError('RUT no autorizado. Habla con tu profe.');
         btn.classList.remove('inactivo'); btn.textContent = 'CONTINUAR'; btn.style.opacity = '1';
@@ -438,6 +540,8 @@
 
   async function doCheckIn() {
     if (getLock()) return;
+    const planInfo = JSON.parse(localStorage.getItem(PLAN_KEY) || 'null');
+    if (planInfo && planInfo.planAgotado) return;
     setLock();
     const rut = localStorage.getItem(RUT_KEY), name = localStorage.getItem(NAME_KEY), profesor = localStorage.getItem(PROF_KEY);
     if (!rut || !name || !profesor) { clearLock(); return; }
@@ -446,25 +550,31 @@
     try {
       const res = await fetchAPI({ action: 'checkin', rut, nombre: name, profesor });
       if (res.ok) {
+        if (planInfo) {
+          planInfo.restantes = res.restantes;
+          planInfo.clasesUsadas = (planInfo.clasesUsadas || 0) + 1;
+          localStorage.setItem(PLAN_KEY, JSON.stringify(planInfo));
+        }
         document.getElementById('successName').textContent = name.toUpperCase();
         document.getElementById('successTime').textContent = todayLabel() + ' · ' + timeNow();
-        showOnly('viewSuccess'); setTimeout(() => loadCheckinView(name), 3500);
+        showOnly('viewSuccess'); setTimeout(() => loadCheckinView(name, planInfo), 3500);
+      } else if (res.error === 'plan_agotado') {
+        document.getElementById('agotadoName').textContent = name.toUpperCase();
+        showOnly('viewAgotado'); setTimeout(() => loadCheckinView(name, planInfo), 4000);
       } else if (res.error && res.error.includes('Ya registraste')) {
         document.getElementById('alreadyName').textContent = name.toUpperCase();
-        showOnly('viewAlready'); setTimeout(() => loadCheckinView(name), 3000);
-      } else { alert('Error: ' + (res.error || 'Intenta de nuevo')); clearLock(); loadCheckinView(name); }
-    } catch { alert('Sin conexión.'); clearLock(); loadCheckinView(name); }
+        showOnly('viewAlready'); setTimeout(() => loadCheckinView(name, planInfo), 3000);
+      } else { alert('Error: ' + (res.error || 'Intenta de nuevo')); clearLock(); loadCheckinView(name, planInfo); }
+    } catch { alert('Sin conexión.'); clearLock(); loadCheckinView(name, planInfo); }
   }
-
-  // ── Acceso profe solo por botón hamburguesa ────────────────────────────────
 
   // ── PIN ────────────────────────────────────────────────────────────────────
   function openPin() { _pinValue = ''; updatePinDisplay(); document.getElementById('pinError').textContent = ''; document.getElementById('pinOverlay').classList.remove('hidden'); }
   function closePin() { document.getElementById('pinOverlay').classList.add('hidden'); _pinValue = ''; }
   function pinPress(d) { if (_pinValue.length >= 4) return; _pinValue += d; updatePinDisplay(); if (_pinValue.length === 4) setTimeout(validatePin, 200); }
-  function pinDelete() { _pinValue = _pinValue.slice(0, -1); updatePinDisplay(); }
+  function pinDelete() { _pinValue = _pinValue.slice(0,-1); updatePinDisplay(); }
   function pinClear()  { _pinValue = ''; updatePinDisplay(); }
-  function updatePinDisplay() { for (let i = 0; i < 4; i++) document.getElementById('pd' + i).classList.toggle('filled', i < _pinValue.length); }
+  function updatePinDisplay() { for (let i = 0; i < 4; i++) document.getElementById('pd'+i).classList.toggle('filled', i < _pinValue.length); }
 
   async function validatePin() {
     document.getElementById('pinError').textContent = '';
@@ -479,7 +589,6 @@
   async function openProfe() {
     document.getElementById('profeTitulo').textContent = '👨‍🏫 ' + _profeActual.toUpperCase();
     document.getElementById('profeOverlay').classList.remove('hidden');
-    // Cargar TODO de una sola vez
     document.getElementById('profeContent').innerHTML = '<div class="admin-loading"><span class="loading-dot"></span> Cargando...</div>';
     try {
       const [recRes, alumRes] = await Promise.all([
@@ -487,7 +596,7 @@
         fetchAPI({ action: 'getAlumnos', profesor: _profeActual })
       ]);
       if (recRes.ok)  _profeRecords = recRes.records || {};
-      if (alumRes.ok) _renderAlumnos(alumRes.alumnos);
+      if (alumRes.ok) { _alumnoInfoCache = {}; alumRes.alumnos.forEach(a => { _alumnoInfoCache[a.rut] = a; }); _renderAlumnos(alumRes.alumnos); }
     } catch {}
     switchTab('hoy');
   }
@@ -496,11 +605,10 @@
   function switchTab(tab) {
     ['hoy','alumnos','historial'].forEach(t => {
       const key = t.charAt(0).toUpperCase() + t.slice(1);
-      document.getElementById('tabContent' + key).classList.toggle('hidden', t !== tab);
-      document.getElementById('tab'     + key).classList.toggle('activo',  t === tab);
+      document.getElementById('tabContent'+key).classList.toggle('hidden', t !== tab);
+      document.getElementById('tab'+key).classList.toggle('activo', t === tab);
     });
-    if (tab === 'hoy')      _renderHoy();
-    if (tab === 'historial') _renderHistorialTab();
+    if (tab === 'hoy') _renderHoy();
   }
 
   function _renderHoy() {
@@ -509,9 +617,9 @@
       const r = _profeRecords[fecha].filter(r => r.profesor === _profeActual);
       if (r.length) records[fecha] = r;
     });
-    const allDays  = Object.keys(records).sort((a,b) => b.localeCompare(a));
+    const allDays = Object.keys(records).sort((a,b) => b.localeCompare(a));
     const todayRec = records[todayKey()] || [];
-    const total    = Object.values(records).flat().length;
+    const total = Object.values(records).flat().length;
     const weekStart = new Date(); weekStart.setDate(weekStart.getDate() - weekStart.getDay());
     let weekCount = 0;
     Object.keys(records).forEach(d => { if (new Date(d) >= weekStart) weekCount += records[d].length; });
@@ -540,30 +648,43 @@
   }
 
   function _renderAlumnos(alumnos) {
+    document.getElementById('newFechaInicio').value = todayKey();
     if (!alumnos || !alumnos.length) {
       document.getElementById('listaAlumnos').innerHTML = '<div class="empty-state">Sin alumnos</div>';
       document.getElementById('alumnoSelector').innerHTML = '<option value="">— Selecciona un alumno —</option>';
       return;
     }
-    document.getElementById('listaAlumnos').innerHTML = alumnos.map(a => `
-      <div class="alumno-row">
-        <div class="alumno-info"><span class="alumno-nombre">${a.nombre}</span><span class="alumno-rut">${a.rut}</span></div>
-        <button class="btn-eliminar" onclick="eliminarAlumno('${a.rut}','${a.nombre}')">✕ Eliminar</button>
-      </div>`).join('');
+    // Calcular clases restantes por alumno
+    document.getElementById('listaAlumnos').innerHTML = alumnos.map(a => {
+      const total = PLAN_CLASES[a.plan] || 8;
+      const usadas = Object.values(_profeRecords).flat().filter(r =>
+        String(r.rut).trim().toLowerCase() === String(a.rut).trim().toLowerCase() &&
+        r.profesor === _profeActual &&
+        (!a.fechaInicio || r.fecha >= a.fechaInicio)
+      ).length;
+      const restantes = Math.max(0, total - usadas);
+      const clase = restantes === 0 ? 'agotado' : restantes <= 2 ? 'pocas' : '';
+      return `
+        <div class="alumno-row">
+          <div class="alumno-info">
+            <span class="alumno-nombre">${a.nombre}</span>
+            <span class="alumno-rut">${a.rut}</span>
+            <span class="alumno-plan">${PLAN_NOMBRES[a.plan] || 'Plan '+a.plan}</span>
+            <span class="alumno-restantes ${clase}">${restantes === 0 ? '⚠️ Plan agotado' : restantes + ' clases restantes'}</span>
+          </div>
+          <button class="btn-eliminar" onclick="eliminarAlumno('${a.rut}','${a.nombre}')">✕</button>
+        </div>`;
+    }).join('');
     document.getElementById('alumnoSelector').innerHTML =
       '<option value="">— Selecciona un alumno —</option>' +
       alumnos.map(a => `<option value="${a.rut}" data-nombre="${a.nombre}">${a.nombre}</option>`).join('');
-  }
-
-  function _renderHistorialTab() {
-    // ya están los records en caché, no hace falta llamar al servidor
   }
 
   async function loadAlumnos() {
     document.getElementById('listaAlumnos').innerHTML = '<div class="admin-loading"><span class="loading-dot"></span></div>';
     try {
       const res = await fetchAPI({ action: 'getAlumnos', profesor: _profeActual });
-      if (res.ok) _renderAlumnos(res.alumnos);
+      if (res.ok) { _alumnoInfoCache = {}; res.alumnos.forEach(a => { _alumnoInfoCache[a.rut] = a; }); _renderAlumnos(res.alumnos); }
       else document.getElementById('listaAlumnos').innerHTML = '<div class="empty-state">Error</div>';
     } catch { document.getElementById('listaAlumnos').innerHTML = '<div class="empty-state">Sin conexión</div>'; }
   }
@@ -571,11 +692,13 @@
   async function agregarAlumno() {
     const rut = document.getElementById('newRut').value.replace(/\./g,'').trim().toLowerCase();
     const nombre = document.getElementById('newNombre').value.trim();
+    const plan = document.getElementById('newPlan').value;
+    const fechaInicio = document.getElementById('newFechaInicio').value;
     const msg = document.getElementById('agregarMsg');
-    if (!rut || !nombre) { msg.style.color='#ff3b3b'; msg.textContent='Completa todos los campos'; return; }
+    if (!rut || !nombre || !fechaInicio) { msg.style.color='#ff3b3b'; msg.textContent='Completa todos los campos'; return; }
     msg.textContent = '';
     try {
-      const res = await fetchAPI({ action: 'agregarAlumno', rut, nombre, profesor: _profeActual });
+      const res = await fetchAPI({ action: 'agregarAlumno', rut, nombre, profesor: _profeActual, plan, fechaInicio });
       if (res.ok) {
         msg.style.color='#00c851'; msg.textContent='✓ Alumno agregado';
         document.getElementById('newRut').value = ''; document.getElementById('newNombre').value = '';
@@ -597,47 +720,67 @@
     const rut = sel.value;
     const nombre = sel.options[sel.selectedIndex]?.dataset?.nombre || '';
     _alumnoSeleccionado = rut ? { rut, nombre } : null;
-    toggleFormClase(false);
-    document.getElementById('profeHistStats').classList.toggle('hidden', !rut);
+    toggleFormClase(false); toggleRenovar(false);
+    document.getElementById('profeHistStats').classList.add('hidden');
+    document.getElementById('profePlanBox').classList.add('hidden');
     document.getElementById('profeMesSelectorContainer').innerHTML = '';
     document.getElementById('profeHistContent').innerHTML = '';
     if (!rut) return;
 
-    const porMes = {}; let total = 0;
+    // Info del plan
+    const alumnoInfo = _alumnoInfoCache[rut];
+    if (alumnoInfo) {
+      const total = PLAN_CLASES[alumnoInfo.plan] || 8;
+      const usadas = Object.values(_profeRecords).flat().filter(r =>
+        String(r.rut).trim().toLowerCase() === rut && r.profesor === _profeActual &&
+        (!alumnoInfo.fechaInicio || r.fecha >= alumnoInfo.fechaInicio)
+      ).length;
+      const restantes = Math.max(0, total - usadas);
+      const pct = Math.min(100, Math.round((usadas / total) * 100));
+      const agotado = restantes === 0;
+
+      document.getElementById('profePlanTitle').textContent = PLAN_NOMBRES[alumnoInfo.plan] || 'Plan';
+      document.getElementById('profePlanCount').textContent = `${usadas} / ${total} clases`;
+      document.getElementById('profePlanFill').style.width = pct + '%';
+      document.getElementById('profePlanFill').className = 'plan-progress-fill' + (agotado ? ' agotado' : '');
+      const restEl = document.getElementById('profePlanRestantes');
+      restEl.textContent = agotado ? '⚠️ Plan agotado' : restantes + ' clases restantes';
+      restEl.className = 'plan-restantes' + (agotado ? ' agotado' : restantes <= 2 ? ' pocas' : '');
+      document.getElementById('profePlanBox').classList.remove('hidden');
+      document.getElementById('renovarPlan').value = alumnoInfo.plan;
+      document.getElementById('renovarFecha').value = todayKey();
+    }
+
+    // Historial
+    const porMes = {}; let total2 = 0;
     Object.keys(_profeRecords).sort((a,b) => b.localeCompare(a)).forEach(fecha => {
       const clases = _profeRecords[fecha].filter(r => String(r.rut).trim().toLowerCase() === rut && r.profesor === _profeActual);
       if (clases.length > 0) {
-        total++;
-        const mes = fecha.substring(0, 7);
+        total2++;
+        const mes = fecha.substring(0,7);
         if (!porMes[mes]) porMes[mes] = [];
         porMes[mes].push({ fecha, hora: clases[0].hora, manual: clases[0].manual });
       }
     });
     _profeHistorialData = porMes;
-    document.getElementById('profeHistTotal').textContent = total;
+    document.getElementById('profeHistTotal').textContent = total2;
+    document.getElementById('profeHistStats').classList.remove('hidden');
     const meses = Object.keys(porMes).sort((a,b) => b.localeCompare(a));
     if (!meses.length) { document.getElementById('profeHistContent').innerHTML = '<div class="empty-state">Sin clases registradas</div>'; return; }
     document.getElementById('profeMesSelectorContainer').innerHTML = meses.map(m => `
       <button class="mes-btn" onclick="seleccionarMesProfe('${m}')">${formatMesCorto(m)}</button>`).join('');
-    const mesActual = todayKey().substring(0, 7);
+    const mesActual = todayKey().substring(0,7);
     seleccionarMesProfe(porMes[mesActual] ? mesActual : meses[0]);
   }
 
   function seleccionarMesProfe(mes) {
-    document.querySelectorAll('#profeMesSelectorContainer .mes-btn').forEach(btn => {
-      btn.classList.toggle('activo', btn.textContent === formatMesCorto(mes));
-    });
+    document.querySelectorAll('#profeMesSelectorContainer .mes-btn').forEach(btn => btn.classList.toggle('activo', btn.textContent === formatMesCorto(mes)));
     const clases = _profeHistorialData[mes] || [];
     document.getElementById('profeHistMes').textContent = clases.length;
-
-    // Botón agregar clase
     const btnToggle = `<button class="btn-toggle-clase" onclick="toggleFormClase(true)">➕ Agregar clase manual</button>`;
-
-    if (!clases.length) {
-      document.getElementById('profeHistContent').innerHTML = btnToggle + '<div class="empty-state">Sin clases este mes</div>';
-      return;
-    }
-    document.getElementById('profeHistContent').innerHTML = btnToggle + clases.map(c => `
+    const btnRenovar = `<button class="btn-renovar" onclick="toggleRenovar(true)">🔄 Renovar plan</button>`;
+    if (!clases.length) { document.getElementById('profeHistContent').innerHTML = btnRenovar + btnToggle + '<div class="empty-state">Sin clases este mes</div>'; return; }
+    document.getElementById('profeHistContent').innerHTML = btnRenovar + btnToggle + clases.map(c => `
       <div class="dia-row-profe">
         <div class="dia-info">
           <span class="dia-fecha">${formatDateLong(c.fecha)}</span>
@@ -649,10 +792,32 @@
 
   function toggleFormClase(show) {
     document.getElementById('formAgregarClase').classList.toggle('hidden', !show);
-    if (show) {
-      document.getElementById('nuevaFecha').value = todayKey();
-      document.getElementById('claseMsg').textContent = '';
-    }
+    if (show) { document.getElementById('nuevaFecha').value = todayKey(); document.getElementById('claseMsg').textContent = ''; }
+  }
+
+  function toggleRenovar(show) {
+    document.getElementById('renovarBox').classList.toggle('hidden', !show);
+    if (show) document.getElementById('renovarMsg').textContent = '';
+  }
+
+  async function confirmarRenovar() {
+    if (!_alumnoSeleccionado) return;
+    const plan = document.getElementById('renovarPlan').value;
+    const fecha = document.getElementById('renovarFecha').value;
+    const msg = document.getElementById('renovarMsg');
+    if (!fecha) { msg.style.color='#ff3b3b'; msg.textContent='Selecciona fecha de inicio'; return; }
+    try {
+      const res = await fetchAPI({ action: 'renovarPlan', rut: _alumnoSeleccionado.rut, profesor: _profeActual, plan, fechaInicio: fecha });
+      if (res.ok) {
+        msg.style.color='#00c851'; msg.textContent='✓ Plan renovado';
+        // Actualizar caché local
+        if (_alumnoInfoCache[_alumnoSeleccionado.rut]) {
+          _alumnoInfoCache[_alumnoSeleccionado.rut].plan = parseInt(plan);
+          _alumnoInfoCache[_alumnoSeleccionado.rut].fechaInicio = fecha;
+        }
+        setTimeout(() => { toggleRenovar(false); onAlumnoChange(); }, 1200);
+      } else { msg.style.color='#ff3b3b'; msg.textContent = res.error || 'Error'; }
+    } catch { msg.style.color='#ff3b3b'; msg.textContent='Sin conexión'; }
   }
 
   async function agregarClase() {
@@ -666,7 +831,6 @@
       const res = await fetchAPI({ action: 'agregarClase', rut: _alumnoSeleccionado.rut, nombre: _alumnoSeleccionado.nombre, profesor: _profeActual, fecha, hora });
       if (res.ok) {
         msg.style.color='#00c851'; msg.textContent='✓ Clase agregada';
-        // Recargar records y refrescar
         const r = await fetchAPI({ action: 'records' });
         if (r.ok) _profeRecords = r.records || {};
         setTimeout(() => { toggleFormClase(false); onAlumnoChange(); }, 1000);
@@ -695,6 +859,21 @@
     document.getElementById('histMes').textContent = '—'; document.getElementById('histTotal').textContent = '—';
     const rut = localStorage.getItem(RUT_KEY);
     if (!rut) return;
+
+    // Info plan
+    const planInfo = JSON.parse(localStorage.getItem(PLAN_KEY) || 'null');
+    if (planInfo) {
+      const { plan, restantes, total, clasesUsadas, planAgotado } = planInfo;
+      const pct = Math.min(100, Math.round(((clasesUsadas||0) / total) * 100));
+      document.getElementById('histPlanTitle').textContent = PLAN_NOMBRES[plan] || 'Plan';
+      document.getElementById('histPlanCount').textContent = `${clasesUsadas||0} / ${total} clases`;
+      document.getElementById('histPlanFill').style.width = pct + '%';
+      document.getElementById('histPlanFill').className = 'plan-progress-fill' + (planAgotado ? ' agotado' : '');
+      const restEl = document.getElementById('histPlanRestantes');
+      restEl.textContent = planAgotado ? '⚠️ Plan agotado — contacta a tu profe' : restantes + ' clases restantes';
+      restEl.className = 'plan-restantes' + (planAgotado ? ' agotado' : restantes <= 2 ? ' pocas' : '');
+    }
+
     try {
       const res = await fetchAPI({ action: 'records' });
       if (!res.ok) { document.getElementById('historialContent').innerHTML = '<div class="empty-state">Error</div>'; return; }
@@ -704,7 +883,7 @@
         const misClases = records[fecha].filter(r => String(r.rut).trim().toLowerCase() === rut);
         if (misClases.length > 0) {
           totalClases++;
-          const mes = fecha.substring(0, 7);
+          const mes = fecha.substring(0,7);
           if (!porMes[mes]) porMes[mes] = [];
           porMes[mes].push({ fecha, hora: misClases[0].hora });
         }
@@ -714,7 +893,7 @@
       const meses = Object.keys(porMes).sort((a,b) => b.localeCompare(a));
       if (!meses.length) { document.getElementById('histMes').textContent='0'; document.getElementById('historialContent').innerHTML='<div class="empty-state">Sin clases aún</div>'; return; }
       document.getElementById('mesSelectorContainer').innerHTML = meses.map(m => `<button class="mes-btn" onclick="seleccionarMes('${m}')">${formatMesCorto(m)}</button>`).join('');
-      const mesActual = todayKey().substring(0, 7);
+      const mesActual = todayKey().substring(0,7);
       seleccionarMes(porMes[mesActual] ? mesActual : meses[0]);
     } catch { document.getElementById('historialContent').innerHTML = '<div class="empty-state">Sin conexión</div>'; }
   }
@@ -738,7 +917,7 @@
   }
 
   // ── Helpers ────────────────────────────────────────────────────────────────
-  function todayKey() { const d = new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function todayKey() { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
   function timeNow() { return new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'}); }
   function todayLabel() { return new Date().toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long'}); }
   function formatDate(key) { const [y,m,d]=key.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long',year:'numeric'}); }
