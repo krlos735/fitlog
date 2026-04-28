@@ -330,24 +330,29 @@
   let _alumnoSeleccionado = null;
 
   // ── Swipe para abrir PIN ───────────────────────────────────────────────────
-  let _swipeStartX = 0, _swipeStartY = 0;
+  let _swipeStartX = 0, _swipeStartY = 0, _swipeMoved = false;
 
   document.addEventListener('touchstart', e => {
     _swipeStartX = e.touches[0].clientX;
     _swipeStartY = e.touches[0].clientY;
+    _swipeMoved  = false;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', e => {
+    _swipeMoved = true;
   }, { passive: true });
 
   document.addEventListener('touchend', e => {
+    if (!_swipeMoved) return; // fue un tap, no swipe
     const dx = e.changedTouches[0].clientX - _swipeStartX;
     const dy = Math.abs(e.changedTouches[0].clientY - _swipeStartY);
-    // Swipe izquierda: dx < -80px y movimiento horizontal (no vertical)
-    if (dx < -80 && dy < 60) {
-      const anyOverlayOpen = ['historialOverlay','pinOverlay','profeOverlay'].some(id =>
+    if (dx < -90 && dy < 50) {
+      const anyOpen = ['historialOverlay','pinOverlay','profeOverlay'].some(id =>
         !document.getElementById(id).classList.contains('hidden')
       );
-      if (!anyOverlayOpen) openPin();
+      if (!anyOpen) openPin();
     }
-  }, { passive: true }); // { rut, nombre }
+  }, { passive: true });
 
   // ── Lock ───────────────────────────────────────────────────────────────────
   function getLock() {
@@ -497,9 +502,19 @@
   }
 
   // ── Panel Profe ────────────────────────────────────────────────────────────
-  function openProfe() {
+  async function openProfe() {
     document.getElementById('profeTitulo').textContent = '👨‍🏫 ' + _profeActual.toUpperCase();
     document.getElementById('profeOverlay').classList.remove('hidden');
+    // Cargar TODO de una sola vez
+    document.getElementById('profeContent').innerHTML = '<div class="admin-loading"><span class="loading-dot"></span> Cargando...</div>';
+    try {
+      const [recRes, alumRes] = await Promise.all([
+        fetchAPI({ action: 'records' }),
+        fetchAPI({ action: 'getAlumnos', profesor: _profeActual })
+      ]);
+      if (recRes.ok)  _profeRecords = recRes.records || {};
+      if (alumRes.ok) _renderAlumnos(alumRes.alumnos);
+    } catch {}
     switchTab('hoy');
   }
   function closeProfe() { document.getElementById('profeOverlay').classList.add('hidden'); }
@@ -508,59 +523,74 @@
     ['hoy','alumnos','historial'].forEach(t => {
       const key = t.charAt(0).toUpperCase() + t.slice(1);
       document.getElementById('tabContent' + key).classList.toggle('hidden', t !== tab);
-      document.getElementById('tab' + key).classList.toggle('activo', t === tab);
+      document.getElementById('tab'     + key).classList.toggle('activo',  t === tab);
     });
-    if (tab === 'hoy') loadProfeData();
-    if (tab === 'alumnos') loadAlumnos();
-    if (tab === 'historial') loadProfeHistorial();
+    if (tab === 'hoy')      _renderHoy();
+    if (tab === 'historial') _renderHistorialTab();
+  }
+
+  function _renderHoy() {
+    const records = {};
+    Object.keys(_profeRecords).forEach(fecha => {
+      const r = _profeRecords[fecha].filter(r => r.profesor === _profeActual);
+      if (r.length) records[fecha] = r;
+    });
+    const allDays  = Object.keys(records).sort((a,b) => b.localeCompare(a));
+    const todayRec = records[todayKey()] || [];
+    const total    = Object.values(records).flat().length;
+    const weekStart = new Date(); weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+    let weekCount = 0;
+    Object.keys(records).forEach(d => { if (new Date(d) >= weekStart) weekCount += records[d].length; });
+    document.getElementById('pStatToday').textContent = todayRec.length;
+    document.getElementById('pStatWeek').textContent  = weekCount;
+    document.getElementById('pStatTotal').textContent = total;
+    if (!allDays.length) { document.getElementById('profeContent').innerHTML = '<div class="empty-state">Sin registros aún</div>'; return; }
+    document.getElementById('profeContent').innerHTML = allDays.map(day => `
+      <div class="day-block">
+        <div class="day-label">${formatDate(day)}<span class="day-count">· ${records[day].length} asistentes</span></div>
+        ${records[day].map(r => `
+          <div class="attendee-row">
+            <div class="attendee-info"><span class="attendee-name">${r.nombre}</span><span class="attendee-rut">${r.rut}</span></div>
+            <span class="attendee-time">${r.hora}</span>
+          </div>`).join('')}
+      </div>`).join('');
   }
 
   async function loadProfeData() {
     document.getElementById('profeContent').innerHTML = '<div class="admin-loading"><span class="loading-dot"></span></div>';
     try {
       const res = await fetchAPI({ action: 'records' });
-      if (!res.ok) { document.getElementById('profeContent').innerHTML = '<div class="empty-state">Error</div>'; return; }
-      _profeRecords = res.records || {};
-      const records = {};
-      Object.keys(_profeRecords).forEach(fecha => {
-        const r = _profeRecords[fecha].filter(r => r.profesor === _profeActual);
-        if (r.length > 0) records[fecha] = r;
-      });
-      const allDays = Object.keys(records).sort((a,b) => b.localeCompare(a));
-      const todayRec = records[todayKey()] || [];
-      const total = Object.values(records).flat().length;
-      const weekStart = new Date(); weekStart.setDate(weekStart.getDate() - weekStart.getDay());
-      let weekCount = 0;
-      Object.keys(records).forEach(d => { if (new Date(d) >= weekStart) weekCount += records[d].length; });
-      document.getElementById('pStatToday').textContent = todayRec.length;
-      document.getElementById('pStatWeek').textContent  = weekCount;
-      document.getElementById('pStatTotal').textContent = total;
-      if (!allDays.length) { document.getElementById('profeContent').innerHTML = '<div class="empty-state">Sin registros aún</div>'; return; }
-      document.getElementById('profeContent').innerHTML = allDays.map(day => `
-        <div class="day-block">
-          <div class="day-label">${formatDate(day)}<span class="day-count">· ${records[day].length} asistentes</span></div>
-          ${records[day].map(r => `
-            <div class="attendee-row">
-              <div class="attendee-info"><span class="attendee-name">${r.nombre}</span><span class="attendee-rut">${r.rut}</span></div>
-              <span class="attendee-time">${r.hora}</span>
-            </div>`).join('')}
-        </div>`).join('');
-    } catch { document.getElementById('profeContent').innerHTML = '<div class="empty-state">Sin conexión</div>'; }
+      if (res.ok) _profeRecords = res.records || {};
+    } catch {}
+    _renderHoy();
+  }
+
+  function _renderAlumnos(alumnos) {
+    if (!alumnos || !alumnos.length) {
+      document.getElementById('listaAlumnos').innerHTML = '<div class="empty-state">Sin alumnos</div>';
+      document.getElementById('alumnoSelector').innerHTML = '<option value="">— Selecciona un alumno —</option>';
+      return;
+    }
+    document.getElementById('listaAlumnos').innerHTML = alumnos.map(a => `
+      <div class="alumno-row">
+        <div class="alumno-info"><span class="alumno-nombre">${a.nombre}</span><span class="alumno-rut">${a.rut}</span></div>
+        <button class="btn-eliminar" onclick="eliminarAlumno('${a.rut}','${a.nombre}')">✕ Eliminar</button>
+      </div>`).join('');
+    document.getElementById('alumnoSelector').innerHTML =
+      '<option value="">— Selecciona un alumno —</option>' +
+      alumnos.map(a => `<option value="${a.rut}" data-nombre="${a.nombre}">${a.nombre}</option>`).join('');
+  }
+
+  function _renderHistorialTab() {
+    // ya están los records en caché, no hace falta llamar al servidor
   }
 
   async function loadAlumnos() {
     document.getElementById('listaAlumnos').innerHTML = '<div class="admin-loading"><span class="loading-dot"></span></div>';
     try {
       const res = await fetchAPI({ action: 'getAlumnos', profesor: _profeActual });
-      if (!res.ok || !res.alumnos.length) { document.getElementById('listaAlumnos').innerHTML = '<div class="empty-state">Sin alumnos</div>'; return; }
-      document.getElementById('listaAlumnos').innerHTML = res.alumnos.map(a => `
-        <div class="alumno-row">
-          <div class="alumno-info"><span class="alumno-nombre">${a.nombre}</span><span class="alumno-rut">${a.rut}</span></div>
-          <button class="btn-eliminar" onclick="eliminarAlumno('${a.rut}','${a.nombre}')">✕ Eliminar</button>
-        </div>`).join('');
-      const sel = document.getElementById('alumnoSelector');
-      sel.innerHTML = '<option value="">— Selecciona un alumno —</option>' +
-        res.alumnos.map(a => `<option value="${a.rut}" data-nombre="${a.nombre}">${a.nombre}</option>`).join('');
+      if (res.ok) _renderAlumnos(res.alumnos);
+      else document.getElementById('listaAlumnos').innerHTML = '<div class="empty-state">Error</div>';
     } catch { document.getElementById('listaAlumnos').innerHTML = '<div class="empty-state">Sin conexión</div>'; }
   }
 
@@ -586,13 +616,6 @@
       const res = await fetchAPI({ action: 'eliminarAlumno', rut, profesor: _profeActual });
       if (res.ok) loadAlumnos(); else alert('Error: ' + (res.error || 'No se pudo eliminar'));
     } catch { alert('Sin conexión'); }
-  }
-
-  async function loadProfeHistorial() {
-    if (!Object.keys(_profeRecords).length) {
-      const res = await fetchAPI({ action: 'records' });
-      if (res.ok) _profeRecords = res.records || {};
-    }
   }
 
   function onAlumnoChange() {
