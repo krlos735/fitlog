@@ -657,12 +657,14 @@
     // Calcular clases restantes por alumno
     document.getElementById('listaAlumnos').innerHTML = alumnos.map(a => {
       const total = PLAN_CLASES[a.plan] || 8;
-      const usadas = Object.entries(_profeRecords).filter(([fecha]) =>
-        !a.fechaInicio || fecha >= a.fechaInicio
-      ).flatMap(([, regs]) => regs).filter(r =>
-        String(r.rut).trim().toLowerCase() === String(a.rut).trim().toLowerCase() &&
-        r.profesor === _profeActual
-      ).length;
+      const fechaInicio = a.fechaInicio || '';
+      const usadas = Object.entries(_profeRecords).reduce((acc, [fecha, regs]) => {
+        if (fechaInicio && fecha < fechaInicio) return acc;
+        return acc + regs.filter(r =>
+          String(r.rut).trim().toLowerCase() === String(a.rut).trim().toLowerCase() &&
+          r.profesor === _profeActual
+        ).length;
+      }, 0);
       const restantes = Math.max(0, total - usadas);
       const clase = restantes === 0 ? 'agotado' : restantes <= 2 ? 'pocas' : '';
       return `
@@ -732,11 +734,13 @@
     const alumnoInfo = _alumnoInfoCache[rut];
     if (alumnoInfo) {
       const total = PLAN_CLASES[alumnoInfo.plan] || 8;
-      const usadas = Object.entries(_profeRecords).filter(([fecha]) =>
-        !alumnoInfo.fechaInicio || fecha >= alumnoInfo.fechaInicio
-      ).flatMap(([, regs]) => regs).filter(r =>
-        String(r.rut).trim().toLowerCase() === rut && r.profesor === _profeActual
-      ).length;
+      const fechaInicio = alumnoInfo.fechaInicio || '';
+      const usadas = Object.entries(_profeRecords).reduce((acc, [fecha, regs]) => {
+        if (fechaInicio && fecha < fechaInicio) return acc;
+        return acc + regs.filter(r =>
+          String(r.rut).trim().toLowerCase() === rut && r.profesor === _profeActual
+        ).length;
+      }, 0);
       const restantes = Math.max(0, total - usadas);
       const pct = Math.min(100, Math.round((usadas / total) * 100));
       const agotado = restantes === 0;
