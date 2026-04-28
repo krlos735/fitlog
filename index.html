@@ -277,7 +277,7 @@
   <div class="card">
     <div id="logoArea" style="position:relative;">
       <button onclick="openPin()" style="position:absolute;top:0;right:0;background:rgba(255,255,255,0.06);border:none;color:#555;font-size:18px;width:38px;height:38px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">☰</button>
-      <div onclick="handleLogoTap()">
+      <div>
         <div class="logo">FITMOTION</div>
         <div class="logo-sub">Control de Asistencia</div>
       </div>
@@ -324,7 +324,6 @@
   const PROF_KEY = 'fitlog:profesor';
 
   let _touchHandled = false;
-  let tapCount = 0, tapTimer = null;
   let _pinValue = '';
   let _profeActual = '';
   let _historialData = {};
@@ -332,30 +331,7 @@
   let _profeRecords = {};
   let _alumnoSeleccionado = null;
 
-  // ── Swipe para abrir PIN ───────────────────────────────────────────────────
-  let _swipeStartX = 0, _swipeStartY = 0, _swipeMoved = false;
-
-  document.addEventListener('touchstart', e => {
-    _swipeStartX = e.touches[0].clientX;
-    _swipeStartY = e.touches[0].clientY;
-    _swipeMoved  = false;
-  }, { passive: true });
-
-  document.addEventListener('touchmove', e => {
-    _swipeMoved = true;
-  }, { passive: true });
-
-  document.addEventListener('touchend', e => {
-    if (!_swipeMoved) return; // fue un tap, no swipe
-    const dx = e.changedTouches[0].clientX - _swipeStartX;
-    const dy = Math.abs(e.changedTouches[0].clientY - _swipeStartY);
-    if (dx < -90 && dy < 50) {
-      const anyOpen = ['historialOverlay','pinOverlay','profeOverlay'].some(id =>
-        !document.getElementById(id).classList.contains('hidden')
-      );
-      if (!anyOpen) openPin();
-    }
-  }, { passive: true });
+  // ── Logo tap removido — acceso profe solo por botón hamburguesa ───────────
 
   // ── Lock ───────────────────────────────────────────────────────────────────
   function getLock() {
@@ -480,12 +456,7 @@
     } catch { alert('Sin conexión.'); clearLock(); loadCheckinView(name); }
   }
 
-  // ── Logo → PIN ─────────────────────────────────────────────────────────────
-  function handleLogoTap() {
-    clearTimeout(tapTimer);
-    if (++tapCount >= 5) { tapCount = 0; openPin(); return; }
-    tapTimer = setTimeout(() => { tapCount = 0; }, 1500);
-  }
+  // ── Acceso profe solo por botón hamburguesa ────────────────────────────────
 
   // ── PIN ────────────────────────────────────────────────────────────────────
   function openPin() { _pinValue = ''; updatePinDisplay(); document.getElementById('pinError').textContent = ''; document.getElementById('pinOverlay').classList.remove('hidden'); }
