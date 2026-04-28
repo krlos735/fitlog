@@ -11,151 +11,68 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #0a0a0a; }
     .app {
-      min-height: 100vh;
-      display: flex; flex-direction: column;
+      min-height: 100vh; display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      font-family: 'DM Sans', sans-serif;
-      color: #f0ede8; padding: 24px;
-      position: relative; overflow: hidden;
-      background: #0a0a0a;
+      font-family: 'DM Sans', sans-serif; color: #f0ede8; padding: 24px;
+      position: relative; overflow: hidden; background: #0a0a0a;
     }
     .app::before {
-      content: ''; position: fixed;
-      top: -40%; left: -20%; width: 70vw; height: 70vw;
+      content: ''; position: fixed; top: -40%; left: -20%; width: 70vw; height: 70vw;
       background: radial-gradient(circle, rgba(255,90,0,0.12) 0%, transparent 70%);
       pointer-events: none;
     }
     .app::after {
-      content: ''; position: fixed;
-      bottom: -30%; right: -20%; width: 60vw; height: 60vw;
+      content: ''; position: fixed; bottom: -30%; right: -20%; width: 60vw; height: 60vw;
       background: radial-gradient(circle, rgba(255,200,0,0.06) 0%, transparent 70%);
       pointer-events: none;
     }
     .card { width: 100%; max-width: 380px; position: relative; z-index: 1; }
 
-    @keyframes fadeUp {
-      from { opacity:0; transform: translateY(24px); }
-      to   { opacity:1; transform: translateY(0); }
-    }
-    @keyframes popIn {
-      from { opacity:0; transform: scale(0.3); }
-      to   { opacity:1; transform: scale(1); }
-    }
-    @keyframes pulse {
-      0%,100% { opacity:0.3; transform:scale(0.8); }
-      50%      { opacity:1;   transform:scale(1.2); }
-    }
-    @keyframes shake {
-      0%,100% { transform: translateX(0); }
-      20%     { transform: translateX(-8px); }
-      40%     { transform: translateX(8px); }
-      60%     { transform: translateX(-6px); }
-      80%     { transform: translateX(6px); }
-    }
+    @keyframes fadeUp { from { opacity:0; transform: translateY(24px); } to { opacity:1; transform: translateY(0); } }
+    @keyframes popIn { from { opacity:0; transform: scale(0.3); } to { opacity:1; transform: scale(1); } }
+    @keyframes pulse { 0%,100% { opacity:0.3; transform:scale(0.8); } 50% { opacity:1; transform:scale(1.2); } }
+    @keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } }
+
     .fadeUp { animation: fadeUp 0.45s ease both; }
-    .logo {
-      font-family: 'Bebas Neue', sans-serif; font-size: 52px;
-      letter-spacing: 4px; color: #ff5a00; line-height: 1;
-      cursor: pointer; user-select: none;
-      text-shadow: 0 0 40px rgba(255,90,0,0.4); margin-bottom: 4px;
-    }
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 4px; color: #ff5a00; line-height: 1; cursor: pointer; user-select: none; text-shadow: 0 0 40px rgba(255,90,0,0.4); margin-bottom: 4px; }
     .logo-sub { font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: #555; margin-bottom: 48px; }
     .section-title { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: #ff5a00; margin-bottom: 16px; }
     .big-text { font-family: 'Bebas Neue', sans-serif; font-size: 38px; letter-spacing: 2px; line-height: 1.1; margin-bottom: 8px; }
     .sub-text { font-size: 14px; color: #777; margin-bottom: 36px; line-height: 1.6; }
 
-    .input {
-      width: 100%; background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
-      padding: 16px 20px; font-size: 17px; font-family: 'DM Sans', sans-serif;
-      color: #f0ede8; outline: none;
-      transition: border-color 0.2s, background 0.2s; margin-bottom: 12px;
-    }
+    .input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px 20px; font-size: 17px; font-family: 'DM Sans', sans-serif; color: #f0ede8; outline: none; transition: border-color 0.2s, background 0.2s; margin-bottom: 12px; }
     .input:focus { border-color: #ff5a00; background: rgba(255,90,0,0.06); }
     .input::placeholder { color: #444; }
     .input.error { border-color: #ff3b3b; animation: shake 0.4s ease; }
     .error-msg { font-size: 13px; color: #ff3b3b; margin-bottom: 16px; min-height: 18px; text-align: center; }
 
-    .btn {
-      width: 100%; padding: 18px; border: none; border-radius: 12px;
-      font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px;
-      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
-      -webkit-tap-highlight-color: transparent; touch-action: manipulation;
-      -webkit-appearance: none; appearance: none;
-    }
+    .btn { width: 100%; padding: 18px; border: none; border-radius: 12px; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; -webkit-tap-highlight-color: transparent; touch-action: manipulation; -webkit-appearance: none; appearance: none; }
     .btn:active { transform: scale(0.97); }
     .btn-primary { background: #ff5a00; color: #fff; box-shadow: 0 8px 32px rgba(255,90,0,0.35); }
-    .btn-primary:disabled, .btn-primary.inactivo {
-      background: #ff5a00 !important; color: rgba(255,255,255,0.4) !important;
-      box-shadow: none; opacity: 1; cursor: not-allowed; pointer-events: none;
-    }
-    .btn-ghost {
-      background: transparent; border: 1px solid rgba(255,255,255,0.12);
-      color: #555; font-size: 13px; letter-spacing: 2px; padding: 12px;
-      margin-top: 12px; font-family: 'DM Sans', sans-serif;
-    }
-    .btn-stats {
-      background: rgba(255,90,0,0.1); border: 1px solid rgba(255,90,0,0.3);
-      color: #ff5a00; font-size: 16px; letter-spacing: 2px; padding: 12px;
-      margin-top: 12px; font-family: 'Bebas Neue', sans-serif;
-      border-radius: 12px; width: 100%; cursor: pointer;
-    }
+    .btn-primary:disabled, .btn-primary.inactivo { background: #ff5a00 !important; color: rgba(255,255,255,0.4) !important; box-shadow: none; opacity: 1; cursor: not-allowed; pointer-events: none; }
+    .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.12); color: #555; font-size: 13px; letter-spacing: 2px; padding: 12px; margin-top: 12px; font-family: 'DM Sans', sans-serif; }
+    .btn-stats { background: rgba(255,90,0,0.1); border: 1px solid rgba(255,90,0,0.3); color: #ff5a00; font-size: 16px; letter-spacing: 2px; padding: 12px; margin-top: 12px; font-family: 'Bebas Neue', sans-serif; border-radius: 12px; width: 100%; cursor: pointer; }
 
     .checkin-card { text-align: center; }
-    .avatar {
-      width: 88px; height: 88px; border-radius: 50%;
-      background: linear-gradient(135deg, #ff5a00, #ff9500);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: #fff;
-      margin: 0 auto 24px; box-shadow: 0 8px 32px rgba(255,90,0,0.4);
-    }
+    .avatar { width: 88px; height: 88px; border-radius: 50%; background: linear-gradient(135deg, #ff5a00, #ff9500); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: #fff; margin: 0 auto 24px; box-shadow: 0 8px 32px rgba(255,90,0,0.4); }
     .greeting { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: #555; margin-bottom: 8px; }
     .name-display { font-family: 'Bebas Neue', sans-serif; font-size: 44px; letter-spacing: 2px; margin-bottom: 6px; }
     .date-display { font-size: 13px; color: #555; margin-bottom: 48px; text-transform: capitalize; }
-
-    .checkin-btn {
-      width: 100%; padding: 24px; border: none; border-radius: 16px;
-      background: #ff5a00; color: #fff;
-      font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 4px;
-      cursor: pointer; box-shadow: 0 12px 40px rgba(255,90,0,0.4);
-      transition: transform 0.15s;
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-      -webkit-tap-highlight-color: transparent; touch-action: manipulation;
-    }
+    .checkin-btn { width: 100%; padding: 24px; border: none; border-radius: 16px; background: #ff5a00; color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 4px; cursor: pointer; box-shadow: 0 12px 40px rgba(255,90,0,0.4); transition: transform 0.15s; display: flex; align-items: center; justify-content: center; gap: 12px; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
     .checkin-btn:active { transform: scale(0.97); }
     .checkin-btn:disabled { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
 
-    .success-icon {
-      width: 100px; height: 100px; border-radius: 50%;
-      background: linear-gradient(135deg, #00c851, #00a844);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 48px; margin: 0 auto 28px;
-      animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both;
-      box-shadow: 0 12px 40px rgba(0,200,80,0.4);
-    }
-    .already-icon {
-      width: 100px; height: 100px; border-radius: 50%;
-      background: linear-gradient(135deg, #ff9500, #ff5a00);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 48px; margin: 0 auto 28px;
-      animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both;
-      box-shadow: 0 12px 40px rgba(255,150,0,0.4);
-    }
+    .success-icon { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #00c851, #00a844); display: flex; align-items: center; justify-content: center; font-size: 48px; margin: 0 auto 28px; animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both; box-shadow: 0 12px 40px rgba(0,200,80,0.4); }
+    .already-icon { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #ff9500, #ff5a00); display: flex; align-items: center; justify-content: center; font-size: 48px; margin: 0 auto 28px; animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both; box-shadow: 0 12px 40px rgba(255,150,0,0.4); }
     .success-name { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 2px; margin-bottom: 8px; }
     .success-time { font-size: 13px; color: #555; }
 
-    /* Overlays */
-    .overlay {
-      position: fixed; inset: 0; background: #0a0a0a; z-index: 100;
-      overflow-y: auto; padding: 32px 20px;
-      animation: fadeUp 0.3s ease both;
-    }
+    .overlay { position: fixed; inset: 0; background: #0a0a0a; z-index: 100; overflow-y: auto; padding: 32px 20px; animation: fadeUp 0.3s ease both; }
     .overlay-inner { max-width: 480px; margin: 0 auto; }
     .overlay-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
     .overlay-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; color: #ff5a00; }
     .close-btn { background: rgba(255,255,255,0.06); border: none; color: #888; font-size: 20px; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; }
 
-    /* Historial */
     .mes-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
     .mes-box { background: rgba(255,90,0,0.07); border: 1px solid rgba(255,90,0,0.15); border-radius: 14px; padding: 20px; text-align: center; }
     .mes-num { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: #ff5a00; line-height: 1; }
@@ -164,11 +81,29 @@
     .mes-selector { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
     .mes-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #888; font-size: 12px; letter-spacing: 1px; padding: 7px 14px; border-radius: 20px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; text-transform: uppercase; }
     .mes-btn.activo { background: #ff5a00; border-color: #ff5a00; color: #fff; font-weight: 500; }
+
     .dia-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 6px; }
     .dia-fecha { font-size: 14px; font-weight: 500; text-transform: capitalize; color: #f0ede8; }
     .dia-hora { font-size: 12px; color: #aaa; font-variant-numeric: tabular-nums; }
+    .dia-row-profe { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 6px; gap: 8px; }
+    .dia-info { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+    .dia-info .dia-fecha { font-size: 13px; }
+    .dia-info .dia-hora { font-size: 11px; }
+    .dia-manual { font-size: 10px; color: #ff9500; letter-spacing: 1px; }
+    .btn-elim-clase { background: rgba(255,50,50,0.1); border: 1px solid rgba(255,50,50,0.25); color: #ff4444; font-size: 11px; padding: 5px 10px; border-radius: 7px; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
 
-    /* Panel profe */
+    /* Formulario agregar clase */
+    .form-agregar-clase { background: rgba(255,150,0,0.06); border: 1px solid rgba(255,150,0,0.2); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
+    .form-agregar-clase.hidden { display: none; }
+    .form-title { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #ff9500; margin-bottom: 12px; }
+    .input-small { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 11px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: #f0ede8; outline: none; margin-bottom: 8px; }
+    .input-small:focus { border-color: #ff5a00; }
+    .input-small::placeholder { color: #444; }
+    .btn-row { display: flex; gap: 8px; }
+    .btn-agregar-clase { flex: 1; padding: 11px; border: none; border-radius: 9px; background: #ff9500; color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 2px; cursor: pointer; }
+    .btn-cancelar-clase { flex: 1; padding: 11px; border: 1px solid rgba(255,255,255,0.1); border-radius: 9px; background: transparent; color: #555; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; }
+    .btn-toggle-clase { width: 100%; padding: 10px; border: 1px dashed rgba(255,150,0,0.4); border-radius: 10px; background: transparent; color: #ff9500; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; margin-bottom: 12px; }
+
     .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 24px; }
     .stat-box { background: rgba(255,90,0,0.07); border: 1px solid rgba(255,90,0,0.15); border-radius: 14px; padding: 16px 10px; text-align: center; }
     .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: #ff5a00; line-height: 1; }
@@ -184,19 +119,21 @@
 
     .alumno-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 6px; }
     .alumno-info { display: flex; flex-direction: column; gap: 2px; }
-    .alumno-nombre { font-size: 15px; font-weight: 500; }
-    .alumno-rut { font-size: 11px; color: #444; }
+    .alumno-nombre { font-size: 15px; font-weight: 500; color: #f0ede8; }
+    .alumno-rut { font-size: 11px; color: #555; }
     .btn-eliminar { background: rgba(255,50,50,0.1); border: 1px solid rgba(255,50,50,0.3); color: #ff4444; font-size: 12px; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
-    .btn-eliminar:hover { background: rgba(255,50,50,0.2); }
 
     .form-agregar { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
-    .form-title { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: #ff5a00; margin-bottom: 16px; }
-    .input-small { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 16px; font-size: 15px; font-family: 'DM Sans', sans-serif; color: #f0ede8; outline: none; margin-bottom: 10px; }
-    .input-small:focus { border-color: #ff5a00; }
-    .input-small::placeholder { color: #444; }
-    .btn-agregar { width: 100%; padding: 14px; border: none; border-radius: 10px; background: #ff5a00; color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 2px; cursor: pointer; }
 
-    /* PIN pad */
+    .day-block { margin-bottom: 28px; }
+    .day-label { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #ff5a00; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,90,0,0.2); }
+    .day-count { font-size: 11px; color: #888; margin-left: 8px; }
+    .attendee-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 6px; }
+    .attendee-info { display: flex; flex-direction: column; gap: 2px; }
+    .attendee-name { font-size: 15px; font-weight: 500; color: #f0ede8; }
+    .attendee-rut  { font-size: 11px; color: #555; }
+    .attendee-time { font-size: 12px; color: #aaa; }
+
     .pin-display { display: flex; gap: 12px; justify-content: center; margin-bottom: 32px; }
     .pin-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #ff5a00; transition: background 0.2s; }
     .pin-dot.filled { background: #ff5a00; }
@@ -206,27 +143,19 @@
     .pin-btn.delete { font-size: 18px; color: #555; }
     .pin-error { font-size: 13px; color: #ff3b3b; text-align: center; margin-top: 16px; min-height: 18px; }
 
+    .refresh-btn { background: rgba(255,90,0,0.1); border: 1px solid rgba(255,90,0,0.2); color: #ff5a00; font-size: 12px; letter-spacing: 2px; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-bottom: 20px; }
     .loading-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ff5a00; animation: pulse 1s ease infinite; }
     .loading-white { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #fff; animation: pulse 1s ease infinite; }
     .empty-state { text-align: center; color: #333; font-size: 14px; padding: 40px 0; }
     .admin-loading { text-align: center; padding: 32px 0; color: #444; font-size: 14px; }
     .rut-hint { font-size: 12px; color: #444; text-align: center; margin-bottom: 16px; }
-    .refresh-btn { background: rgba(255,90,0,0.1); border: 1px solid rgba(255,90,0,0.2); color: #ff5a00; font-size: 12px; letter-spacing: 2px; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-bottom: 20px; }
-    .day-block { margin-bottom: 28px; }
-    .day-label { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #ff5a00; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,90,0,0.2); }
-    .day-count { font-size: 11px; color: #888; margin-left: 8px; }
-    .attendee-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 6px; }
-    .attendee-info { display: flex; flex-direction: column; gap: 2px; }
-    .attendee-name { font-size: 15px; font-weight: 500; color: #f0ede8; }
-    .attendee-rut  { font-size: 11px; color: #666; }
-    .attendee-time { font-size: 12px; color: #aaa; }
-    .hidden { display: none !important; }
     .success-msg { font-size: 13px; color: #00c851; text-align: center; margin-top: 8px; min-height: 18px; }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
 
-<!-- HISTORIAL PERSONAL (alumno) -->
+<!-- HISTORIAL ALUMNO -->
 <div class="overlay hidden" id="historialOverlay">
   <div class="overlay-inner">
     <div class="overlay-header">
@@ -250,13 +179,11 @@
       <span class="overlay-title">🔐 ACCESO PROFE</span>
       <button class="close-btn" onclick="closePin()">✕</button>
     </div>
-    <div style="text-align:center; margin-bottom:28px;">
+    <div style="text-align:center;margin-bottom:28px;">
       <div style="font-size:13px;letter-spacing:3px;text-transform:uppercase;color:#555;margin-bottom:20px;">Ingresa tu PIN</div>
       <div class="pin-display" id="pinDisplay">
-        <div class="pin-dot" id="pd0"></div>
-        <div class="pin-dot" id="pd1"></div>
-        <div class="pin-dot" id="pd2"></div>
-        <div class="pin-dot" id="pd3"></div>
+        <div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div>
+        <div class="pin-dot" id="pd2"></div><div class="pin-dot" id="pd3"></div>
       </div>
     </div>
     <div class="pin-pad">
@@ -284,8 +211,6 @@
       <span class="overlay-title" id="profeTitulo">👨‍🏫 PANEL</span>
       <button class="close-btn" onclick="closeProfe()">✕</button>
     </div>
-
-    <!-- Tabs -->
     <div class="profe-tabs">
       <button class="profe-tab activo" id="tabHoy" onclick="switchTab('hoy')">Hoy</button>
       <button class="profe-tab" id="tabAlumnos" onclick="switchTab('alumnos')">Alumnos</button>
@@ -306,10 +231,10 @@
     <!-- Tab Alumnos -->
     <div id="tabContentAlumnos" class="hidden">
       <div class="form-agregar">
-        <div class="form-title">➕ Agregar alumno</div>
+        <div class="form-title" style="font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:16px;">➕ Agregar alumno</div>
         <input class="input-small" type="text" id="newRut" placeholder="RUT (ej: 12345678-9)" oninput="formatRutInput(this)" maxlength="12" />
         <input class="input-small" type="text" id="newNombre" placeholder="Nombre completo" />
-        <button class="btn-agregar" onclick="agregarAlumno()">AGREGAR</button>
+        <button class="btn-agregar-clase" style="width:100%;background:#ff5a00;" onclick="agregarAlumno()">AGREGAR ALUMNO</button>
         <div class="success-msg" id="agregarMsg"></div>
       </div>
       <div class="historial-section-title">Lista de alumnos</div>
@@ -324,10 +249,23 @@
           <option value="">— Selecciona un alumno —</option>
         </select>
       </div>
-      <div class="mes-stats" id="profeHistStats" style="display:none">
+      <div class="mes-stats hidden" id="profeHistStats">
         <div class="mes-box"><div class="mes-num" id="profeHistMes">—</div><div class="mes-label">Este mes</div></div>
         <div class="mes-box"><div class="mes-num" id="profeHistTotal">—</div><div class="mes-label">Total</div></div>
       </div>
+
+      <!-- Formulario agregar clase -->
+      <div class="form-agregar-clase hidden" id="formAgregarClase">
+        <div class="form-title">➕ Agregar clase manual</div>
+        <input class="input-small" type="date" id="nuevaFecha" />
+        <input class="input-small" type="time" id="nuevaHora" value="19:00" />
+        <div class="btn-row">
+          <button class="btn-agregar-clase" onclick="agregarClase()">GUARDAR</button>
+          <button class="btn-cancelar-clase" onclick="toggleFormClase(false)">Cancelar</button>
+        </div>
+        <div class="success-msg" id="claseMsg"></div>
+      </div>
+
       <div class="mes-selector" id="profeMesSelectorContainer"></div>
       <div id="profeHistContent"></div>
     </div>
@@ -341,44 +279,31 @@
       <div class="logo">FITMOTION</div>
       <div class="logo-sub">Control de Asistencia</div>
     </div>
-
-    <div id="viewLoading" style="text-align:center;padding:40px 0">
-      <span class="loading-dot"></span>
-    </div>
-
+    <div id="viewLoading" style="text-align:center;padding:40px 0"><span class="loading-dot"></span></div>
     <div id="viewRut" class="hidden fadeUp">
       <div class="section-title">Bienvenido</div>
       <div class="big-text">INGRESA<br>TU RUT</div>
       <div class="sub-text">Solo la primera vez. Tu teléfono te recordará después.</div>
-      <input class="input" type="text" id="rutInput"
-        placeholder="Ej: 12345678-9"
-        oninput="formatRut(this); checkRutInput()"
-        onkeydown="if(event.key==='Enter') validateRut()"
-        autocomplete="off" maxlength="12" />
+      <input class="input" type="text" id="rutInput" placeholder="Ej: 12345678-9" oninput="formatRut(this); checkRutInput()" onkeydown="if(event.key==='Enter') validateRut()" autocomplete="off" maxlength="12" />
       <div class="rut-hint">Sin puntos, con guión</div>
       <div class="error-msg" id="rutError"></div>
       <button class="btn btn-primary inactivo" id="btnValidate" onclick="validateRut()">CONTINUAR</button>
     </div>
-
     <div id="viewCheckin" class="checkin-card hidden fadeUp">
       <div class="avatar" id="avatarLetter">?</div>
       <div class="greeting">Bienvenido de vuelta</div>
       <div class="name-display" id="nameDisplay">—</div>
       <div class="date-display" id="dateDisplay">—</div>
-      <button class="checkin-btn" id="btnCheckin"
-        ontouchstart="handleCheckinTouch(event)"
-        onclick="handleCheckinClick(event)">⚡ REGISTRAR</button>
+      <button class="checkin-btn" id="btnCheckin" ontouchstart="handleCheckinTouch(event)" onclick="handleCheckinClick(event)">⚡ REGISTRAR</button>
       <button class="btn-stats" onclick="openHistorial()">📊 VER MI ASISTENCIA</button>
       <button class="btn btn-ghost" id="btnNotMe" onclick="changeName()">—</button>
     </div>
-
     <div id="viewSuccess" class="hidden" style="text-align:center;animation:fadeUp 0.3s ease both">
       <div class="success-icon">✓</div>
       <div class="section-title">¡Asistencia registrada!</div>
       <div class="success-name" id="successName">—</div>
       <div class="success-time" id="successTime">—</div>
     </div>
-
     <div id="viewAlready" class="hidden" style="text-align:center;animation:fadeUp 0.3s ease both">
       <div class="already-icon">⚡</div>
       <div class="section-title">Ya estás registrado</div>
@@ -399,10 +324,30 @@
   let tapCount = 0, tapTimer = null;
   let _pinValue = '';
   let _profeActual = '';
-  let _tabActual = 'hoy';
   let _historialData = {};
   let _profeHistorialData = {};
   let _profeRecords = {};
+  let _alumnoSeleccionado = null;
+
+  // ── Swipe para abrir PIN ───────────────────────────────────────────────────
+  let _swipeStartX = 0, _swipeStartY = 0;
+
+  document.addEventListener('touchstart', e => {
+    _swipeStartX = e.touches[0].clientX;
+    _swipeStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - _swipeStartX;
+    const dy = Math.abs(e.changedTouches[0].clientY - _swipeStartY);
+    // Swipe izquierda: dx < -80px y movimiento horizontal (no vertical)
+    if (dx < -80 && dy < 60) {
+      const anyOverlayOpen = ['historialOverlay','pinOverlay','profeOverlay'].some(id =>
+        !document.getElementById(id).classList.contains('hidden')
+      );
+      if (!anyOverlayOpen) openPin();
+    }
+  }, { passive: true }); // { rut, nombre }
 
   // ── Lock ───────────────────────────────────────────────────────────────────
   function getLock() {
@@ -415,7 +360,7 @@
   function setLock() { localStorage.setItem(LOCK_KEY, JSON.stringify({ date: todayKey() })); }
   function clearLock() { localStorage.removeItem(LOCK_KEY); }
 
-  // ── RUT format ─────────────────────────────────────────────────────────────
+  // ── RUT ────────────────────────────────────────────────────────────────────
   function formatRut(input) {
     let v = input.value.replace(/[^0-9kK]/g, '').toUpperCase();
     if (v.length > 1) v = v.slice(0, -1) + '-' + v.slice(-1);
@@ -426,8 +371,7 @@
   function checkRutInput() {
     const v = document.getElementById('rutInput').value.trim();
     const btn = document.getElementById('btnValidate');
-    if (v.length < 3) btn.classList.add('inactivo');
-    else btn.classList.remove('inactivo');
+    if (v.length < 3) btn.classList.add('inactivo'); else btn.classList.remove('inactivo');
     document.getElementById('rutError').textContent = '';
     document.getElementById('rutInput').classList.remove('error');
   }
@@ -443,8 +387,7 @@
         if (res.ok) {
           localStorage.setItem(NAME_KEY, res.nombre);
           localStorage.setItem(PROF_KEY, res.profesor);
-          if (res.yaRegistrado) setLock();
-          else clearLock();
+          if (res.yaRegistrado) setLock(); else clearLock();
           loadCheckinView(res.nombre);
         } else { changeName(); }
       } catch {}
@@ -482,15 +425,11 @@
     if (btn.classList.contains('inactivo')) return;
     const rut = document.getElementById('rutInput').value.replace(/\./g,'').trim().toLowerCase();
     if (!rut) return;
-    btn.classList.add('inactivo');
-    btn.innerHTML = 'VERIFICANDO...';
-    btn.style.opacity = '0.7';
+    btn.classList.add('inactivo'); btn.innerHTML = 'VERIFICANDO...'; btn.style.opacity = '0.7';
     try {
       const res = await fetchAPI({ action: 'validate', rut });
       if (res.ok) {
-        localStorage.setItem(RUT_KEY, rut);
-        localStorage.setItem(NAME_KEY, res.nombre);
-        localStorage.setItem(PROF_KEY, res.profesor);
+        localStorage.setItem(RUT_KEY, rut); localStorage.setItem(NAME_KEY, res.nombre); localStorage.setItem(PROF_KEY, res.profesor);
         if (res.yaRegistrado) setLock(); else clearLock();
         btn.classList.remove('inactivo'); btn.textContent = 'CONTINUAR'; btn.style.opacity = '1';
         loadCheckinView(res.nombre);
@@ -507,8 +446,7 @@
   function showRutError(msg) {
     document.getElementById('rutError').textContent = msg;
     const inp = document.getElementById('rutInput');
-    inp.classList.add('error');
-    setTimeout(() => inp.classList.remove('error'), 600);
+    inp.classList.add('error'); setTimeout(() => inp.classList.remove('error'), 600);
   }
 
   function handleCheckinTouch(e) { e.preventDefault(); _touchHandled = true; doCheckIn(); }
@@ -517,9 +455,7 @@
   async function doCheckIn() {
     if (getLock()) return;
     setLock();
-    const rut      = localStorage.getItem(RUT_KEY);
-    const name     = localStorage.getItem(NAME_KEY);
-    const profesor = localStorage.getItem(PROF_KEY);
+    const rut = localStorage.getItem(RUT_KEY), name = localStorage.getItem(NAME_KEY), profesor = localStorage.getItem(PROF_KEY);
     if (!rut || !name || !profesor) { clearLock(); return; }
     const btn = document.getElementById('btnCheckin');
     btn.disabled = true; btn.innerHTML = '<span class="loading-white"></span>';
@@ -528,23 +464,15 @@
       if (res.ok) {
         document.getElementById('successName').textContent = name.toUpperCase();
         document.getElementById('successTime').textContent = todayLabel() + ' · ' + timeNow();
-        showOnly('viewSuccess');
-        setTimeout(() => loadCheckinView(name), 3500);
+        showOnly('viewSuccess'); setTimeout(() => loadCheckinView(name), 3500);
       } else if (res.error && res.error.includes('Ya registraste')) {
         document.getElementById('alreadyName').textContent = name.toUpperCase();
-        showOnly('viewAlready');
-        setTimeout(() => loadCheckinView(name), 3000);
-      } else {
-        alert('Error: ' + (res.error || 'Intenta de nuevo'));
-        clearLock(); loadCheckinView(name);
-      }
-    } catch {
-      alert('Sin conexión. Intenta de nuevo.');
-      clearLock(); loadCheckinView(name);
-    }
+        showOnly('viewAlready'); setTimeout(() => loadCheckinView(name), 3000);
+      } else { alert('Error: ' + (res.error || 'Intenta de nuevo')); clearLock(); loadCheckinView(name); }
+    } catch { alert('Sin conexión.'); clearLock(); loadCheckinView(name); }
   }
 
-  // ── Logo tap → PIN ─────────────────────────────────────────────────────────
+  // ── Logo → PIN ─────────────────────────────────────────────────────────────
   function handleLogoTap() {
     clearTimeout(tapTimer);
     if (++tapCount >= 5) { tapCount = 0; openPin(); return; }
@@ -552,45 +480,20 @@
   }
 
   // ── PIN ────────────────────────────────────────────────────────────────────
-  function openPin() {
-    _pinValue = ''; updatePinDisplay();
-    document.getElementById('pinError').textContent = '';
-    document.getElementById('pinOverlay').classList.remove('hidden');
-  }
+  function openPin() { _pinValue = ''; updatePinDisplay(); document.getElementById('pinError').textContent = ''; document.getElementById('pinOverlay').classList.remove('hidden'); }
   function closePin() { document.getElementById('pinOverlay').classList.add('hidden'); _pinValue = ''; }
-
-  function pinPress(d) {
-    if (_pinValue.length >= 4) return;
-    _pinValue += d;
-    updatePinDisplay();
-    if (_pinValue.length === 4) setTimeout(validatePin, 200);
-  }
-
+  function pinPress(d) { if (_pinValue.length >= 4) return; _pinValue += d; updatePinDisplay(); if (_pinValue.length === 4) setTimeout(validatePin, 200); }
   function pinDelete() { _pinValue = _pinValue.slice(0, -1); updatePinDisplay(); }
   function pinClear()  { _pinValue = ''; updatePinDisplay(); }
-
-  function updatePinDisplay() {
-    for (let i = 0; i < 4; i++) {
-      document.getElementById('pd' + i).classList.toggle('filled', i < _pinValue.length);
-    }
-  }
+  function updatePinDisplay() { for (let i = 0; i < 4; i++) document.getElementById('pd' + i).classList.toggle('filled', i < _pinValue.length); }
 
   async function validatePin() {
     document.getElementById('pinError').textContent = '';
     try {
       const res = await fetchAPI({ action: 'validarProfesor', pin: _pinValue });
-      if (res.ok) {
-        _profeActual = res.profesor;
-        closePin();
-        openProfe();
-      } else {
-        document.getElementById('pinError').textContent = 'PIN incorrecto';
-        _pinValue = ''; updatePinDisplay();
-      }
-    } catch {
-      document.getElementById('pinError').textContent = 'Sin conexión';
-      _pinValue = ''; updatePinDisplay();
-    }
+      if (res.ok) { _profeActual = res.profesor; closePin(); openProfe(); }
+      else { document.getElementById('pinError').textContent = 'PIN incorrecto'; _pinValue = ''; updatePinDisplay(); }
+    } catch { document.getElementById('pinError').textContent = 'Sin conexión'; _pinValue = ''; updatePinDisplay(); }
   }
 
   // ── Panel Profe ────────────────────────────────────────────────────────────
@@ -599,14 +502,13 @@
     document.getElementById('profeOverlay').classList.remove('hidden');
     switchTab('hoy');
   }
-
   function closeProfe() { document.getElementById('profeOverlay').classList.add('hidden'); }
 
   function switchTab(tab) {
-    _tabActual = tab;
     ['hoy','alumnos','historial'].forEach(t => {
-      document.getElementById('tabContent' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('hidden', t !== tab);
-      document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('activo', t === tab);
+      const key = t.charAt(0).toUpperCase() + t.slice(1);
+      document.getElementById('tabContent' + key).classList.toggle('hidden', t !== tab);
+      document.getElementById('tab' + key).classList.toggle('activo', t === tab);
     });
     if (tab === 'hoy') loadProfeData();
     if (tab === 'alumnos') loadAlumnos();
@@ -617,43 +519,32 @@
     document.getElementById('profeContent').innerHTML = '<div class="admin-loading"><span class="loading-dot"></span></div>';
     try {
       const res = await fetchAPI({ action: 'records' });
-      if (!res.ok) { document.getElementById('profeContent').innerHTML = '<div class="empty-state">Error al cargar</div>'; return; }
+      if (!res.ok) { document.getElementById('profeContent').innerHTML = '<div class="empty-state">Error</div>'; return; }
       _profeRecords = res.records || {};
-
-      // Filtrar solo registros del profe actual
       const records = {};
       Object.keys(_profeRecords).forEach(fecha => {
-        const misReg = _profeRecords[fecha].filter(r => r.profesor === _profeActual);
-        if (misReg.length > 0) records[fecha] = misReg;
+        const r = _profeRecords[fecha].filter(r => r.profesor === _profeActual);
+        if (r.length > 0) records[fecha] = r;
       });
-
-      const allDays  = Object.keys(records).sort((a,b) => b.localeCompare(a));
+      const allDays = Object.keys(records).sort((a,b) => b.localeCompare(a));
       const todayRec = records[todayKey()] || [];
-      const total    = Object.values(records).flat().length;
+      const total = Object.values(records).flat().length;
       const weekStart = new Date(); weekStart.setDate(weekStart.getDate() - weekStart.getDay());
       let weekCount = 0;
       Object.keys(records).forEach(d => { if (new Date(d) >= weekStart) weekCount += records[d].length; });
-
       document.getElementById('pStatToday').textContent = todayRec.length;
       document.getElementById('pStatWeek').textContent  = weekCount;
       document.getElementById('pStatTotal').textContent = total;
-
-      if (allDays.length === 0) { document.getElementById('profeContent').innerHTML = '<div class="empty-state">Sin registros aún</div>'; return; }
-
+      if (!allDays.length) { document.getElementById('profeContent').innerHTML = '<div class="empty-state">Sin registros aún</div>'; return; }
       document.getElementById('profeContent').innerHTML = allDays.map(day => `
         <div class="day-block">
           <div class="day-label">${formatDate(day)}<span class="day-count">· ${records[day].length} asistentes</span></div>
           ${records[day].map(r => `
             <div class="attendee-row">
-              <div class="attendee-info">
-                <span class="attendee-name">${r.nombre}</span>
-                <span class="attendee-rut">${r.rut}</span>
-              </div>
+              <div class="attendee-info"><span class="attendee-name">${r.nombre}</span><span class="attendee-rut">${r.rut}</span></div>
               <span class="attendee-time">${r.hora}</span>
-            </div>
-          `).join('')}
-        </div>
-      `).join('');
+            </div>`).join('')}
+        </div>`).join('');
     } catch { document.getElementById('profeContent').innerHTML = '<div class="empty-state">Sin conexión</div>'; }
   }
 
@@ -661,102 +552,76 @@
     document.getElementById('listaAlumnos').innerHTML = '<div class="admin-loading"><span class="loading-dot"></span></div>';
     try {
       const res = await fetchAPI({ action: 'getAlumnos', profesor: _profeActual });
-      if (!res.ok) { document.getElementById('listaAlumnos').innerHTML = '<div class="empty-state">Error</div>'; return; }
-      if (res.alumnos.length === 0) { document.getElementById('listaAlumnos').innerHTML = '<div class="empty-state">Sin alumnos</div>'; return; }
+      if (!res.ok || !res.alumnos.length) { document.getElementById('listaAlumnos').innerHTML = '<div class="empty-state">Sin alumnos</div>'; return; }
       document.getElementById('listaAlumnos').innerHTML = res.alumnos.map(a => `
         <div class="alumno-row">
-          <div class="alumno-info">
-            <span class="alumno-nombre">${a.nombre}</span>
-            <span class="alumno-rut">${a.rut}</span>
-          </div>
-          <button class="btn-eliminar" onclick="eliminarAlumno('${a.rut}', '${a.nombre}')">✕ Eliminar</button>
-        </div>
-      `).join('');
-
-      // Actualizar selector de historial
+          <div class="alumno-info"><span class="alumno-nombre">${a.nombre}</span><span class="alumno-rut">${a.rut}</span></div>
+          <button class="btn-eliminar" onclick="eliminarAlumno('${a.rut}','${a.nombre}')">✕ Eliminar</button>
+        </div>`).join('');
       const sel = document.getElementById('alumnoSelector');
       sel.innerHTML = '<option value="">— Selecciona un alumno —</option>' +
-        res.alumnos.map(a => `<option value="${a.rut}">${a.nombre}</option>`).join('');
+        res.alumnos.map(a => `<option value="${a.rut}" data-nombre="${a.nombre}">${a.nombre}</option>`).join('');
     } catch { document.getElementById('listaAlumnos').innerHTML = '<div class="empty-state">Sin conexión</div>'; }
   }
 
   async function agregarAlumno() {
-    const rut    = document.getElementById('newRut').value.replace(/\./g,'').trim().toLowerCase();
+    const rut = document.getElementById('newRut').value.replace(/\./g,'').trim().toLowerCase();
     const nombre = document.getElementById('newNombre').value.trim();
-    if (!rut || !nombre) { document.getElementById('agregarMsg').style.color = '#ff3b3b'; document.getElementById('agregarMsg').textContent = 'Completa todos los campos'; return; }
-    document.getElementById('agregarMsg').textContent = '';
+    const msg = document.getElementById('agregarMsg');
+    if (!rut || !nombre) { msg.style.color='#ff3b3b'; msg.textContent='Completa todos los campos'; return; }
+    msg.textContent = '';
     try {
       const res = await fetchAPI({ action: 'agregarAlumno', rut, nombre, profesor: _profeActual });
       if (res.ok) {
-        document.getElementById('agregarMsg').style.color = '#00c851';
-        document.getElementById('agregarMsg').textContent = '✓ Alumno agregado';
-        document.getElementById('newRut').value = '';
-        document.getElementById('newNombre').value = '';
-        loadAlumnos();
-        setTimeout(() => document.getElementById('agregarMsg').textContent = '', 3000);
-      } else {
-        document.getElementById('agregarMsg').style.color = '#ff3b3b';
-        document.getElementById('agregarMsg').textContent = res.error || 'Error al agregar';
-      }
-    } catch {
-      document.getElementById('agregarMsg').style.color = '#ff3b3b';
-      document.getElementById('agregarMsg').textContent = 'Sin conexión';
-    }
+        msg.style.color='#00c851'; msg.textContent='✓ Alumno agregado';
+        document.getElementById('newRut').value = ''; document.getElementById('newNombre').value = '';
+        loadAlumnos(); setTimeout(() => msg.textContent='', 3000);
+      } else { msg.style.color='#ff3b3b'; msg.textContent = res.error || 'Error'; }
+    } catch { msg.style.color='#ff3b3b'; msg.textContent='Sin conexión'; }
   }
 
   async function eliminarAlumno(rut, nombre) {
     if (!confirm('¿Eliminar a ' + nombre + '?')) return;
     try {
       const res = await fetchAPI({ action: 'eliminarAlumno', rut, profesor: _profeActual });
-      if (res.ok) loadAlumnos();
-      else alert('Error: ' + (res.error || 'No se pudo eliminar'));
+      if (res.ok) loadAlumnos(); else alert('Error: ' + (res.error || 'No se pudo eliminar'));
     } catch { alert('Sin conexión'); }
   }
 
   async function loadProfeHistorial() {
-    const res = await fetchAPI({ action: 'records' });
-    if (!res.ok) return;
-    _profeRecords = res.records || {};
+    if (!Object.keys(_profeRecords).length) {
+      const res = await fetchAPI({ action: 'records' });
+      if (res.ok) _profeRecords = res.records || {};
+    }
   }
 
   function onAlumnoChange() {
-    const rut = document.getElementById('alumnoSelector').value;
-    if (!rut) {
-      document.getElementById('profeHistStats').style.display = 'none';
-      document.getElementById('profeMesSelectorContainer').innerHTML = '';
-      document.getElementById('profeHistContent').innerHTML = '';
-      return;
-    }
+    const sel = document.getElementById('alumnoSelector');
+    const rut = sel.value;
+    const nombre = sel.options[sel.selectedIndex]?.dataset?.nombre || '';
+    _alumnoSeleccionado = rut ? { rut, nombre } : null;
+    toggleFormClase(false);
+    document.getElementById('profeHistStats').classList.toggle('hidden', !rut);
+    document.getElementById('profeMesSelectorContainer').innerHTML = '';
+    document.getElementById('profeHistContent').innerHTML = '';
+    if (!rut) return;
 
-    const porMes = {};
-    let total = 0;
+    const porMes = {}; let total = 0;
     Object.keys(_profeRecords).sort((a,b) => b.localeCompare(a)).forEach(fecha => {
-      const clases = _profeRecords[fecha].filter(r =>
-        String(r.rut).trim().toLowerCase() === rut && r.profesor === _profeActual
-      );
+      const clases = _profeRecords[fecha].filter(r => String(r.rut).trim().toLowerCase() === rut && r.profesor === _profeActual);
       if (clases.length > 0) {
         total++;
         const mes = fecha.substring(0, 7);
         if (!porMes[mes]) porMes[mes] = [];
-        porMes[mes].push({ fecha, hora: clases[0].hora });
+        porMes[mes].push({ fecha, hora: clases[0].hora, manual: clases[0].manual });
       }
     });
-
     _profeHistorialData = porMes;
     document.getElementById('profeHistTotal').textContent = total;
-    document.getElementById('profeHistStats').style.display = 'grid';
-
     const meses = Object.keys(porMes).sort((a,b) => b.localeCompare(a));
-    if (meses.length === 0) {
-      document.getElementById('profeHistContent').innerHTML = '<div class="empty-state">Sin clases registradas</div>';
-      document.getElementById('profeMesSelectorContainer').innerHTML = '';
-      return;
-    }
-
+    if (!meses.length) { document.getElementById('profeHistContent').innerHTML = '<div class="empty-state">Sin clases registradas</div>'; return; }
     document.getElementById('profeMesSelectorContainer').innerHTML = meses.map(m => `
-      <button class="mes-btn" onclick="seleccionarMesProfe('${m}')">${formatMesCorto(m)}</button>
-    `).join('');
-
+      <button class="mes-btn" onclick="seleccionarMesProfe('${m}')">${formatMesCorto(m)}</button>`).join('');
     const mesActual = todayKey().substring(0, 7);
     seleccionarMesProfe(porMes[mesActual] ? mesActual : meses[0]);
   }
@@ -767,13 +632,62 @@
     });
     const clases = _profeHistorialData[mes] || [];
     document.getElementById('profeHistMes').textContent = clases.length;
-    if (clases.length === 0) { document.getElementById('profeHistContent').innerHTML = '<div class="empty-state">Sin clases este mes</div>'; return; }
-    document.getElementById('profeHistContent').innerHTML = clases.map(c => `
-      <div class="dia-row">
-        <span class="dia-fecha">${formatDateLong(c.fecha)}</span>
-        <span class="dia-hora">${c.hora}</span>
-      </div>
-    `).join('');
+
+    // Botón agregar clase
+    const btnToggle = `<button class="btn-toggle-clase" onclick="toggleFormClase(true)">➕ Agregar clase manual</button>`;
+
+    if (!clases.length) {
+      document.getElementById('profeHistContent').innerHTML = btnToggle + '<div class="empty-state">Sin clases este mes</div>';
+      return;
+    }
+    document.getElementById('profeHistContent').innerHTML = btnToggle + clases.map(c => `
+      <div class="dia-row-profe">
+        <div class="dia-info">
+          <span class="dia-fecha">${formatDateLong(c.fecha)}</span>
+          <span class="dia-hora">${c.hora}${c.manual ? ' &nbsp;<span class="dia-manual">MANUAL</span>' : ''}</span>
+        </div>
+        <button class="btn-elim-clase" onclick="eliminarClase('${c.fecha}')">✕</button>
+      </div>`).join('');
+  }
+
+  function toggleFormClase(show) {
+    document.getElementById('formAgregarClase').classList.toggle('hidden', !show);
+    if (show) {
+      document.getElementById('nuevaFecha').value = todayKey();
+      document.getElementById('claseMsg').textContent = '';
+    }
+  }
+
+  async function agregarClase() {
+    if (!_alumnoSeleccionado) return;
+    const fecha = document.getElementById('nuevaFecha').value;
+    const hora  = document.getElementById('nuevaHora').value;
+    const msg   = document.getElementById('claseMsg');
+    if (!fecha || !hora) { msg.style.color='#ff3b3b'; msg.textContent='Selecciona fecha y hora'; return; }
+    msg.textContent = '';
+    try {
+      const res = await fetchAPI({ action: 'agregarClase', rut: _alumnoSeleccionado.rut, nombre: _alumnoSeleccionado.nombre, profesor: _profeActual, fecha, hora });
+      if (res.ok) {
+        msg.style.color='#00c851'; msg.textContent='✓ Clase agregada';
+        // Recargar records y refrescar
+        const r = await fetchAPI({ action: 'records' });
+        if (r.ok) _profeRecords = r.records || {};
+        setTimeout(() => { toggleFormClase(false); onAlumnoChange(); }, 1000);
+      } else { msg.style.color='#ff3b3b'; msg.textContent = res.error || 'Error'; }
+    } catch { msg.style.color='#ff3b3b'; msg.textContent='Sin conexión'; }
+  }
+
+  async function eliminarClase(fecha) {
+    if (!_alumnoSeleccionado) return;
+    if (!confirm('¿Eliminar clase del ' + formatDateLong(fecha) + '?')) return;
+    try {
+      const res = await fetchAPI({ action: 'eliminarClase', rut: _alumnoSeleccionado.rut, profesor: _profeActual, fecha });
+      if (res.ok) {
+        const r = await fetchAPI({ action: 'records' });
+        if (r.ok) _profeRecords = r.records || {};
+        onAlumnoChange();
+      } else { alert('Error: ' + (res.error || 'No se pudo eliminar')); }
+    } catch { alert('Sin conexión'); }
   }
 
   // ── Historial alumno ───────────────────────────────────────────────────────
@@ -781,13 +695,12 @@
     document.getElementById('historialOverlay').classList.remove('hidden');
     document.getElementById('historialContent').innerHTML = '<div class="admin-loading"><span class="loading-dot"></span></div>';
     document.getElementById('mesSelectorContainer').innerHTML = '';
-    document.getElementById('histMes').textContent  = '—';
-    document.getElementById('histTotal').textContent = '—';
+    document.getElementById('histMes').textContent = '—'; document.getElementById('histTotal').textContent = '—';
     const rut = localStorage.getItem(RUT_KEY);
     if (!rut) return;
     try {
       const res = await fetchAPI({ action: 'records' });
-      if (!res.ok) { document.getElementById('historialContent').innerHTML = '<div class="empty-state">Error al cargar</div>'; return; }
+      if (!res.ok) { document.getElementById('historialContent').innerHTML = '<div class="empty-state">Error</div>'; return; }
       const records = res.records || {};
       const porMes = {}; let totalClases = 0;
       Object.keys(records).sort((a,b) => b.localeCompare(a)).forEach(fecha => {
@@ -802,29 +715,21 @@
       _historialData = porMes;
       document.getElementById('histTotal').textContent = totalClases;
       const meses = Object.keys(porMes).sort((a,b) => b.localeCompare(a));
-      if (meses.length === 0) { document.getElementById('histMes').textContent = '0'; document.getElementById('historialContent').innerHTML = '<div class="empty-state">Sin clases registradas aún</div>'; return; }
-      document.getElementById('mesSelectorContainer').innerHTML = meses.map(m => `
-        <button class="mes-btn" onclick="seleccionarMes('${m}')">${formatMesCorto(m)}</button>
-      `).join('');
+      if (!meses.length) { document.getElementById('histMes').textContent='0'; document.getElementById('historialContent').innerHTML='<div class="empty-state">Sin clases aún</div>'; return; }
+      document.getElementById('mesSelectorContainer').innerHTML = meses.map(m => `<button class="mes-btn" onclick="seleccionarMes('${m}')">${formatMesCorto(m)}</button>`).join('');
       const mesActual = todayKey().substring(0, 7);
       seleccionarMes(porMes[mesActual] ? mesActual : meses[0]);
     } catch { document.getElementById('historialContent').innerHTML = '<div class="empty-state">Sin conexión</div>'; }
   }
 
   function seleccionarMes(mes) {
-    document.querySelectorAll('#mesSelectorContainer .mes-btn').forEach(btn => {
-      btn.classList.toggle('activo', btn.textContent === formatMesCorto(mes));
-    });
+    document.querySelectorAll('#mesSelectorContainer .mes-btn').forEach(btn => btn.classList.toggle('activo', btn.textContent === formatMesCorto(mes)));
     const clases = _historialData[mes] || [];
     document.getElementById('histMes').textContent = clases.length;
     document.getElementById('histSectionTitle').textContent = 'Clases · ' + formatMesLargo(mes);
-    if (clases.length === 0) { document.getElementById('historialContent').innerHTML = '<div class="empty-state">Sin clases este mes</div>'; return; }
+    if (!clases.length) { document.getElementById('historialContent').innerHTML = '<div class="empty-state">Sin clases este mes</div>'; return; }
     document.getElementById('historialContent').innerHTML = clases.map(c => `
-      <div class="dia-row">
-        <span class="dia-fecha">${formatDateLong(c.fecha)}</span>
-        <span class="dia-hora">${c.hora}</span>
-      </div>
-    `).join('');
+      <div class="dia-row"><span class="dia-fecha">${formatDateLong(c.fecha)}</span><span class="dia-hora">${c.hora}</span></div>`).join('');
   }
 
   function closeHistorial() { document.getElementById('historialOverlay').classList.add('hidden'); }
@@ -836,13 +741,13 @@
   }
 
   // ── Helpers ────────────────────────────────────────────────────────────────
-  function todayKey() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
-  function timeNow() { return new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }); }
-  function todayLabel() { return new Date().toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long' }); }
-  function formatDate(key) { const [y,m,d] = key.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); }
-  function formatDateLong(key) { const [y,m,d] = key.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long' }); }
-  function formatMesCorto(key) { const [y,m] = key.split('-').map(Number); return new Date(y,m-1,1).toLocaleDateString('es-CL', { month: 'short', year: '2-digit' }).toUpperCase(); }
-  function formatMesLargo(key) { const [y,m] = key.split('-').map(Number); return new Date(y,m-1,1).toLocaleDateString('es-CL', { month: 'long', year: 'numeric' }).toUpperCase(); }
+  function todayKey() { const d = new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function timeNow() { return new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'}); }
+  function todayLabel() { return new Date().toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long'}); }
+  function formatDate(key) { const [y,m,d]=key.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long',year:'numeric'}); }
+  function formatDateLong(key) { const [y,m,d]=key.split('-').map(Number); return new Date(y,m-1,d).toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long'}); }
+  function formatMesCorto(key) { const [y,m]=key.split('-').map(Number); return new Date(y,m-1,1).toLocaleDateString('es-CL',{month:'short',year:'2-digit'}).toUpperCase(); }
+  function formatMesLargo(key) { const [y,m]=key.split('-').map(Number); return new Date(y,m-1,1).toLocaleDateString('es-CL',{month:'long',year:'numeric'}).toUpperCase(); }
 
   window.addEventListener('DOMContentLoaded', init);
 </script>
