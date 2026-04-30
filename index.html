@@ -16,161 +16,154 @@
       font-family: 'DM Sans', sans-serif; color: #f0ede8; padding: 24px;
       position: relative; overflow: hidden; background: #0a0a0a;
     }
-    .app::before { content: ''; position: fixed; top: -40%; left: -20%; width: 70vw; height: 70vw; background: radial-gradient(circle, rgba(255,90,0,0.12) 0%, transparent 70%); pointer-events: none; }
-    .app::after  { content: ''; position: fixed; bottom: -30%; right: -20%; width: 60vw; height: 60vw; background: radial-gradient(circle, rgba(255,200,0,0.06) 0%, transparent 70%); pointer-events: none; }
-    .card { width: 100%; max-width: 380px; position: relative; z-index: 1; }
+    .app::before { content:''; position:fixed; top:-40%; left:-20%; width:70vw; height:70vw; background:radial-gradient(circle,rgba(255,90,0,0.12) 0%,transparent 70%); pointer-events:none; }
+    .app::after  { content:''; position:fixed; bottom:-30%; right:-20%; width:60vw; height:60vw; background:radial-gradient(circle,rgba(255,200,0,0.06) 0%,transparent 70%); pointer-events:none; }
+    .card { width:100%; max-width:380px; position:relative; z-index:1; }
 
-    @keyframes fadeUp { from { opacity:0; transform: translateY(24px); } to { opacity:1; transform: translateY(0); } }
-    @keyframes popIn  { from { opacity:0; transform: scale(0.3); } to { opacity:1; transform: scale(1); } }
-    @keyframes pulse  { 0%,100% { opacity:0.3; transform:scale(0.8); } 50% { opacity:1; transform:scale(1.2); } }
-    @keyframes shake  { 0%,100% { transform:translateX(0); } 20% { transform:translateX(-8px); } 40% { transform:translateX(8px); } 60% { transform:translateX(-6px); } 80% { transform:translateX(6px); } }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes popIn  { from{opacity:0;transform:scale(0.3)} to{opacity:1;transform:scale(1)} }
+    @keyframes pulse  { 0%,100%{opacity:0.3;transform:scale(0.8)} 50%{opacity:1;transform:scale(1.2)} }
+    @keyframes shake  { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)} }
 
-    .fadeUp { animation: fadeUp 0.45s ease both; }
-    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 4px; color: #ff5a00; line-height: 1; user-select: none; text-shadow: 0 0 40px rgba(255,90,0,0.4); margin-bottom: 4px; }
-    .logo-sub { font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: #555; margin-bottom: 48px; }
-    .section-title { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: #ff5a00; margin-bottom: 16px; }
-    .big-text { font-family: 'Bebas Neue', sans-serif; font-size: 38px; letter-spacing: 2px; line-height: 1.1; margin-bottom: 8px; }
-    .sub-text { font-size: 14px; color: #777; margin-bottom: 36px; line-height: 1.6; }
+    .fadeUp { animation:fadeUp 0.45s ease both; }
+    .logo { font-family:'Bebas Neue',sans-serif; font-size:52px; letter-spacing:4px; color:#ff5a00; line-height:1; user-select:none; text-shadow:0 0 40px rgba(255,90,0,0.4); margin-bottom:4px; }
+    .logo-sub { font-size:11px; letter-spacing:5px; text-transform:uppercase; color:#555; margin-bottom:48px; }
+    .section-title { font-size:13px; letter-spacing:4px; text-transform:uppercase; color:#ff5a00; margin-bottom:16px; }
+    .big-text { font-family:'Bebas Neue',sans-serif; font-size:38px; letter-spacing:2px; line-height:1.1; margin-bottom:8px; }
+    .sub-text { font-size:14px; color:#777; margin-bottom:36px; line-height:1.6; }
 
-    .input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px 20px; font-size: 17px; font-family: 'DM Sans', sans-serif; color: #f0ede8; outline: none; transition: border-color 0.2s; margin-bottom: 12px; }
-    .input:focus { border-color: #ff5a00; background: rgba(255,90,0,0.06); }
-    .input::placeholder { color: #444; }
-    .input.error { border-color: #ff3b3b; animation: shake 0.4s ease; }
-    .error-msg { font-size: 13px; color: #ff3b3b; margin-bottom: 16px; min-height: 18px; text-align: center; }
+    .input { width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px 20px; font-size:17px; font-family:'DM Sans',sans-serif; color:#f0ede8; outline:none; transition:border-color 0.2s; margin-bottom:12px; }
+    .input:focus { border-color:#ff5a00; background:rgba(255,90,0,0.06); }
+    .input::placeholder { color:#444; }
+    .input.error { border-color:#ff3b3b; animation:shake 0.4s ease; }
+    .error-msg { font-size:13px; color:#ff3b3b; margin-bottom:16px; min-height:18px; text-align:center; }
 
-    .btn { width: 100%; padding: 18px; border: none; border-radius: 12px; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; cursor: pointer; transition: transform 0.15s; -webkit-tap-highlight-color: transparent; touch-action: manipulation; -webkit-appearance: none; }
-    .btn:active { transform: scale(0.97); }
-    .btn-primary { background: #ff5a00; color: #fff; box-shadow: 0 8px 32px rgba(255,90,0,0.35); }
-    .btn-primary.inactivo { color: rgba(255,255,255,0.4) !important; box-shadow: none; cursor: not-allowed; pointer-events: none; }
-    .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.12); color: #555; font-size: 13px; letter-spacing: 2px; padding: 12px; margin-top: 12px; font-family: 'DM Sans', sans-serif; }
-    .btn-stats { background: rgba(255,90,0,0.1); border: 1px solid rgba(255,90,0,0.3); color: #ff5a00; font-size: 16px; letter-spacing: 2px; padding: 12px; margin-top: 12px; font-family: 'Bebas Neue', sans-serif; border-radius: 12px; width: 100%; cursor: pointer; }
+    .btn { width:100%; padding:18px; border:none; border-radius:12px; font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:3px; cursor:pointer; transition:transform 0.15s; -webkit-tap-highlight-color:transparent; touch-action:manipulation; -webkit-appearance:none; }
+    .btn:active { transform:scale(0.97); }
+    .btn-primary { background:#ff5a00; color:#fff; box-shadow:0 8px 32px rgba(255,90,0,0.35); }
+    .btn-primary.inactivo { color:rgba(255,255,255,0.4)!important; box-shadow:none; cursor:not-allowed; pointer-events:none; }
+    .btn-ghost { background:transparent; border:1px solid rgba(255,255,255,0.12); color:#555; font-size:13px; letter-spacing:2px; padding:12px; margin-top:12px; font-family:'DM Sans',sans-serif; }
+    .btn-stats { background:rgba(255,90,0,0.1); border:1px solid rgba(255,90,0,0.3); color:#ff5a00; font-size:16px; letter-spacing:2px; padding:12px; margin-top:12px; font-family:'Bebas Neue',sans-serif; border-radius:12px; width:100%; cursor:pointer; }
 
-    .checkin-card { text-align: center; }
-    .avatar { width: 88px; height: 88px; border-radius: 50%; background: linear-gradient(135deg, #ff5a00, #ff9500); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: #fff; margin: 0 auto 24px; box-shadow: 0 8px 32px rgba(255,90,0,0.4); }
-    .greeting { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: #555; margin-bottom: 8px; }
-    .name-display { font-family: 'Bebas Neue', sans-serif; font-size: 44px; letter-spacing: 2px; margin-bottom: 6px; }
-    .date-display { font-size: 13px; color: #555; margin-bottom: 32px; text-transform: capitalize; }
+    .checkin-card { text-align:center; }
+    .avatar { width:88px; height:88px; border-radius:50%; background:linear-gradient(135deg,#ff5a00,#ff9500); display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue',sans-serif; font-size:36px; color:#fff; margin:0 auto 24px; box-shadow:0 8px 32px rgba(255,90,0,0.4); }
+    .greeting { font-size:13px; letter-spacing:4px; text-transform:uppercase; color:#555; margin-bottom:8px; }
+    .name-display { font-family:'Bebas Neue',sans-serif; font-size:44px; letter-spacing:2px; margin-bottom:6px; }
+    .date-display { font-size:13px; color:#555; margin-bottom:32px; text-transform:capitalize; }
+    .plan-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(255,90,0,0.1); border:1px solid rgba(255,90,0,0.25); border-radius:20px; padding:6px 14px; margin-bottom:24px; font-size:13px; color:#ff9500; }
+    .plan-badge.agotado { background:rgba(255,50,50,0.1); border-color:rgba(255,50,50,0.3); color:#ff4444; }
+    .checkin-btn { width:100%; padding:24px; border:none; border-radius:16px; background:#ff5a00; color:#fff; font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:4px; cursor:pointer; box-shadow:0 12px 40px rgba(255,90,0,0.4); transition:transform 0.15s; display:flex; align-items:center; justify-content:center; gap:12px; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
+    .checkin-btn:active { transform:scale(0.97); }
+    .checkin-btn:disabled { opacity:0.6; cursor:not-allowed; pointer-events:none; }
+    .success-icon { width:100px; height:100px; border-radius:50%; background:linear-gradient(135deg,#00c851,#00a844); display:flex; align-items:center; justify-content:center; font-size:48px; margin:0 auto 28px; animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both; box-shadow:0 12px 40px rgba(0,200,80,0.4); }
+    .already-icon { width:100px; height:100px; border-radius:50%; background:linear-gradient(135deg,#ff9500,#ff5a00); display:flex; align-items:center; justify-content:center; font-size:48px; margin:0 auto 28px; animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both; box-shadow:0 12px 40px rgba(255,150,0,0.4); }
+    .agotado-icon { width:100px; height:100px; border-radius:50%; background:linear-gradient(135deg,#ff3b3b,#cc0000); display:flex; align-items:center; justify-content:center; font-size:48px; margin:0 auto 28px; animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both; box-shadow:0 12px 40px rgba(255,50,50,0.4); }
+    .success-name { font-family:'Bebas Neue',sans-serif; font-size:40px; letter-spacing:2px; margin-bottom:8px; }
+    .success-time { font-size:13px; color:#555; }
 
-    /* Plan badge en check-in */
-    .plan-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,90,0,0.1); border: 1px solid rgba(255,90,0,0.25); border-radius: 20px; padding: 6px 14px; margin-bottom: 24px; font-size: 13px; color: #ff9500; }
-    .plan-badge.agotado { background: rgba(255,50,50,0.1); border-color: rgba(255,50,50,0.3); color: #ff4444; }
+    .plan-info-box { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; margin-bottom:16px; }
+    .plan-info-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+    .plan-info-title { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:#ff5a00; }
+    .plan-info-count { font-size:13px; color:#888; }
+    .plan-progress-bar { width:100%; height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; margin-bottom:8px; }
+    .plan-progress-fill { height:100%; border-radius:4px; background:linear-gradient(90deg,#ff5a00,#ff9500); transition:width 0.5s ease; }
+    .plan-progress-fill.agotado { background:linear-gradient(90deg,#ff3b3b,#cc0000); }
+    .plan-restantes { font-size:12px; color:#555; text-align:right; }
+    .plan-restantes.pocas { color:#ff9500; }
+    .plan-restantes.agotado { color:#ff3b3b; }
 
-    .checkin-btn { width: 100%; padding: 24px; border: none; border-radius: 16px; background: #ff5a00; color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 4px; cursor: pointer; box-shadow: 0 12px 40px rgba(255,90,0,0.4); transition: transform 0.15s; display: flex; align-items: center; justify-content: center; gap: 12px; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-    .checkin-btn:active { transform: scale(0.97); }
-    .checkin-btn:disabled { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
+    .overlay { position:fixed; inset:0; background:#0a0a0a; z-index:100; overflow-y:auto; padding:32px 20px; animation:fadeUp 0.3s ease both; }
+    .overlay-inner { max-width:480px; margin:0 auto; }
+    .overlay-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:28px; }
+    .overlay-title { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:3px; color:#ff5a00; }
+    .close-btn { background:rgba(255,255,255,0.06); border:none; color:#888; font-size:20px; width:40px; height:40px; border-radius:10px; cursor:pointer; }
 
-    .success-icon { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #00c851, #00a844); display: flex; align-items: center; justify-content: center; font-size: 48px; margin: 0 auto 28px; animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both; box-shadow: 0 12px 40px rgba(0,200,80,0.4); }
-    .already-icon { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #ff9500, #ff5a00); display: flex; align-items: center; justify-content: center; font-size: 48px; margin: 0 auto 28px; animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both; box-shadow: 0 12px 40px rgba(255,150,0,0.4); }
-    .agotado-icon { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #ff3b3b, #cc0000); display: flex; align-items: center; justify-content: center; font-size: 48px; margin: 0 auto 28px; animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both; box-shadow: 0 12px 40px rgba(255,50,50,0.4); }
-    .success-name { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 2px; margin-bottom: 8px; }
-    .success-time { font-size: 13px; color: #555; }
+    .mes-stats { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+    .mes-box { background:rgba(255,90,0,0.07); border:1px solid rgba(255,90,0,0.15); border-radius:14px; padding:20px; text-align:center; }
+    .mes-num { font-family:'Bebas Neue',sans-serif; font-size:48px; color:#ff5a00; line-height:1; }
+    .mes-label { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#444; margin-top:4px; }
+    .historial-section-title { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:#ff5a00; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid rgba(255,90,0,0.2); }
+    .mes-selector { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+    .mes-btn { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#888; font-size:12px; padding:7px 14px; border-radius:20px; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s; text-transform:uppercase; }
+    .mes-btn.activo { background:#ff5a00; border-color:#ff5a00; color:#fff; }
 
-    /* Barra de progreso plan */
-    .plan-info-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 16px; margin-bottom: 20px; }
-    .plan-info-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .plan-info-title { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: #ff5a00; }
-    .plan-info-count { font-size: 13px; color: #888; }
-    .plan-progress-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
-    .plan-progress-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #ff5a00, #ff9500); transition: width 0.5s ease; }
-    .plan-progress-fill.agotado { background: linear-gradient(90deg, #ff3b3b, #cc0000); }
-    .plan-restantes { font-size: 12px; color: #555; text-align: right; }
-    .plan-restantes.pocas { color: #ff9500; }
-    .plan-restantes.agotado { color: #ff3b3b; }
-
-    /* Overlays */
-    .overlay { position: fixed; inset: 0; background: #0a0a0a; z-index: 100; overflow-y: auto; padding: 32px 20px; animation: fadeUp 0.3s ease both; }
-    .overlay-inner { max-width: 480px; margin: 0 auto; }
-    .overlay-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
-    .overlay-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; color: #ff5a00; }
-    .close-btn { background: rgba(255,255,255,0.06); border: none; color: #888; font-size: 20px; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; }
-
-    .mes-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-    .mes-box { background: rgba(255,90,0,0.07); border: 1px solid rgba(255,90,0,0.15); border-radius: 14px; padding: 20px; text-align: center; }
-    .mes-num { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: #ff5a00; line-height: 1; }
-    .mes-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #444; margin-top: 4px; }
-    .historial-section-title { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #ff5a00; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,90,0,0.2); }
-    .mes-selector { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
-    .mes-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #888; font-size: 12px; padding: 7px 14px; border-radius: 20px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; text-transform: uppercase; }
-    .mes-btn.activo { background: #ff5a00; border-color: #ff5a00; color: #fff; }
-
-    .dia-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 6px; }
-    .dia-fecha { font-size: 14px; font-weight: 500; text-transform: capitalize; color: #f0ede8; }
-    .dia-hora { font-size: 12px; color: #aaa; }
-    .dia-row-profe { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 6px; gap: 8px; }
-    .dia-info { display: flex; flex-direction: column; gap: 2px; flex: 1; }
-    .dia-info .dia-fecha { font-size: 13px; }
-    .dia-info .dia-hora { font-size: 11px; }
-    .dia-manual { font-size: 10px; color: #ff9500; letter-spacing: 1px; }
-    .btn-elim-clase { background: rgba(255,50,50,0.1); border: 1px solid rgba(255,50,50,0.25); color: #ff4444; font-size: 11px; padding: 5px 10px; border-radius: 7px; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
+    .dia-row { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:rgba(255,255,255,0.03); border-radius:10px; margin-bottom:6px; }
+    .dia-fecha { font-size:14px; font-weight:500; text-transform:capitalize; color:#f0ede8; }
+    .dia-hora { font-size:12px; color:#aaa; }
+    .dia-row-profe { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:rgba(255,255,255,0.03); border-radius:10px; margin-bottom:6px; gap:8px; }
+    .dia-info { display:flex; flex-direction:column; gap:2px; flex:1; }
+    .dia-info .dia-fecha { font-size:13px; }
+    .dia-info .dia-hora { font-size:11px; }
+    .dia-manual { font-size:10px; color:#ff9500; letter-spacing:1px; }
+    .btn-elim-clase { background:rgba(255,50,50,0.1); border:1px solid rgba(255,50,50,0.25); color:#ff4444; font-size:11px; padding:5px 10px; border-radius:7px; cursor:pointer; font-family:'DM Sans',sans-serif; white-space:nowrap; }
 
     /* Panel profe */
-    .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 24px; }
-    .stat-box { background: rgba(255,90,0,0.07); border: 1px solid rgba(255,90,0,0.15); border-radius: 14px; padding: 16px 10px; text-align: center; }
-    .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 38px; color: #ff5a00; line-height: 1; }
-    .stat-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #444; margin-top: 4px; }
-    .profe-tabs { display: flex; gap: 8px; margin-bottom: 24px; }
-    .profe-tab { flex: 1; padding: 10px; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
-    .profe-tab.activo { background: #ff5a00; color: #fff; }
-    .profe-tab:not(.activo) { background: rgba(255,255,255,0.05); color: #555; border: 1px solid rgba(255,255,255,0.08); }
+    .profe-tabs { display:flex; gap:8px; margin-bottom:24px; }
+    .profe-tab { flex:1; padding:10px; border:none; border-radius:10px; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; cursor:pointer; transition:all 0.2s; }
+    .profe-tab.activo { background:#ff5a00; color:#fff; }
+    .profe-tab:not(.activo) { background:rgba(255,255,255,0.05); color:#555; border:1px solid rgba(255,255,255,0.08); }
 
-    .alumno-selector { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 14px 16px; font-size: 15px; font-family: 'DM Sans', sans-serif; color: #f0ede8; outline: none; margin-bottom: 16px; cursor: pointer; }
-    .alumno-selector option { background: #1a1a1a; }
+    .alumno-selector { width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:14px 16px; font-size:15px; font-family:'DM Sans',sans-serif; color:#f0ede8; outline:none; margin-bottom:16px; cursor:pointer; }
+    .alumno-selector option { background:#1a1a1a; }
+    .alumno-selector:disabled { opacity:0.5; }
 
-    .alumno-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 6px; }
-    .alumno-info { display: flex; flex-direction: column; gap: 3px; flex: 1; }
-    .alumno-nombre { font-size: 15px; font-weight: 500; color: #f0ede8; }
-    .alumno-rut { font-size: 11px; color: #555; }
-    .alumno-plan { font-size: 11px; color: #ff9500; }
-    .alumno-restantes { font-size: 11px; }
-    .alumno-restantes.pocas { color: #ff9500; }
-    .alumno-restantes.agotado { color: #ff4444; }
-    .btn-eliminar { background: rgba(255,50,50,0.1); border: 1px solid rgba(255,50,50,0.3); color: #ff4444; font-size: 12px; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .alumno-row { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:rgba(255,255,255,0.03); border-radius:10px; margin-bottom:6px; }
+    .alumno-info { display:flex; flex-direction:column; gap:3px; flex:1; }
+    .alumno-nombre { font-size:15px; font-weight:500; color:#f0ede8; }
+    .alumno-rut { font-size:11px; color:#555; }
+    .alumno-plan { font-size:11px; color:#ff9500; }
+    .alumno-restantes { font-size:11px; }
+    .alumno-restantes.pocas { color:#ff9500; }
+    .alumno-restantes.agotado { color:#ff4444; }
+    .btn-eliminar { background:rgba(255,50,50,0.1); border:1px solid rgba(255,50,50,0.3); color:#ff4444; font-size:12px; padding:6px 12px; border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif; }
 
-    .form-agregar { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
-    .form-agregar-clase { background: rgba(255,150,0,0.06); border: 1px solid rgba(255,150,0,0.2); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
-    .form-agregar-clase.hidden { display: none; }
-    .form-title { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; }
-    .input-small { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 11px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: #f0ede8; outline: none; margin-bottom: 8px; }
-    .input-small:focus { border-color: #ff5a00; }
-    .input-small::placeholder { color: #444; }
-    .select-small { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 11px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: #f0ede8; outline: none; margin-bottom: 8px; cursor: pointer; }
-    .select-small option { background: #1a1a1a; }
-    .btn-row { display: flex; gap: 8px; }
-    .btn-agregar-clase { flex: 1; padding: 11px; border: none; border-radius: 9px; background: #ff9500; color: #fff; font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 2px; cursor: pointer; }
-    .btn-cancelar-clase { flex: 1; padding: 11px; border: 1px solid rgba(255,255,255,0.1); border-radius: 9px; background: transparent; color: #555; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; }
-    .btn-toggle-clase { width: 100%; padding: 10px; border: 1px dashed rgba(255,150,0,0.4); border-radius: 10px; background: transparent; color: #ff9500; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; margin-bottom: 12px; }
+    .form-agregar { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:20px; margin-bottom:16px; }
+    .form-agregar-clase { background:rgba(255,150,0,0.06); border:1px solid rgba(255,150,0,0.2); border-radius:14px; padding:16px; margin-bottom:16px; }
+    .form-title { font-size:11px; letter-spacing:3px; text-transform:uppercase; margin-bottom:12px; }
+    .input-small { width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:11px 14px; font-size:14px; font-family:'DM Sans',sans-serif; color:#f0ede8; outline:none; margin-bottom:8px; }
+    .input-small:focus { border-color:#ff5a00; }
+    .input-small::placeholder { color:#444; }
+    .select-small { width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:11px 14px; font-size:14px; font-family:'DM Sans',sans-serif; color:#f0ede8; outline:none; margin-bottom:8px; cursor:pointer; }
+    .select-small option { background:#1a1a1a; }
+    .btn-row { display:flex; gap:8px; }
+    .btn-accion { width:100%; padding:16px; border:none; border-radius:12px; font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:2px; cursor:pointer; margin-bottom:10px; -webkit-tap-highlight-color:transparent; }
+    .btn-accion-primary { background:#ff5a00; color:#fff; box-shadow:0 6px 24px rgba(255,90,0,0.3); }
+    .btn-accion-secondary { background:rgba(255,150,0,0.1); border:1px solid rgba(255,150,0,0.3); color:#ff9500; }
+    .btn-accion-ghost { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); color:#888; font-size:15px; }
+    .btn-confirmar { flex:1; padding:12px; border:none; border-radius:9px; background:#ff5a00; color:#fff; font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:2px; cursor:pointer; }
+    .btn-cancelar { flex:1; padding:12px; border:1px solid rgba(255,255,255,0.1); border-radius:9px; background:transparent; color:#555; font-family:'DM Sans',sans-serif; font-size:13px; cursor:pointer; }
 
-    /* Renovar plan */
-    .renovar-box { background: rgba(255,90,0,0.06); border: 1px solid rgba(255,90,0,0.2); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
-    .renovar-box.hidden { display: none; }
-    .btn-renovar { width: 100%; padding: 12px; border: none; border-radius: 10px; background: rgba(255,90,0,0.15); border: 1px solid rgba(255,90,0,0.3); color: #ff5a00; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 2px; cursor: pointer; margin-bottom: 12px; }
+    .renovar-box { background:rgba(255,90,0,0.06); border:1px solid rgba(255,90,0,0.2); border-radius:14px; padding:16px; margin-bottom:12px; }
 
-    .day-block { margin-bottom: 28px; }
-    .day-label { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #ff5a00; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,90,0,0.2); }
-    .day-count { font-size: 11px; color: #888; margin-left: 8px; }
-    .attendee-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 6px; }
-    .attendee-info { display: flex; flex-direction: column; gap: 2px; }
-    .attendee-name { font-size: 15px; font-weight: 500; color: #f0ede8; }
-    .attendee-rut  { font-size: 11px; color: #555; }
-    .attendee-time { font-size: 12px; color: #aaa; }
+    /* Filtro mes/año */
+    .filtro-mes { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
 
-    .pin-display { display: flex; gap: 12px; justify-content: center; margin-bottom: 32px; }
-    .pin-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #ff5a00; transition: background 0.2s; }
-    .pin-dot.filled { background: #ff5a00; }
-    .pin-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 280px; margin: 0 auto; }
-    .pin-btn { padding: 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; background: rgba(255,255,255,0.04); color: #f0ede8; font-family: 'Bebas Neue', sans-serif; font-size: 28px; cursor: pointer; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
-    .pin-btn:active { background: rgba(255,90,0,0.2); border-color: #ff5a00; transform: scale(0.95); }
-    .pin-btn.delete { font-size: 18px; color: #555; }
-    .pin-error { font-size: 13px; color: #ff3b3b; text-align: center; margin-top: 16px; min-height: 18px; }
+    .day-block { margin-bottom:28px; }
+    .day-label { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:#ff5a00; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid rgba(255,90,0,0.2); }
+    .day-count { font-size:11px; color:#888; margin-left:8px; }
+    .attendee-row { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:rgba(255,255,255,0.03); border-radius:10px; margin-bottom:6px; }
+    .attendee-info { display:flex; flex-direction:column; gap:2px; }
+    .attendee-name { font-size:15px; font-weight:500; color:#f0ede8; }
+    .attendee-rut  { font-size:11px; color:#555; }
+    .attendee-time { font-size:12px; color:#aaa; }
 
-    .refresh-btn { background: rgba(255,90,0,0.1); border: 1px solid rgba(255,90,0,0.2); color: #ff5a00; font-size: 12px; letter-spacing: 2px; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-bottom: 20px; }
-    .loading-dot   { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ff5a00; animation: pulse 1s ease infinite; }
-    .loading-white { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #fff; animation: pulse 1s ease infinite; }
-    .empty-state { text-align: center; color: #333; font-size: 14px; padding: 40px 0; }
-    .admin-loading { text-align: center; padding: 32px 0; color: #444; font-size: 14px; }
-    .rut-hint { font-size: 12px; color: #444; text-align: center; margin-bottom: 16px; }
-    .success-msg { font-size: 13px; text-align: center; margin-top: 8px; min-height: 18px; }
-    .hidden { display: none !important; }
+    .pin-display { display:flex; gap:12px; justify-content:center; margin-bottom:32px; }
+    .pin-dot { width:16px; height:16px; border-radius:50%; border:2px solid #ff5a00; transition:background 0.2s; }
+    .pin-dot.filled { background:#ff5a00; }
+    .pin-pad { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; max-width:280px; margin:0 auto; }
+    .pin-btn { padding:20px; border:1px solid rgba(255,255,255,0.1); border-radius:14px; background:rgba(255,255,255,0.04); color:#f0ede8; font-family:'Bebas Neue',sans-serif; font-size:28px; cursor:pointer; transition:all 0.15s; -webkit-tap-highlight-color:transparent; }
+    .pin-btn:active { background:rgba(255,90,0,0.2); border-color:#ff5a00; transform:scale(0.95); }
+    .pin-btn.delete { font-size:18px; color:#555; }
+    .pin-error { font-size:13px; color:#ff3b3b; text-align:center; margin-top:16px; min-height:18px; }
+
+    .loading-dot   { display:inline-block; width:10px; height:10px; border-radius:50%; background:#ff5a00; animation:pulse 1s ease infinite; }
+    .loading-white { display:inline-block; width:10px; height:10px; border-radius:50%; background:#fff; animation:pulse 1s ease infinite; }
+    .empty-state { text-align:center; color:#333; font-size:14px; padding:40px 0; }
+    .admin-loading { text-align:center; padding:32px 0; color:#444; font-size:14px; }
+    .rut-hint { font-size:12px; color:#444; text-align:center; margin-bottom:16px; }
+    .success-msg { font-size:13px; text-align:center; margin-top:8px; min-height:18px; }
+    .divider { height:1px; background:rgba(255,255,255,0.06); margin:16px 0; }
+    .hidden { display:none !important; }
   </style>
 </head>
 <body>
@@ -182,7 +175,6 @@
       <span class="overlay-title">📅 MI ASISTENCIA</span>
       <button class="close-btn" onclick="closeHistorial()">✕</button>
     </div>
-    <!-- Info plan alumno -->
     <div class="plan-info-box" id="histPlanBox">
       <div class="plan-info-header">
         <span class="plan-info-title" id="histPlanTitle">Plan —</span>
@@ -246,12 +238,83 @@
       <button class="profe-tab"        id="tabHoy"       onclick="switchTab('hoy')">Asistencia del día</button>
     </div>
 
-    <!-- Tab Asistencia del día -->
-    <div id="tabContentHoy" class="hidden">
-      <div id="profeContent"><div class="admin-loading"><span class="loading-dot"></span></div></div>
+    <!-- Tab Asistencia por alumno -->
+    <div id="tabContentHistorial">
+
+      <!-- Selector alumno con loading -->
+      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:8px;">Alumno</div>
+      <div style="position:relative;">
+        <select class="alumno-selector" id="alumnoSelector" onchange="onAlumnoChange()" disabled>
+          <option value="">⏳ Cargando alumnos...</option>
+        </select>
+      </div>
+
+      <!-- Info plan -->
+      <div class="plan-info-box hidden" id="profePlanBox">
+        <div class="plan-info-header">
+          <span class="plan-info-title" id="profePlanTitle">Plan —</span>
+          <span class="plan-info-count" id="profePlanCount">— / —</span>
+        </div>
+        <div class="plan-progress-bar"><div class="plan-progress-fill" id="profePlanFill" style="width:0%"></div></div>
+        <div class="plan-restantes" id="profePlanRestantes">—</div>
+      </div>
+
+      <!-- Botón renovar plan -->
+      <button class="btn-accion btn-accion-primary hidden" id="btnRenovarPlan" onclick="toggleRenovar(true)">🔄 RENOVAR PLAN</button>
+
+      <!-- Formulario renovar -->
+      <div class="renovar-box hidden" id="renovarBox">
+        <div class="form-title" style="color:#ff5a00;">🔄 Renovar plan</div>
+        <select class="select-small" id="renovarPlan">
+          <option value="1">Plan 1 — 2x semana (8 clases)</option>
+          <option value="2">Plan 2 — 3x semana (12 clases)</option>
+          <option value="3">Plan 3 — 4x semana (16 clases)</option>
+        </select>
+        <input class="input-small" type="date" id="renovarFecha" />
+        <div class="btn-row">
+          <button class="btn-confirmar" onclick="confirmarRenovar()">CONFIRMAR</button>
+          <button class="btn-cancelar" onclick="toggleRenovar(false)">Cancelar</button>
+        </div>
+        <div class="success-msg" id="renovarMsg"></div>
+      </div>
+
+      <div class="divider hidden" id="dividerFiltro"></div>
+
+      <!-- Filtro mes/año -->
+      <div class="hidden" id="filtroMesBox">
+        <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:8px;">Ver asistencia por período</div>
+        <div class="filtro-mes">
+          <select class="select-small" id="filtroMes" style="margin-bottom:0;">
+            <option value="1">Enero</option><option value="2">Febrero</option>
+            <option value="3">Marzo</option><option value="4">Abril</option>
+            <option value="5">Mayo</option><option value="6">Junio</option>
+            <option value="7">Julio</option><option value="8">Agosto</option>
+            <option value="9">Septiembre</option><option value="10">Octubre</option>
+            <option value="11">Noviembre</option><option value="12">Diciembre</option>
+          </select>
+          <select class="select-small" id="filtroAnio" style="margin-bottom:0;"></select>
+        </div>
+        <button class="btn-accion btn-accion-secondary" onclick="verAsistenciaPeriodo()">📋 VER ASISTENCIA</button>
+      </div>
+
+      <!-- Formulario agregar clase manual -->
+      <div class="form-agregar-clase hidden" id="formAgregarClase">
+        <div class="form-title" style="color:#ff9500;">➕ Agregar clase manual</div>
+        <input class="input-small" type="date" id="nuevaFecha" />
+        <input class="input-small" type="time" id="nuevaHora" value="19:00" />
+        <div class="btn-row">
+          <button class="btn-confirmar" onclick="agregarClase()">GUARDAR</button>
+          <button class="btn-cancelar" onclick="toggleFormClase(false)">Cancelar</button>
+        </div>
+        <div class="success-msg" id="claseMsg"></div>
+      </div>
+
+      <!-- Resultado clases -->
+      <div id="profeHistContent"></div>
+
     </div>
 
-    <!-- Tab Alumnos -->
+    <!-- Tab Agregar Alumnos -->
     <div id="tabContentAlumnos" class="hidden">
       <div class="form-agregar">
         <div class="form-title" style="color:#ff5a00;">➕ Agregar alumno</div>
@@ -263,70 +326,18 @@
           <option value="3">Plan 3 — 4x semana (16 clases)</option>
         </select>
         <input class="input-small" type="date" id="newFechaInicio" />
-        <button class="btn-agregar-clase" style="width:100%;background:#ff5a00;" onclick="agregarAlumno()">AGREGAR ALUMNO</button>
+        <button class="btn-accion btn-accion-primary" style="margin-top:4px;" onclick="agregarAlumno()">AGREGAR ALUMNO</button>
         <div class="success-msg" id="agregarMsg"></div>
       </div>
       <div class="historial-section-title">Lista de alumnos</div>
       <div id="listaAlumnos"><div class="admin-loading"><span class="loading-dot"></span></div></div>
     </div>
 
-    <!-- Tab Historial -->
-    <div id="tabContentHistorial" class="hidden">
-      <div style="margin-bottom:16px;">
-        <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:8px;">Alumno</div>
-        <select class="alumno-selector" id="alumnoSelector" onchange="onAlumnoChange()">
-          <option value="">— Selecciona un alumno —</option>
-        </select>
-      </div>
-
-      <!-- Info plan del alumno seleccionado -->
-      <div class="plan-info-box hidden" id="profePlanBox">
-        <div class="plan-info-header">
-          <span class="plan-info-title" id="profePlanTitle">Plan —</span>
-          <span class="plan-info-count" id="profePlanCount">— / —</span>
-        </div>
-        <div class="plan-progress-bar"><div class="plan-progress-fill" id="profePlanFill" style="width:0%"></div></div>
-        <div class="plan-restantes" id="profePlanRestantes">—</div>
-      </div>
-
-      <!-- Renovar plan -->
-      <div class="renovar-box hidden" id="renovarBox">
-        <div class="form-title" style="color:#ff5a00;">🔄 Renovar plan</div>
-        <select class="select-small" id="renovarPlan">
-          <option value="1">Plan 1 — 2x semana (8 clases)</option>
-          <option value="2">Plan 2 — 3x semana (12 clases)</option>
-          <option value="3">Plan 3 — 4x semana (16 clases)</option>
-        </select>
-        <input class="input-small" type="date" id="renovarFecha" />
-        <div class="btn-row">
-          <button class="btn-agregar-clase" style="background:#ff5a00;" onclick="confirmarRenovar()">CONFIRMAR</button>
-          <button class="btn-cancelar-clase" onclick="toggleRenovar(false)">Cancelar</button>
-        </div>
-        <div class="success-msg" id="renovarMsg"></div>
-      </div>
-
-      <!-- Botones acción -->
-      <div id="botonesAccion" class="hidden" style="display:none;flex-direction:column;gap:10px;margin-bottom:16px;">
-        <button class="btn-renovar" style="padding:16px;font-size:18px;" onclick="toggleRenovar(true)">🔄 RENOVAR PLAN</button>
-        <button class="btn-toggle-clase" style="padding:16px;font-size:15px;font-weight:600;" onclick="toggleFormClase(true)">➕ AGREGAR CLASE MANUAL</button>
-        <button class="btn-toggle-clase" style="padding:16px;font-size:15px;font-weight:600;border-color:rgba(255,255,255,0.2);color:#888;" onclick="verClasesAlumno()">📋 VER CLASES DEL ALUMNO</button>
-      </div>
-
-      <!-- Agregar clase manual -->
-      <div class="form-agregar-clase hidden" id="formAgregarClase">
-        <div class="form-title" style="color:#ff9500;">➕ Agregar clase manual</div>
-        <input class="input-small" type="date" id="nuevaFecha" />
-        <input class="input-small" type="time" id="nuevaHora" value="19:00" />
-        <div class="btn-row">
-          <button class="btn-agregar-clase" onclick="agregarClase()">GUARDAR</button>
-          <button class="btn-cancelar-clase" onclick="toggleFormClase(false)">Cancelar</button>
-        </div>
-        <div class="success-msg" id="claseMsg"></div>
-      </div>
-
-      <div class="mes-selector" id="profeMesSelectorContainer"></div>
-      <div id="profeHistContent"></div>
+    <!-- Tab Asistencia del día -->
+    <div id="tabContentHoy" class="hidden">
+      <div id="profeContent"><div class="admin-loading"><span class="loading-dot"></span></div></div>
     </div>
+
   </div>
 </div>
 
@@ -404,8 +415,8 @@
   let _alumnoSeleccionado = null;
   let _alumnoInfoCache = {};
 
-  const PLAN_CLASES = { 1: 8, 2: 12, 3: 16 };
-  const PLAN_NOMBRES = { 1: 'Plan 1 — 2x semana', 2: 'Plan 2 — 3x semana', 3: 'Plan 3 — 4x semana' };
+  const PLAN_CLASES  = { 1:8, 2:12, 3:16 };
+  const PLAN_NOMBRES = { 1:'Plan 1 — 2x semana', 2:'Plan 2 — 3x semana', 3:'Plan 3 — 4x semana' };
 
   // ── Lock ───────────────────────────────────────────────────────────────────
   function getLock() {
@@ -415,13 +426,13 @@
     if (date !== todayKey()) { localStorage.removeItem(LOCK_KEY); return false; }
     return true;
   }
-  function setLock() { localStorage.setItem(LOCK_KEY, JSON.stringify({ date: todayKey() })); }
+  function setLock()   { localStorage.setItem(LOCK_KEY, JSON.stringify({ date: todayKey() })); }
   function clearLock() { localStorage.removeItem(LOCK_KEY); }
 
   // ── RUT ────────────────────────────────────────────────────────────────────
   function formatRut(input) {
-    let v = input.value.replace(/[^0-9kK]/g, '').toUpperCase();
-    if (v.length > 1) v = v.slice(0,-1) + '-' + v.slice(-1);
+    let v = input.value.replace(/[^0-9kK]/g,'').toUpperCase();
+    if (v.length > 1) v = v.slice(0,-1)+'-'+v.slice(-1);
     input.value = v;
   }
   function formatRutInput(input) { formatRut(input); }
@@ -439,15 +450,15 @@
     const rut  = localStorage.getItem(RUT_KEY);
     const name = localStorage.getItem(NAME_KEY);
     if (rut && name) {
-      loadCheckinView(name, JSON.parse(localStorage.getItem(PLAN_KEY) || 'null'));
+      loadCheckinView(name, JSON.parse(localStorage.getItem(PLAN_KEY)||'null'));
       try {
-        const res = await fetchAPI({ action: 'validate', rut });
+        const res = await fetchAPI({ action:'validate', rut });
         if (res.ok) {
           localStorage.setItem(NAME_KEY, res.nombre);
           localStorage.setItem(PROF_KEY, res.profesor);
-          localStorage.setItem(PLAN_KEY, JSON.stringify({ plan: res.plan, restantes: res.restantes, total: res.total, clasesUsadas: res.clasesUsadas, planAgotado: res.planAgotado }));
+          localStorage.setItem(PLAN_KEY, JSON.stringify({ plan:res.plan, restantes:res.restantes, total:res.total, clasesUsadas:res.clasesUsadas, planAgotado:res.planAgotado }));
           if (res.yaRegistrado) setLock(); else clearLock();
-          loadCheckinView(res.nombre, { plan: res.plan, restantes: res.restantes, total: res.total, clasesUsadas: res.clasesUsadas, planAgotado: res.planAgotado });
+          loadCheckinView(res.nombre, { plan:res.plan, restantes:res.restantes, total:res.total, clasesUsadas:res.clasesUsadas, planAgotado:res.planAgotado });
         } else { changeName(); }
       } catch {}
     } else { showOnly('viewRut'); }
@@ -463,38 +474,34 @@
     document.getElementById('avatarLetter').textContent = name.charAt(0).toUpperCase();
     document.getElementById('nameDisplay').textContent  = name.toUpperCase();
     document.getElementById('dateDisplay').textContent  = todayLabel();
-    document.getElementById('btnNotMe').textContent     = 'No soy ' + name.split(' ')[0];
-
-    const btn = document.getElementById('btnCheckin');
+    document.getElementById('btnNotMe').textContent     = 'No soy '+name.split(' ')[0];
+    const btn   = document.getElementById('btnCheckin');
     const badge = document.getElementById('planBadge');
-
     if (planInfo) {
-      const { plan, restantes, total, planAgotado } = planInfo;
+      const { plan, restantes, planAgotado } = planInfo;
       if (planAgotado) {
         badge.textContent = '⚠️ Plan agotado — contacta a tu profe';
         badge.className = 'plan-badge agotado';
-        btn.disabled = true;
-        btn.innerHTML = '⚠️ PLAN AGOTADO';
+        btn.disabled = true; btn.innerHTML = '⚠️ PLAN AGOTADO';
       } else {
-        badge.textContent = `${PLAN_NOMBRES[plan] || 'Plan'} · ${restantes} clase${restantes !== 1 ? 's' : ''} restante${restantes !== 1 ? 's' : ''}`;
-        badge.className = restantes <= 2 ? 'plan-badge agotado' : 'plan-badge';
-        if (getLock()) { btn.disabled = true; btn.innerHTML = '✓ YA REGISTRADO HOY'; }
-        else { btn.disabled = false; btn.innerHTML = '⚡ REGISTRAR'; }
+        badge.textContent = `${PLAN_NOMBRES[plan]||'Plan'} · ${restantes} clase${restantes!==1?'s':''} restante${restantes!==1?'s':''}`;
+        badge.className = restantes<=2 ? 'plan-badge agotado' : 'plan-badge';
+        if (getLock()) { btn.disabled=true; btn.innerHTML='✓ YA REGISTRADO HOY'; }
+        else { btn.disabled=false; btn.innerHTML='⚡ REGISTRAR'; }
       }
     } else {
-      badge.textContent = '— clases';
-      badge.className = 'plan-badge';
-      if (getLock()) { btn.disabled = true; btn.innerHTML = '✓ YA REGISTRADO HOY'; }
-      else { btn.disabled = false; btn.innerHTML = '⚡ REGISTRAR'; }
+      badge.textContent='— clases'; badge.className='plan-badge';
+      if (getLock()) { btn.disabled=true; btn.innerHTML='✓ YA REGISTRADO HOY'; }
+      else { btn.disabled=false; btn.innerHTML='⚡ REGISTRAR'; }
     }
     showOnly('viewCheckin');
   }
 
   function changeName() {
-    clearLock(); _touchHandled = false;
-    [RUT_KEY, NAME_KEY, PROF_KEY, PLAN_KEY].forEach(k => localStorage.removeItem(k));
-    document.getElementById('rutInput').value = '';
-    document.getElementById('rutError').textContent = '';
+    clearLock(); _touchHandled=false;
+    [RUT_KEY,NAME_KEY,PROF_KEY,PLAN_KEY].forEach(k=>localStorage.removeItem(k));
+    document.getElementById('rutInput').value='';
+    document.getElementById('rutError').textContent='';
     document.getElementById('btnValidate').classList.add('inactivo');
     showOnly('viewRut');
   }
@@ -504,132 +511,147 @@
     if (btn.classList.contains('inactivo')) return;
     const rut = document.getElementById('rutInput').value.replace(/\./g,'').trim().toLowerCase();
     if (!rut) return;
-    btn.classList.add('inactivo'); btn.innerHTML = 'VERIFICANDO...'; btn.style.opacity = '0.7';
+    btn.classList.add('inactivo'); btn.innerHTML='VERIFICANDO...'; btn.style.opacity='0.7';
     try {
-      const res = await fetchAPI({ action: 'validate', rut });
+      const res = await fetchAPI({ action:'validate', rut });
       if (res.ok) {
-        localStorage.setItem(RUT_KEY, rut);
-        localStorage.setItem(NAME_KEY, res.nombre);
+        localStorage.setItem(RUT_KEY, rut); localStorage.setItem(NAME_KEY, res.nombre);
         localStorage.setItem(PROF_KEY, res.profesor);
-        localStorage.setItem(PLAN_KEY, JSON.stringify({ plan: res.plan, restantes: res.restantes, total: res.total, clasesUsadas: res.clasesUsadas, planAgotado: res.planAgotado }));
+        localStorage.setItem(PLAN_KEY, JSON.stringify({ plan:res.plan, restantes:res.restantes, total:res.total, clasesUsadas:res.clasesUsadas, planAgotado:res.planAgotado }));
         if (res.yaRegistrado) setLock(); else clearLock();
-        btn.classList.remove('inactivo'); btn.textContent = 'CONTINUAR'; btn.style.opacity = '1';
-        loadCheckinView(res.nombre, { plan: res.plan, restantes: res.restantes, total: res.total, planAgotado: res.planAgotado });
+        btn.classList.remove('inactivo'); btn.textContent='CONTINUAR'; btn.style.opacity='1';
+        loadCheckinView(res.nombre, { plan:res.plan, restantes:res.restantes, total:res.total, planAgotado:res.planAgotado });
       } else {
         showRutError('RUT no autorizado. Habla con tu profe.');
-        btn.classList.remove('inactivo'); btn.textContent = 'CONTINUAR'; btn.style.opacity = '1';
+        btn.classList.remove('inactivo'); btn.textContent='CONTINUAR'; btn.style.opacity='1';
       }
     } catch {
       showRutError('Sin conexión. Intenta de nuevo.');
-      btn.classList.remove('inactivo'); btn.textContent = 'CONTINUAR'; btn.style.opacity = '1';
+      btn.classList.remove('inactivo'); btn.textContent='CONTINUAR'; btn.style.opacity='1';
     }
   }
 
   function showRutError(msg) {
     document.getElementById('rutError').textContent = msg;
     const inp = document.getElementById('rutInput');
-    inp.classList.add('error'); setTimeout(() => inp.classList.remove('error'), 600);
+    inp.classList.add('error'); setTimeout(()=>inp.classList.remove('error'),600);
   }
 
-  function handleCheckinTouch(e) { e.preventDefault(); _touchHandled = true; doCheckIn(); }
-  function handleCheckinClick(e) { if (_touchHandled) { _touchHandled = false; return; } doCheckIn(); }
+  function handleCheckinTouch(e) { e.preventDefault(); _touchHandled=true; doCheckIn(); }
+  function handleCheckinClick(e) { if (_touchHandled) { _touchHandled=false; return; } doCheckIn(); }
 
   async function doCheckIn() {
     if (getLock()) return;
-    const planInfo = JSON.parse(localStorage.getItem(PLAN_KEY) || 'null');
+    const planInfo = JSON.parse(localStorage.getItem(PLAN_KEY)||'null');
     if (planInfo && planInfo.planAgotado) return;
     setLock();
-    const rut = localStorage.getItem(RUT_KEY), name = localStorage.getItem(NAME_KEY), profesor = localStorage.getItem(PROF_KEY);
-    if (!rut || !name || !profesor) { clearLock(); return; }
+    const rut=localStorage.getItem(RUT_KEY), name=localStorage.getItem(NAME_KEY), profesor=localStorage.getItem(PROF_KEY);
+    if (!rut||!name||!profesor) { clearLock(); return; }
     const btn = document.getElementById('btnCheckin');
-    btn.disabled = true; btn.innerHTML = '<span class="loading-white"></span>';
+    btn.disabled=true; btn.innerHTML='<span class="loading-white"></span>';
     try {
-      const res = await fetchAPI({ action: 'checkin', rut, nombre: name, profesor });
+      const res = await fetchAPI({ action:'checkin', rut, nombre:name, profesor });
       if (res.ok) {
-        if (planInfo) {
-          planInfo.restantes = res.restantes;
-          planInfo.clasesUsadas = (planInfo.clasesUsadas || 0) + 1;
-          localStorage.setItem(PLAN_KEY, JSON.stringify(planInfo));
-        }
-        document.getElementById('successName').textContent = name.toUpperCase();
-        document.getElementById('successTime').textContent = todayLabel() + ' · ' + timeNow();
-        showOnly('viewSuccess'); setTimeout(() => loadCheckinView(name, planInfo), 3500);
-      } else if (res.error === 'plan_agotado') {
-        document.getElementById('agotadoName').textContent = name.toUpperCase();
-        showOnly('viewAgotado'); setTimeout(() => loadCheckinView(name, planInfo), 4000);
-      } else if (res.error && res.error.includes('Ya registraste')) {
-        document.getElementById('alreadyName').textContent = name.toUpperCase();
-        showOnly('viewAlready'); setTimeout(() => loadCheckinView(name, planInfo), 3000);
-      } else { alert('Error: ' + (res.error || 'Intenta de nuevo')); clearLock(); loadCheckinView(name, planInfo); }
-    } catch { alert('Sin conexión.'); clearLock(); loadCheckinView(name, planInfo); }
+        if (planInfo) { planInfo.restantes=res.restantes; planInfo.clasesUsadas=(planInfo.clasesUsadas||0)+1; localStorage.setItem(PLAN_KEY,JSON.stringify(planInfo)); }
+        document.getElementById('successName').textContent=name.toUpperCase();
+        document.getElementById('successTime').textContent=todayLabel()+' · '+timeNow();
+        showOnly('viewSuccess'); setTimeout(()=>loadCheckinView(name,planInfo),3500);
+      } else if (res.error==='plan_agotado') {
+        document.getElementById('agotadoName').textContent=name.toUpperCase();
+        showOnly('viewAgotado'); setTimeout(()=>loadCheckinView(name,planInfo),4000);
+      } else if (res.error&&res.error.includes('Ya registraste')) {
+        document.getElementById('alreadyName').textContent=name.toUpperCase();
+        showOnly('viewAlready'); setTimeout(()=>loadCheckinView(name,planInfo),3000);
+      } else { alert('Error: '+(res.error||'Intenta de nuevo')); clearLock(); loadCheckinView(name,planInfo); }
+    } catch { alert('Sin conexión.'); clearLock(); loadCheckinView(name,planInfo); }
   }
 
   // ── PIN ────────────────────────────────────────────────────────────────────
-  function openPin() { _pinValue = ''; updatePinDisplay(); document.getElementById('pinError').textContent = ''; document.getElementById('pinOverlay').classList.remove('hidden'); }
-  function closePin() { document.getElementById('pinOverlay').classList.add('hidden'); _pinValue = ''; }
-  function pinPress(d) { if (_pinValue.length >= 4) return; _pinValue += d; updatePinDisplay(); if (_pinValue.length === 4) setTimeout(validatePin, 200); }
-  function pinDelete() { _pinValue = _pinValue.slice(0,-1); updatePinDisplay(); }
-  function pinClear()  { _pinValue = ''; updatePinDisplay(); }
-  function updatePinDisplay() { for (let i = 0; i < 4; i++) document.getElementById('pd'+i).classList.toggle('filled', i < _pinValue.length); }
+  function openPin() { _pinValue=''; updatePinDisplay(); document.getElementById('pinError').textContent=''; document.getElementById('pinOverlay').classList.remove('hidden'); }
+  function closePin() { document.getElementById('pinOverlay').classList.add('hidden'); _pinValue=''; }
+  function pinPress(d) { if (_pinValue.length>=4) return; _pinValue+=d; updatePinDisplay(); if (_pinValue.length===4) setTimeout(validatePin,200); }
+  function pinDelete() { _pinValue=_pinValue.slice(0,-1); updatePinDisplay(); }
+  function pinClear()  { _pinValue=''; updatePinDisplay(); }
+  function updatePinDisplay() { for(let i=0;i<4;i++) document.getElementById('pd'+i).classList.toggle('filled',i<_pinValue.length); }
 
   async function validatePin() {
-    document.getElementById('pinError').textContent = '';
+    document.getElementById('pinError').textContent='';
     try {
-      const res = await fetchAPI({ action: 'validarProfesor', pin: _pinValue });
-      if (res.ok) { _profeActual = res.profesor; closePin(); openProfe(); }
-      else { document.getElementById('pinError').textContent = 'PIN incorrecto'; _pinValue = ''; updatePinDisplay(); }
-    } catch { document.getElementById('pinError').textContent = 'Sin conexión'; _pinValue = ''; updatePinDisplay(); }
+      const res = await fetchAPI({ action:'validarProfesor', pin:_pinValue });
+      if (res.ok) { _profeActual=res.profesor; closePin(); openProfe(); }
+      else { document.getElementById('pinError').textContent='PIN incorrecto'; _pinValue=''; updatePinDisplay(); }
+    } catch { document.getElementById('pinError').textContent='Sin conexión'; _pinValue=''; updatePinDisplay(); }
   }
 
   // ── Panel Profe ────────────────────────────────────────────────────────────
   async function openProfe() {
-    document.getElementById('profeTitulo').textContent = '👨‍🏫 ' + _profeActual.toUpperCase();
+    document.getElementById('profeTitulo').textContent='👨‍🏫 '+_profeActual.toUpperCase();
     document.getElementById('profeOverlay').classList.remove('hidden');
-    document.getElementById('profeContent').innerHTML = '<div class="admin-loading"><span class="loading-dot"></span> Cargando...</div>';
+    resetHistorialTab();
+
+    // Inicializar filtro año
+    const anioSel = document.getElementById('filtroAnio');
+    const anioActual = new Date().getFullYear();
+    anioSel.innerHTML = [anioActual-1, anioActual, anioActual+1].map(y=>`<option value="${y}" ${y===anioActual?'selected':''}>${y}</option>`).join('');
+    document.getElementById('filtroMes').value = new Date().getMonth()+1;
+
+    // Cargar datos en paralelo
     try {
       const [recRes, alumRes] = await Promise.all([
-        fetchAPI({ action: 'records' }),
-        fetchAPI({ action: 'getAlumnos', profesor: _profeActual })
+        fetchAPI({ action:'records' }),
+        fetchAPI({ action:'getAlumnos', profesor:_profeActual })
       ]);
-      if (recRes.ok)  _profeRecords = recRes.records || {};
-      if (alumRes.ok) { _alumnoInfoCache = {}; alumRes.alumnos.forEach(a => { _alumnoInfoCache[a.rut] = a; }); _renderAlumnos(alumRes.alumnos); }
+      if (recRes.ok)  _profeRecords = recRes.records||{};
+      if (alumRes.ok) {
+        _alumnoInfoCache={};
+        alumRes.alumnos.forEach(a=>{ _alumnoInfoCache[a.rut]=a; });
+        _renderAlumnos(alumRes.alumnos);
+        // Habilitar selector con alumnos
+        const sel = document.getElementById('alumnoSelector');
+        sel.disabled = false;
+        sel.innerHTML = '<option value="">— Selecciona un alumno —</option>' +
+          alumRes.alumnos.map(a=>`<option value="${a.rut}" data-nombre="${a.nombre}">${a.nombre}</option>`).join('');
+      }
     } catch {}
-    switchTab('historial');
+    _renderHoy();
   }
+
+  function resetHistorialTab() {
+    _alumnoSeleccionado=null; _profeHistorialData={};
+    const sel = document.getElementById('alumnoSelector');
+    sel.disabled=true; sel.value='';
+    sel.innerHTML='<option value="">⏳ Cargando alumnos...</option>';
+    document.getElementById('profePlanBox').classList.add('hidden');
+    document.getElementById('btnRenovarPlan').classList.add('hidden');
+    document.getElementById('renovarBox').classList.add('hidden');
+    document.getElementById('dividerFiltro').classList.add('hidden');
+    document.getElementById('filtroMesBox').classList.add('hidden');
+    document.getElementById('formAgregarClase').classList.add('hidden');
+    document.getElementById('profeHistContent').innerHTML='';
+  }
+
   function closeProfe() {
     document.getElementById('profeOverlay').classList.add('hidden');
-    // Resetear estado
-    _alumnoSeleccionado = null;
-    _profeHistorialData = {};
-    document.getElementById('alumnoSelector').value = '';
-    document.getElementById('profePlanBox').classList.add('hidden');
-    document.getElementById('renovarBox').classList.add('hidden');
-    document.getElementById('formAgregarClase').classList.add('hidden');
-    document.getElementById('profeHistStats').classList.add('hidden');
-    document.getElementById('profeMesSelectorContainer').innerHTML = '';
-    document.getElementById('profeHistContent').innerHTML = '';
+    resetHistorialTab();
   }
 
   function switchTab(tab) {
-    ['hoy','alumnos','historial'].forEach(t => {
-      const key = t.charAt(0).toUpperCase() + t.slice(1);
-      document.getElementById('tabContent'+key).classList.toggle('hidden', t !== tab);
-      document.getElementById('tab'+key).classList.toggle('activo', t === tab);
+    ['historial','alumnos','hoy'].forEach(t=>{
+      const key=t.charAt(0).toUpperCase()+t.slice(1);
+      document.getElementById('tabContent'+key).classList.toggle('hidden',t!==tab);
+      document.getElementById('tab'+key).classList.toggle('activo',t===tab);
     });
-    if (tab === 'hoy') _renderHoy();
+    if (tab==='hoy') _renderHoy();
   }
 
   function _renderHoy() {
-    const hoy = todayKey();
-    const todayRec = (_profeRecords[hoy] || []).filter(r => r.profesor === _profeActual);
-    if (!todayRec.length) {
-      document.getElementById('profeContent').innerHTML = '<div class="empty-state">Sin asistencia hoy</div>';
-      return;
-    }
-    document.getElementById('profeContent').innerHTML = `
+    const hoy=todayKey();
+    const todayRec=(_profeRecords[hoy]||[]).filter(r=>r.profesor===_profeActual);
+    if (!todayRec.length) { document.getElementById('profeContent').innerHTML='<div class="empty-state">Sin asistencia hoy</div>'; return; }
+    document.getElementById('profeContent').innerHTML=`
       <div class="day-block">
         <div class="day-label">${formatDate(hoy)}<span class="day-count">· ${todayRec.length} asistentes</span></div>
-        ${todayRec.map(r => `
+        ${todayRec.map(r=>`
           <div class="attendee-row">
             <div class="attendee-info"><span class="attendee-name">${r.nombre}</span><span class="attendee-rut">${r.rut}</span></div>
             <span class="attendee-time">${r.hora}</span>
@@ -638,275 +660,253 @@
   }
 
   function _renderAlumnos(alumnos) {
-    document.getElementById('newFechaInicio').value = todayKey();
-    if (!alumnos || !alumnos.length) {
-      document.getElementById('listaAlumnos').innerHTML = '<div class="empty-state">Sin alumnos</div>';
-      document.getElementById('alumnoSelector').innerHTML = '<option value="">— Selecciona un alumno —</option>';
-      return;
-    }
-    // Calcular clases restantes por alumno
-    document.getElementById('listaAlumnos').innerHTML = alumnos.map(a => {
-      const total = PLAN_CLASES[a.plan] || 8;
-      const fechaInicio = a.fechaInicio || '';
-      const usadas = Object.entries(_profeRecords).reduce((acc, [fecha, regs]) => {
-        if (fechaInicio && fecha < fechaInicio) return acc;
-        return acc + regs.filter(r =>
-          String(r.rut).trim().toLowerCase() === String(a.rut).trim().toLowerCase() &&
-          r.profesor === _profeActual
-        ).length;
-      }, 0);
-      const restantes = Math.max(0, total - usadas);
-      const clase = restantes === 0 ? 'agotado' : restantes <= 2 ? 'pocas' : '';
-      return `
-        <div class="alumno-row">
-          <div class="alumno-info">
-            <span class="alumno-nombre">${a.nombre}</span>
-            <span class="alumno-rut">${a.rut}</span>
-            <span class="alumno-plan">${PLAN_NOMBRES[a.plan] || 'Plan '+a.plan}</span>
-            <span class="alumno-restantes ${clase}">${restantes === 0 ? '⚠️ Plan agotado' : restantes + ' clases restantes'}</span>
-          </div>
-          <button class="btn-eliminar" onclick="eliminarAlumno('${a.rut}','${a.nombre}')">✕</button>
-        </div>`;
+    document.getElementById('newFechaInicio').value=todayKey();
+    if (!alumnos||!alumnos.length) { document.getElementById('listaAlumnos').innerHTML='<div class="empty-state">Sin alumnos</div>'; return; }
+    document.getElementById('listaAlumnos').innerHTML=alumnos.map(a=>{
+      const total=PLAN_CLASES[a.plan]||8;
+      const fechaInicio=a.fechaInicio||'';
+      const usadas=Object.entries(_profeRecords).reduce((acc,[fecha,regs])=>{
+        if (fechaInicio&&fecha<fechaInicio) return acc;
+        return acc+regs.filter(r=>String(r.rut).trim().toLowerCase()===String(a.rut).trim().toLowerCase()&&r.profesor===_profeActual).length;
+      },0);
+      const restantes=Math.max(0,total-usadas);
+      const clase=restantes===0?'agotado':restantes<=2?'pocas':'';
+      return `<div class="alumno-row">
+        <div class="alumno-info">
+          <span class="alumno-nombre">${a.nombre}</span>
+          <span class="alumno-rut">${a.rut}</span>
+          <span class="alumno-plan">${PLAN_NOMBRES[a.plan]||'Plan '+a.plan}</span>
+          <span class="alumno-restantes ${clase}">${restantes===0?'⚠️ Plan agotado':restantes+' clases restantes'}</span>
+        </div>
+        <button class="btn-eliminar" onclick="eliminarAlumno('${a.rut}','${a.nombre}')">✕</button>
+      </div>`;
     }).join('');
-    document.getElementById('alumnoSelector').innerHTML =
-      '<option value="">— Selecciona un alumno —</option>' +
-      alumnos.map(a => `<option value="${a.rut}" data-nombre="${a.nombre}">${a.nombre}</option>`).join('');
   }
 
   async function loadAlumnos() {
-    document.getElementById('listaAlumnos').innerHTML = '<div class="admin-loading"><span class="loading-dot"></span></div>';
+    document.getElementById('listaAlumnos').innerHTML='<div class="admin-loading"><span class="loading-dot"></span></div>';
     try {
-      const res = await fetchAPI({ action: 'getAlumnos', profesor: _profeActual });
-      if (res.ok) { _alumnoInfoCache = {}; res.alumnos.forEach(a => { _alumnoInfoCache[a.rut] = a; }); _renderAlumnos(res.alumnos); }
-      else document.getElementById('listaAlumnos').innerHTML = '<div class="empty-state">Error</div>';
-    } catch { document.getElementById('listaAlumnos').innerHTML = '<div class="empty-state">Sin conexión</div>'; }
+      const res=await fetchAPI({ action:'getAlumnos', profesor:_profeActual });
+      if (res.ok) { _alumnoInfoCache={}; res.alumnos.forEach(a=>{_alumnoInfoCache[a.rut]=a;}); _renderAlumnos(res.alumnos); }
+      else document.getElementById('listaAlumnos').innerHTML='<div class="empty-state">Error</div>';
+    } catch { document.getElementById('listaAlumnos').innerHTML='<div class="empty-state">Sin conexión</div>'; }
   }
 
   async function agregarAlumno() {
-    const rut = document.getElementById('newRut').value.replace(/\./g,'').trim().toLowerCase();
-    const nombre = document.getElementById('newNombre').value.trim();
-    const plan = document.getElementById('newPlan').value;
-    const fechaInicio = document.getElementById('newFechaInicio').value;
-    const msg = document.getElementById('agregarMsg');
-    if (!rut || !nombre || !fechaInicio) { msg.style.color='#ff3b3b'; msg.textContent='Completa todos los campos'; return; }
-    msg.textContent = '';
+    const rut=document.getElementById('newRut').value.replace(/\./g,'').trim().toLowerCase();
+    const nombre=document.getElementById('newNombre').value.trim();
+    const plan=document.getElementById('newPlan').value;
+    const fechaInicio=document.getElementById('newFechaInicio').value;
+    const msg=document.getElementById('agregarMsg');
+    if (!rut||!nombre||!fechaInicio) { msg.style.color='#ff3b3b'; msg.textContent='Completa todos los campos'; return; }
+    msg.textContent='';
     try {
-      const res = await fetchAPI({ action: 'agregarAlumno', rut, nombre, profesor: _profeActual, plan, fechaInicio });
+      const res=await fetchAPI({ action:'agregarAlumno', rut, nombre, profesor:_profeActual, plan, fechaInicio });
       if (res.ok) {
         msg.style.color='#00c851'; msg.textContent='✓ Alumno agregado';
-        document.getElementById('newRut').value = ''; document.getElementById('newNombre').value = '';
-        loadAlumnos(); setTimeout(() => msg.textContent='', 3000);
-      } else { msg.style.color='#ff3b3b'; msg.textContent = res.error || 'Error'; }
+        document.getElementById('newRut').value=''; document.getElementById('newNombre').value='';
+        loadAlumnos(); setTimeout(()=>msg.textContent='',3000);
+      } else { msg.style.color='#ff3b3b'; msg.textContent=res.error||'Error'; }
     } catch { msg.style.color='#ff3b3b'; msg.textContent='Sin conexión'; }
   }
 
-  async function eliminarAlumno(rut, nombre) {
-    if (!confirm('¿Eliminar a ' + nombre + '?')) return;
+  async function eliminarAlumno(rut,nombre) {
+    if (!confirm('¿Eliminar a '+nombre+'?')) return;
     try {
-      const res = await fetchAPI({ action: 'eliminarAlumno', rut, profesor: _profeActual });
-      if (res.ok) loadAlumnos(); else alert('Error: ' + (res.error || 'No se pudo eliminar'));
+      const res=await fetchAPI({ action:'eliminarAlumno', rut, profesor:_profeActual });
+      if (res.ok) loadAlumnos(); else alert('Error: '+(res.error||'No se pudo eliminar'));
     } catch { alert('Sin conexión'); }
   }
 
   function onAlumnoChange() {
-    const sel = document.getElementById('alumnoSelector');
-    const rut = sel.value;
-    const nombre = sel.options[sel.selectedIndex]?.dataset?.nombre || '';
-    _alumnoSeleccionado = rut ? { rut, nombre } : null;
-    toggleFormClase(false); toggleRenovar(false);
+    const sel=document.getElementById('alumnoSelector');
+    const rut=sel.value;
+    const nombre=sel.options[sel.selectedIndex]?.dataset?.nombre||'';
+    _alumnoSeleccionado=rut?{rut,nombre}:null;
+    toggleRenovar(false); toggleFormClase(false);
     document.getElementById('profePlanBox').classList.add('hidden');
-    document.getElementById('profeMesSelectorContainer').innerHTML = '';
-    document.getElementById('profeHistContent').innerHTML = '';
-    document.getElementById('botonesAccion').style.display = 'none';
-
+    document.getElementById('btnRenovarPlan').classList.add('hidden');
+    document.getElementById('dividerFiltro').classList.add('hidden');
+    document.getElementById('filtroMesBox').classList.add('hidden');
+    document.getElementById('profeHistContent').innerHTML='';
     if (!rut) return;
 
-    // Info del plan
-    const alumnoInfo = _alumnoInfoCache[rut];
+    const alumnoInfo=_alumnoInfoCache[rut];
     if (alumnoInfo) {
-      const total = PLAN_CLASES[alumnoInfo.plan] || 8;
-      const fechaInicio = alumnoInfo.fechaInicio || '';
-      const usadas = Object.entries(_profeRecords).reduce((acc, [fecha, regs]) => {
-        if (fechaInicio && fecha < fechaInicio) return acc;
-        return acc + regs.filter(r =>
-          String(r.rut).trim().toLowerCase() === rut && r.profesor === _profeActual
-        ).length;
-      }, 0);
-      const restantes = Math.max(0, total - usadas);
-      const pct = Math.min(100, Math.round((usadas / total) * 100));
-      const agotado = restantes === 0;
-
-      document.getElementById('profePlanTitle').textContent = PLAN_NOMBRES[alumnoInfo.plan] || 'Plan';
-      document.getElementById('profePlanCount').textContent = `${usadas} / ${total} clases`;
-      document.getElementById('profePlanFill').style.width = pct + '%';
-      document.getElementById('profePlanFill').className = 'plan-progress-fill' + (agotado ? ' agotado' : '');
-      const restEl = document.getElementById('profePlanRestantes');
-      restEl.textContent = agotado ? '⚠️ Plan agotado' : restantes + ' clases restantes';
-      restEl.className = 'plan-restantes' + (agotado ? ' agotado' : restantes <= 2 ? ' pocas' : '');
+      const total=PLAN_CLASES[alumnoInfo.plan]||8;
+      const fechaInicio=alumnoInfo.fechaInicio||'';
+      const usadas=Object.entries(_profeRecords).reduce((acc,[fecha,regs])=>{
+        if (fechaInicio&&fecha<fechaInicio) return acc;
+        return acc+regs.filter(r=>String(r.rut).trim().toLowerCase()===rut&&r.profesor===_profeActual).length;
+      },0);
+      const restantes=Math.max(0,total-usadas);
+      const pct=Math.min(100,Math.round((usadas/total)*100));
+      const agotado=restantes===0;
+      document.getElementById('profePlanTitle').textContent=PLAN_NOMBRES[alumnoInfo.plan]||'Plan';
+      document.getElementById('profePlanCount').textContent=`${usadas} / ${total} clases`;
+      document.getElementById('profePlanFill').style.width=pct+'%';
+      document.getElementById('profePlanFill').className='plan-progress-fill'+(agotado?' agotado':'');
+      const restEl=document.getElementById('profePlanRestantes');
+      restEl.textContent=agotado?'⚠️ Plan agotado':restantes+' clases restantes';
+      restEl.className='plan-restantes'+(agotado?' agotado':restantes<=2?' pocas':'');
       document.getElementById('profePlanBox').classList.remove('hidden');
-      document.getElementById('renovarPlan').value = alumnoInfo.plan;
-      document.getElementById('renovarFecha').value = todayKey();
+      document.getElementById('renovarPlan').value=alumnoInfo.plan;
+      document.getElementById('renovarFecha').value=todayKey();
+      document.getElementById('btnRenovarPlan').classList.remove('hidden');
     }
-
-    // Mostrar botones de acción
-    document.getElementById('botonesAccion').style.display = 'flex';
+    document.getElementById('dividerFiltro').classList.remove('hidden');
+    document.getElementById('filtroMesBox').classList.remove('hidden');
   }
 
-  async function verClasesAlumno() {
+  function verAsistenciaPeriodo() {
     if (!_alumnoSeleccionado) return;
-    const rut = _alumnoSeleccionado.rut;
-    document.getElementById('profeHistContent').innerHTML = '<div class="admin-loading"><span class="loading-dot"></span></div>';
-    document.getElementById('profeMesSelectorContainer').innerHTML = '';
-
-    const porMes = {}; let total2 = 0;
-    Object.keys(_profeRecords).sort((a,b) => b.localeCompare(a)).forEach(fecha => {
-      const clases = _profeRecords[fecha].filter(r => String(r.rut).trim().toLowerCase() === rut && r.profesor === _profeActual);
-      if (clases.length > 0) {
-        total2++;
-        const mes = fecha.substring(0,7);
-        if (!porMes[mes]) porMes[mes] = [];
-        porMes[mes].push({ fecha, hora: clases[0].hora, manual: clases[0].manual });
+    const mes=document.getElementById('filtroMes').value.padStart(2,'0');
+    const anio=document.getElementById('filtroAnio').value;
+    const periodo=`${anio}-${mes}`;
+    const rut=_alumnoSeleccionado.rut;
+    const clases=[];
+    Object.keys(_profeRecords).forEach(fecha=>{
+      if (fecha.substring(0,7)===periodo) {
+        const regs=_profeRecords[fecha].filter(r=>String(r.rut).trim().toLowerCase()===rut&&r.profesor===_profeActual);
+        if (regs.length>0) clases.push({ fecha, hora:regs[0].hora, manual:regs[0].manual });
       }
     });
-    _profeHistorialData = porMes;
-
-    const meses = Object.keys(porMes).sort((a,b) => b.localeCompare(a));
-    if (!meses.length) { document.getElementById('profeHistContent').innerHTML = '<div class="empty-state">Sin clases registradas</div>'; return; }
-    document.getElementById('profeMesSelectorContainer').innerHTML = meses.map(m => `
-      <button class="mes-btn" onclick="seleccionarMesProfe('${m}')">${formatMesCorto(m)}</button>`).join('');
-    const mesActual = todayKey().substring(0,7);
-    seleccionarMesProfe(porMes[mesActual] ? mesActual : meses[0]);
-  }
-
-  function seleccionarMesProfe(mes) {
-    document.querySelectorAll('#profeMesSelectorContainer .mes-btn').forEach(btn => btn.classList.toggle('activo', btn.textContent === formatMesCorto(mes)));
-    const clases = _profeHistorialData[mes] || [];
-    if (!clases.length) { document.getElementById('profeHistContent').innerHTML = '<div class="empty-state">Sin clases este mes</div>'; return; }
-    document.getElementById('profeHistContent').innerHTML = clases.map(c => `
-      <div class="dia-row-profe">
-        <div class="dia-info">
-          <span class="dia-fecha">${formatDateLong(c.fecha)}</span>
-          <span class="dia-hora">${c.hora}${c.manual ? ' &nbsp;<span class="dia-manual">MANUAL</span>' : ''}</span>
+    clases.sort((a,b)=>b.fecha.localeCompare(a.fecha));
+    toggleFormClase(false);
+    if (!clases.length) {
+      document.getElementById('profeHistContent').innerHTML=`
+        <div style="margin-bottom:12px;">
+          <button class="btn-accion btn-accion-secondary" onclick="toggleFormClase(true)">➕ AGREGAR CLASE MANUAL</button>
         </div>
-        <button class="btn-elim-clase" onclick="eliminarClase('${c.fecha}')">✕</button>
-      </div>`).join('');
-  }
-
-  function toggleFormClase(show) {
-    document.getElementById('formAgregarClase').classList.toggle('hidden', !show);
-    if (show) { document.getElementById('nuevaFecha').value = todayKey(); document.getElementById('claseMsg').textContent = ''; }
+        <div class="empty-state">Sin clases en este período</div>`;
+      return;
+    }
+    document.getElementById('profeHistContent').innerHTML=`
+      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,90,0,0.2);">
+        ${clases.length} clase${clases.length!==1?'s':''} en este período
+      </div>
+      <div style="margin-bottom:12px;">
+        <button class="btn-accion btn-accion-secondary" onclick="toggleFormClase(true)">➕ AGREGAR CLASE MANUAL</button>
+      </div>
+      ${clases.map(c=>`
+        <div class="dia-row-profe">
+          <div class="dia-info">
+            <span class="dia-fecha">${formatDateLong(c.fecha)}</span>
+            <span class="dia-hora">${c.hora}${c.manual?' &nbsp;<span class="dia-manual">MANUAL</span>':''}</span>
+          </div>
+          <button class="btn-elim-clase" onclick="eliminarClase('${c.fecha}')">✕</button>
+        </div>`).join('')}`;
   }
 
   function toggleRenovar(show) {
-    document.getElementById('renovarBox').classList.toggle('hidden', !show);
-    if (show) document.getElementById('renovarMsg').textContent = '';
+    document.getElementById('renovarBox').classList.toggle('hidden',!show);
+    document.getElementById('btnRenovarPlan').classList.toggle('hidden',show);
+    if (show) document.getElementById('renovarMsg').textContent='';
+  }
+
+  function toggleFormClase(show) {
+    document.getElementById('formAgregarClase').classList.toggle('hidden',!show);
+    if (show) { document.getElementById('nuevaFecha').value=todayKey(); document.getElementById('claseMsg').textContent=''; }
   }
 
   async function confirmarRenovar() {
     if (!_alumnoSeleccionado) return;
-    const plan = document.getElementById('renovarPlan').value;
-    const fecha = document.getElementById('renovarFecha').value;
-    const msg = document.getElementById('renovarMsg');
+    const plan=document.getElementById('renovarPlan').value;
+    const fecha=document.getElementById('renovarFecha').value;
+    const msg=document.getElementById('renovarMsg');
     if (!fecha) { msg.style.color='#ff3b3b'; msg.textContent='Selecciona fecha de inicio'; return; }
     try {
-      const res = await fetchAPI({ action: 'renovarPlan', rut: _alumnoSeleccionado.rut, profesor: _profeActual, plan, fechaInicio: fecha });
+      const res=await fetchAPI({ action:'renovarPlan', rut:_alumnoSeleccionado.rut, profesor:_profeActual, plan, fechaInicio:fecha });
       if (res.ok) {
         msg.style.color='#00c851'; msg.textContent='✓ Plan renovado';
-        // Actualizar caché local
-        if (_alumnoInfoCache[_alumnoSeleccionado.rut]) {
-          _alumnoInfoCache[_alumnoSeleccionado.rut].plan = parseInt(plan);
-          _alumnoInfoCache[_alumnoSeleccionado.rut].fechaInicio = fecha;
-        }
-        setTimeout(() => { toggleRenovar(false); onAlumnoChange(); }, 1200);
-      } else { msg.style.color='#ff3b3b'; msg.textContent = res.error || 'Error'; }
+        if (_alumnoInfoCache[_alumnoSeleccionado.rut]) { _alumnoInfoCache[_alumnoSeleccionado.rut].plan=parseInt(plan); _alumnoInfoCache[_alumnoSeleccionado.rut].fechaInicio=fecha; }
+        setTimeout(()=>{ toggleRenovar(false); onAlumnoChange(); },1200);
+      } else { msg.style.color='#ff3b3b'; msg.textContent=res.error||'Error'; }
     } catch { msg.style.color='#ff3b3b'; msg.textContent='Sin conexión'; }
   }
 
   async function agregarClase() {
     if (!_alumnoSeleccionado) return;
-    const fecha = document.getElementById('nuevaFecha').value;
-    const hora  = document.getElementById('nuevaHora').value;
-    const msg   = document.getElementById('claseMsg');
-    if (!fecha || !hora) { msg.style.color='#ff3b3b'; msg.textContent='Selecciona fecha y hora'; return; }
-    msg.textContent = '';
+    const fecha=document.getElementById('nuevaFecha').value;
+    const hora=document.getElementById('nuevaHora').value;
+    const msg=document.getElementById('claseMsg');
+    if (!fecha||!hora) { msg.style.color='#ff3b3b'; msg.textContent='Selecciona fecha y hora'; return; }
+    msg.textContent='';
     try {
-      const res = await fetchAPI({ action: 'agregarClase', rut: _alumnoSeleccionado.rut, nombre: _alumnoSeleccionado.nombre, profesor: _profeActual, fecha, hora });
+      const res=await fetchAPI({ action:'agregarClase', rut:_alumnoSeleccionado.rut, nombre:_alumnoSeleccionado.nombre, profesor:_profeActual, fecha, hora });
       if (res.ok) {
         msg.style.color='#00c851'; msg.textContent='✓ Clase agregada';
-        const r = await fetchAPI({ action: 'records' });
-        if (r.ok) _profeRecords = r.records || {};
-        setTimeout(() => { toggleFormClase(false); onAlumnoChange(); }, 1000);
-      } else { msg.style.color='#ff3b3b'; msg.textContent = res.error || 'Error'; }
+        const r=await fetchAPI({ action:'records' });
+        if (r.ok) _profeRecords=r.records||{};
+        setTimeout(()=>{ toggleFormClase(false); verAsistenciaPeriodo(); },1000);
+      } else { msg.style.color='#ff3b3b'; msg.textContent=res.error||'Error'; }
     } catch { msg.style.color='#ff3b3b'; msg.textContent='Sin conexión'; }
   }
 
   async function eliminarClase(fecha) {
     if (!_alumnoSeleccionado) return;
-    if (!confirm('¿Eliminar clase del ' + formatDateLong(fecha) + '?')) return;
+    if (!confirm('¿Eliminar clase del '+formatDateLong(fecha)+'?')) return;
     try {
-      const res = await fetchAPI({ action: 'eliminarClase', rut: _alumnoSeleccionado.rut, profesor: _profeActual, fecha });
+      const res=await fetchAPI({ action:'eliminarClase', rut:_alumnoSeleccionado.rut, profesor:_profeActual, fecha });
       if (res.ok) {
-        const r = await fetchAPI({ action: 'records' });
-        if (r.ok) _profeRecords = r.records || {};
-        onAlumnoChange();
-      } else { alert('Error: ' + (res.error || 'No se pudo eliminar')); }
+        const r=await fetchAPI({ action:'records' });
+        if (r.ok) _profeRecords=r.records||{};
+        verAsistenciaPeriodo();
+      } else { alert('Error: '+(res.error||'No se pudo eliminar')); }
     } catch { alert('Sin conexión'); }
   }
 
   // ── Historial alumno ───────────────────────────────────────────────────────
   async function openHistorial() {
     document.getElementById('historialOverlay').classList.remove('hidden');
-    document.getElementById('historialContent').innerHTML = '<div class="admin-loading"><span class="loading-dot"></span></div>';
-    document.getElementById('mesSelectorContainer').innerHTML = '';
-    document.getElementById('histMes').textContent = '—'; document.getElementById('histTotal').textContent = '—';
-    const rut = localStorage.getItem(RUT_KEY);
+    document.getElementById('historialContent').innerHTML='<div class="admin-loading"><span class="loading-dot"></span></div>';
+    document.getElementById('mesSelectorContainer').innerHTML='';
+    document.getElementById('histMes').textContent='—'; document.getElementById('histTotal').textContent='—';
+    const rut=localStorage.getItem(RUT_KEY);
     if (!rut) return;
-
-    // Info plan
-    const planInfo = JSON.parse(localStorage.getItem(PLAN_KEY) || 'null');
+    const planInfo=JSON.parse(localStorage.getItem(PLAN_KEY)||'null');
     if (planInfo) {
-      const { plan, restantes, total, clasesUsadas, planAgotado } = planInfo;
-      const pct = Math.min(100, Math.round(((clasesUsadas||0) / total) * 100));
-      document.getElementById('histPlanTitle').textContent = PLAN_NOMBRES[plan] || 'Plan';
-      document.getElementById('histPlanCount').textContent = `${clasesUsadas||0} / ${total} clases`;
-      document.getElementById('histPlanFill').style.width = pct + '%';
-      document.getElementById('histPlanFill').className = 'plan-progress-fill' + (planAgotado ? ' agotado' : '');
-      const restEl = document.getElementById('histPlanRestantes');
-      restEl.textContent = planAgotado ? '⚠️ Plan agotado — contacta a tu profe' : restantes + ' clases restantes';
-      restEl.className = 'plan-restantes' + (planAgotado ? ' agotado' : restantes <= 2 ? ' pocas' : '');
+      const {plan,restantes,total,clasesUsadas,planAgotado}=planInfo;
+      const pct=Math.min(100,Math.round(((clasesUsadas||0)/total)*100));
+      document.getElementById('histPlanTitle').textContent=PLAN_NOMBRES[plan]||'Plan';
+      document.getElementById('histPlanCount').textContent=`${clasesUsadas||0} / ${total} clases`;
+      document.getElementById('histPlanFill').style.width=pct+'%';
+      document.getElementById('histPlanFill').className='plan-progress-fill'+(planAgotado?' agotado':'');
+      const restEl=document.getElementById('histPlanRestantes');
+      restEl.textContent=planAgotado?'⚠️ Plan agotado — contacta a tu profe':restantes+' clases restantes';
+      restEl.className='plan-restantes'+(planAgotado?' agotado':restantes<=2?' pocas':'');
     }
-
     try {
-      const res = await fetchAPI({ action: 'records' });
-      if (!res.ok) { document.getElementById('historialContent').innerHTML = '<div class="empty-state">Error</div>'; return; }
-      const records = res.records || {};
-      const porMes = {}; let totalClases = 0;
-      Object.keys(records).sort((a,b) => b.localeCompare(a)).forEach(fecha => {
-        const misClases = records[fecha].filter(r => String(r.rut).trim().toLowerCase() === rut);
-        if (misClases.length > 0) {
+      const res=await fetchAPI({ action:'records' });
+      if (!res.ok) { document.getElementById('historialContent').innerHTML='<div class="empty-state">Error</div>'; return; }
+      const records=res.records||{};
+      const porMes={}; let totalClases=0;
+      Object.keys(records).sort((a,b)=>b.localeCompare(a)).forEach(fecha=>{
+        const misClases=records[fecha].filter(r=>String(r.rut).trim().toLowerCase()===rut);
+        if (misClases.length>0) {
           totalClases++;
-          const mes = fecha.substring(0,7);
-          if (!porMes[mes]) porMes[mes] = [];
-          porMes[mes].push({ fecha, hora: misClases[0].hora });
+          const mes=fecha.substring(0,7);
+          if (!porMes[mes]) porMes[mes]=[];
+          porMes[mes].push({ fecha, hora:misClases[0].hora });
         }
       });
-      _historialData = porMes;
-      document.getElementById('histTotal').textContent = totalClases;
-      const meses = Object.keys(porMes).sort((a,b) => b.localeCompare(a));
+      _historialData=porMes;
+      document.getElementById('histTotal').textContent=totalClases;
+      const meses=Object.keys(porMes).sort((a,b)=>b.localeCompare(a));
       if (!meses.length) { document.getElementById('histMes').textContent='0'; document.getElementById('historialContent').innerHTML='<div class="empty-state">Sin clases aún</div>'; return; }
-      document.getElementById('mesSelectorContainer').innerHTML = meses.map(m => `<button class="mes-btn" onclick="seleccionarMes('${m}')">${formatMesCorto(m)}</button>`).join('');
-      const mesActual = todayKey().substring(0,7);
-      seleccionarMes(porMes[mesActual] ? mesActual : meses[0]);
-    } catch { document.getElementById('historialContent').innerHTML = '<div class="empty-state">Sin conexión</div>'; }
+      document.getElementById('mesSelectorContainer').innerHTML=meses.map(m=>`<button class="mes-btn" onclick="seleccionarMes('${m}')">${formatMesCorto(m)}</button>`).join('');
+      const mesActual=todayKey().substring(0,7);
+      seleccionarMes(porMes[mesActual]?mesActual:meses[0]);
+    } catch { document.getElementById('historialContent').innerHTML='<div class="empty-state">Sin conexión</div>'; }
   }
 
   function seleccionarMes(mes) {
-    document.querySelectorAll('#mesSelectorContainer .mes-btn').forEach(btn => btn.classList.toggle('activo', btn.textContent === formatMesCorto(mes)));
-    const clases = _historialData[mes] || [];
-    document.getElementById('histMes').textContent = clases.length;
-    document.getElementById('histSectionTitle').textContent = 'Clases · ' + formatMesLargo(mes);
-    if (!clases.length) { document.getElementById('historialContent').innerHTML = '<div class="empty-state">Sin clases este mes</div>'; return; }
-    document.getElementById('historialContent').innerHTML = clases.map(c => `
+    document.querySelectorAll('#mesSelectorContainer .mes-btn').forEach(btn=>btn.classList.toggle('activo',btn.textContent===formatMesCorto(mes)));
+    const clases=_historialData[mes]||[];
+    document.getElementById('histMes').textContent=clases.length;
+    document.getElementById('histSectionTitle').textContent='Clases · '+formatMesLargo(mes);
+    if (!clases.length) { document.getElementById('historialContent').innerHTML='<div class="empty-state">Sin clases este mes</div>'; return; }
+    document.getElementById('historialContent').innerHTML=clases.map(c=>`
       <div class="dia-row"><span class="dia-fecha">${formatDateLong(c.fecha)}</span><span class="dia-hora">${c.hora}</span></div>`).join('');
   }
 
@@ -914,7 +914,7 @@
 
   // ── API ────────────────────────────────────────────────────────────────────
   async function fetchAPI(body) {
-    const res = await fetch(API, { method: 'POST', body: JSON.stringify(body) });
+    const res=await fetch(API,{method:'POST',body:JSON.stringify(body)});
     return res.json();
   }
 
@@ -927,7 +927,7 @@
   function formatMesCorto(key) { const [y,m]=key.split('-').map(Number); return new Date(y,m-1,1).toLocaleDateString('es-CL',{month:'short',year:'2-digit'}).toUpperCase(); }
   function formatMesLargo(key) { const [y,m]=key.split('-').map(Number); return new Date(y,m-1,1).toLocaleDateString('es-CL',{month:'long',year:'numeric'}).toUpperCase(); }
 
-  window.addEventListener('DOMContentLoaded', init);
+  window.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
 </html>
