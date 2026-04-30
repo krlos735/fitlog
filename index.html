@@ -305,9 +305,11 @@
         <div class="success-msg" id="renovarMsg"></div>
       </div>
 
-      <div class="mes-stats hidden" id="profeHistStats">
-        <div class="mes-box"><div class="mes-num" id="profeHistMes">—</div><div class="mes-label">Este mes</div></div>
-        <div class="mes-box"><div class="mes-num" id="profeHistTotal">—</div><div class="mes-label">Total</div></div>
+      <!-- Botones acción -->
+      <div id="botonesAccion" class="hidden" style="display:none;flex-direction:column;gap:10px;margin-bottom:16px;">
+        <button class="btn-renovar" style="padding:16px;font-size:18px;" onclick="toggleRenovar(true)">🔄 RENOVAR PLAN</button>
+        <button class="btn-toggle-clase" style="padding:16px;font-size:15px;font-weight:600;" onclick="toggleFormClase(true)">➕ AGREGAR CLASE MANUAL</button>
+        <button class="btn-toggle-clase" style="padding:16px;font-size:15px;font-weight:600;border-color:rgba(255,255,255,0.2);color:#888;" onclick="verClasesAlumno()">📋 VER CLASES DEL ALUMNO</button>
       </div>
 
       <!-- Agregar clase manual -->
@@ -594,7 +596,19 @@
     } catch {}
     switchTab('historial');
   }
-  function closeProfe() { document.getElementById('profeOverlay').classList.add('hidden'); }
+  function closeProfe() {
+    document.getElementById('profeOverlay').classList.add('hidden');
+    // Resetear estado
+    _alumnoSeleccionado = null;
+    _profeHistorialData = {};
+    document.getElementById('alumnoSelector').value = '';
+    document.getElementById('profePlanBox').classList.add('hidden');
+    document.getElementById('renovarBox').classList.add('hidden');
+    document.getElementById('formAgregarClase').classList.add('hidden');
+    document.getElementById('profeHistStats').classList.add('hidden');
+    document.getElementById('profeMesSelectorContainer').innerHTML = '';
+    document.getElementById('profeHistContent').innerHTML = '';
+  }
 
   function switchTab(tab) {
     ['hoy','alumnos','historial'].forEach(t => {
@@ -700,10 +714,11 @@
     const nombre = sel.options[sel.selectedIndex]?.dataset?.nombre || '';
     _alumnoSeleccionado = rut ? { rut, nombre } : null;
     toggleFormClase(false); toggleRenovar(false);
-    document.getElementById('profeHistStats').classList.add('hidden');
     document.getElementById('profePlanBox').classList.add('hidden');
     document.getElementById('profeMesSelectorContainer').innerHTML = '';
     document.getElementById('profeHistContent').innerHTML = '';
+    document.getElementById('botonesAccion').style.display = 'none';
+
     if (!rut) return;
 
     // Info del plan
@@ -733,7 +748,16 @@
       document.getElementById('renovarFecha').value = todayKey();
     }
 
-    // Historial
+    // Mostrar botones de acción
+    document.getElementById('botonesAccion').style.display = 'flex';
+  }
+
+  async function verClasesAlumno() {
+    if (!_alumnoSeleccionado) return;
+    const rut = _alumnoSeleccionado.rut;
+    document.getElementById('profeHistContent').innerHTML = '<div class="admin-loading"><span class="loading-dot"></span></div>';
+    document.getElementById('profeMesSelectorContainer').innerHTML = '';
+
     const porMes = {}; let total2 = 0;
     Object.keys(_profeRecords).sort((a,b) => b.localeCompare(a)).forEach(fecha => {
       const clases = _profeRecords[fecha].filter(r => String(r.rut).trim().toLowerCase() === rut && r.profesor === _profeActual);
@@ -745,8 +769,7 @@
       }
     });
     _profeHistorialData = porMes;
-    document.getElementById('profeHistTotal').textContent = total2;
-    document.getElementById('profeHistStats').classList.remove('hidden');
+
     const meses = Object.keys(porMes).sort((a,b) => b.localeCompare(a));
     if (!meses.length) { document.getElementById('profeHistContent').innerHTML = '<div class="empty-state">Sin clases registradas</div>'; return; }
     document.getElementById('profeMesSelectorContainer').innerHTML = meses.map(m => `
@@ -758,11 +781,8 @@
   function seleccionarMesProfe(mes) {
     document.querySelectorAll('#profeMesSelectorContainer .mes-btn').forEach(btn => btn.classList.toggle('activo', btn.textContent === formatMesCorto(mes)));
     const clases = _profeHistorialData[mes] || [];
-    document.getElementById('profeHistMes').textContent = clases.length;
-    const btnToggle = `<button class="btn-toggle-clase" onclick="toggleFormClase(true)">➕ Agregar clase manual</button>`;
-    const btnRenovar = `<button class="btn-renovar" onclick="toggleRenovar(true)">🔄 Renovar plan</button>`;
-    if (!clases.length) { document.getElementById('profeHistContent').innerHTML = btnRenovar + btnToggle + '<div class="empty-state">Sin clases este mes</div>'; return; }
-    document.getElementById('profeHistContent').innerHTML = btnRenovar + btnToggle + clases.map(c => `
+    if (!clases.length) { document.getElementById('profeHistContent').innerHTML = '<div class="empty-state">Sin clases este mes</div>'; return; }
+    document.getElementById('profeHistContent').innerHTML = clases.map(c => `
       <div class="dia-row-profe">
         <div class="dia-info">
           <span class="dia-fecha">${formatDateLong(c.fecha)}</span>
