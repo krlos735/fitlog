@@ -243,17 +243,11 @@
     <div class="profe-tabs">
       <button class="profe-tab activo" id="tabHistorial" onclick="switchTab('historial')">Asistencia por alumno</button>
       <button class="profe-tab"        id="tabAlumnos"   onclick="switchTab('alumnos')">Agregar Alumnos</button>
-      <button class="profe-tab"        id="tabHoy"       onclick="switchTab('hoy')">Hoy</button>
+      <button class="profe-tab"        id="tabHoy"       onclick="switchTab('hoy')">Asistencia del día</button>
     </div>
 
-    <!-- Tab Hoy -->
-    <div id="tabContentHoy">
-      <div class="stats-row">
-        <div class="stat-box"><div class="stat-num" id="pStatToday">—</div><div class="stat-label">Hoy</div></div>
-        <div class="stat-box"><div class="stat-num" id="pStatWeek">—</div><div class="stat-label">Semana</div></div>
-        <div class="stat-box"><div class="stat-num" id="pStatTotal">—</div><div class="stat-label">Total</div></div>
-      </div>
-      <button class="refresh-btn" onclick="loadProfeData()">↻ ACTUALIZAR</button>
+    <!-- Tab Asistencia del día -->
+    <div id="tabContentHoy" class="hidden">
       <div id="profeContent"><div class="admin-loading"><span class="loading-dot"></span></div></div>
     </div>
 
@@ -614,19 +608,6 @@
   function _renderHoy() {
     const hoy = todayKey();
     const todayRec = (_profeRecords[hoy] || []).filter(r => r.profesor === _profeActual);
-    document.getElementById('pStatToday').textContent = todayRec.length;
-
-    // Semana
-    const weekStart = new Date(); weekStart.setDate(weekStart.getDate() - weekStart.getDay());
-    let weekCount = 0, total = 0;
-    Object.keys(_profeRecords).forEach(fecha => {
-      const r = _profeRecords[fecha].filter(r => r.profesor === _profeActual);
-      total += r.length;
-      if (new Date(fecha) >= weekStart) weekCount += r.length;
-    });
-    document.getElementById('pStatWeek').textContent  = weekCount;
-    document.getElementById('pStatTotal').textContent = total;
-
     if (!todayRec.length) {
       document.getElementById('profeContent').innerHTML = '<div class="empty-state">Sin asistencia hoy</div>';
       return;
@@ -640,15 +621,6 @@
             <span class="attendee-time">${r.hora}</span>
           </div>`).join('')}
       </div>`;
-  }
-
-  async function loadProfeData() {
-    document.getElementById('profeContent').innerHTML = '<div class="admin-loading"><span class="loading-dot"></span></div>';
-    try {
-      const res = await fetchAPI({ action: 'records' });
-      if (res.ok) _profeRecords = res.records || {};
-    } catch {}
-    _renderHoy();
   }
 
   function _renderAlumnos(alumnos) {
