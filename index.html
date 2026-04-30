@@ -241,9 +241,9 @@
       <button class="close-btn" onclick="closeProfe()">✕</button>
     </div>
     <div class="profe-tabs">
-      <button class="profe-tab activo" id="tabHoy"      onclick="switchTab('hoy')">Hoy</button>
-      <button class="profe-tab"        id="tabAlumnos"  onclick="switchTab('alumnos')">Alumnos</button>
-      <button class="profe-tab"        id="tabHistorial" onclick="switchTab('historial')">Historial</button>
+      <button class="profe-tab activo" id="tabHistorial" onclick="switchTab('historial')">Asistencia por alumno</button>
+      <button class="profe-tab"        id="tabAlumnos"   onclick="switchTab('alumnos')">Agregar Alumnos</button>
+      <button class="profe-tab"        id="tabHoy"       onclick="switchTab('hoy')">Hoy</button>
     </div>
 
     <!-- Tab Hoy -->
@@ -598,7 +598,7 @@
       if (recRes.ok)  _profeRecords = recRes.records || {};
       if (alumRes.ok) { _alumnoInfoCache = {}; alumRes.alumnos.forEach(a => { _alumnoInfoCache[a.rut] = a; }); _renderAlumnos(alumRes.alumnos); }
     } catch {}
-    switchTab('hoy');
+    switchTab('historial');
   }
   function closeProfe() { document.getElementById('profeOverlay').classList.add('hidden'); }
 
@@ -612,30 +612,34 @@
   }
 
   function _renderHoy() {
-    const records = {};
+    const hoy = todayKey();
+    const todayRec = (_profeRecords[hoy] || []).filter(r => r.profesor === _profeActual);
+    document.getElementById('pStatToday').textContent = todayRec.length;
+
+    // Semana
+    const weekStart = new Date(); weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+    let weekCount = 0, total = 0;
     Object.keys(_profeRecords).forEach(fecha => {
       const r = _profeRecords[fecha].filter(r => r.profesor === _profeActual);
-      if (r.length) records[fecha] = r;
+      total += r.length;
+      if (new Date(fecha) >= weekStart) weekCount += r.length;
     });
-    const allDays = Object.keys(records).sort((a,b) => b.localeCompare(a));
-    const todayRec = records[todayKey()] || [];
-    const total = Object.values(records).flat().length;
-    const weekStart = new Date(); weekStart.setDate(weekStart.getDate() - weekStart.getDay());
-    let weekCount = 0;
-    Object.keys(records).forEach(d => { if (new Date(d) >= weekStart) weekCount += records[d].length; });
-    document.getElementById('pStatToday').textContent = todayRec.length;
     document.getElementById('pStatWeek').textContent  = weekCount;
     document.getElementById('pStatTotal').textContent = total;
-    if (!allDays.length) { document.getElementById('profeContent').innerHTML = '<div class="empty-state">Sin registros aún</div>'; return; }
-    document.getElementById('profeContent').innerHTML = allDays.map(day => `
+
+    if (!todayRec.length) {
+      document.getElementById('profeContent').innerHTML = '<div class="empty-state">Sin asistencia hoy</div>';
+      return;
+    }
+    document.getElementById('profeContent').innerHTML = `
       <div class="day-block">
-        <div class="day-label">${formatDate(day)}<span class="day-count">· ${records[day].length} asistentes</span></div>
-        ${records[day].map(r => `
+        <div class="day-label">${formatDate(hoy)}<span class="day-count">· ${todayRec.length} asistentes</span></div>
+        ${todayRec.map(r => `
           <div class="attendee-row">
             <div class="attendee-info"><span class="attendee-name">${r.nombre}</span><span class="attendee-rut">${r.rut}</span></div>
             <span class="attendee-time">${r.hora}</span>
           </div>`).join('')}
-      </div>`).join('');
+      </div>`;
   }
 
   async function loadProfeData() {
