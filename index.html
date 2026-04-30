@@ -183,13 +183,23 @@
       <div class="plan-progress-bar"><div class="plan-progress-fill" id="histPlanFill" style="width:0%"></div></div>
       <div class="plan-restantes" id="histPlanRestantes">—</div>
     </div>
-    <div class="mes-stats">
-      <div class="mes-box"><div class="mes-num" id="histMes">—</div><div class="mes-label">Este mes</div></div>
-      <div class="mes-box"><div class="mes-num" id="histTotal">—</div><div class="mes-label">Total</div></div>
+
+    <!-- Filtro mes/año alumno -->
+    <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:8px;">Ver clases por período</div>
+    <div class="filtro-mes">
+      <select class="select-small" id="histFiltroMes" style="margin-bottom:0;">
+        <option value="1">Enero</option><option value="2">Febrero</option>
+        <option value="3">Marzo</option><option value="4">Abril</option>
+        <option value="5">Mayo</option><option value="6">Junio</option>
+        <option value="7">Julio</option><option value="8">Agosto</option>
+        <option value="9">Septiembre</option><option value="10">Octubre</option>
+        <option value="11">Noviembre</option><option value="12">Diciembre</option>
+      </select>
+      <select class="select-small" id="histFiltroAnio" style="margin-bottom:0;"></select>
     </div>
-    <div class="historial-section-title" id="histSectionTitle">Clases del mes</div>
-    <div class="mes-selector" id="mesSelectorContainer"></div>
-    <div id="historialContent"><div class="admin-loading"><span class="loading-dot"></span></div></div>
+    <button class="btn-accion btn-accion-secondary" style="margin-top:8px;" onclick="verClasesPeriodoAlumno()">📋 VER CLASES</button>
+
+    <div id="historialContent" style="margin-top:16px;"></div>
   </div>
 </div>
 
@@ -859,11 +869,18 @@
   // ── Historial alumno ───────────────────────────────────────────────────────
   async function openHistorial() {
     document.getElementById('historialOverlay').classList.remove('hidden');
-    document.getElementById('historialContent').innerHTML='<div class="admin-loading"><span class="loading-dot"></span></div>';
-    document.getElementById('mesSelectorContainer').innerHTML='';
-    document.getElementById('histMes').textContent='—'; document.getElementById('histTotal').textContent='—';
+    document.getElementById('historialContent').innerHTML='';
+
+    // Inicializar filtro año
+    const anioSel = document.getElementById('histFiltroAnio');
+    const anioActual = new Date().getFullYear();
+    anioSel.innerHTML = [anioActual-1, anioActual, anioActual+1].map(y=>`<option value="${y}" ${y===anioActual?'selected':''}>${y}</option>`).join('');
+    document.getElementById('histFiltroMes').value = new Date().getMonth()+1;
+
     const rut=localStorage.getItem(RUT_KEY);
     if (!rut) return;
+
+    // Info plan desde caché local
     const planInfo=JSON.parse(localStorage.getItem(PLAN_KEY)||'null');
     if (planInfo) {
       const {plan,restantes,total,clasesUsadas,planAgotado}=planInfo;
@@ -876,38 +893,46 @@
       restEl.textContent=planAgotado?'⚠️ Plan agotado — contacta a tu profe':restantes+' clases restantes';
       restEl.className='plan-restantes'+(planAgotado?' agotado':restantes<=2?' pocas':'');
     }
+
+    // Cargar records en background para tenerlos listos
     try {
       const res=await fetchAPI({ action:'records' });
-      if (!res.ok) { document.getElementById('historialContent').innerHTML='<div class="empty-state">Error</div>'; return; }
-      const records=res.records||{};
-      const porMes={}; let totalClases=0;
-      Object.keys(records).sort((a,b)=>b.localeCompare(a)).forEach(fecha=>{
-        const misClases=records[fecha].filter(r=>String(r.rut).trim().toLowerCase()===rut);
-        if (misClases.length>0) {
-          totalClases++;
-          const mes=fecha.substring(0,7);
-          if (!porMes[mes]) porMes[mes]=[];
-          porMes[mes].push({ fecha, hora:misClases[0].hora });
-        }
-      });
-      _historialData=porMes;
-      document.getElementById('histTotal').textContent=totalClases;
-      const meses=Object.keys(porMes).sort((a,b)=>b.localeCompare(a));
-      if (!meses.length) { document.getElementById('histMes').textContent='0'; document.getElementById('historialContent').innerHTML='<div class="empty-state">Sin clases aún</div>'; return; }
-      document.getElementById('mesSelectorContainer').innerHTML=meses.map(m=>`<button class="mes-btn" onclick="seleccionarMes('${m}')">${formatMesCorto(m)}</button>`).join('');
-      const mesActual=todayKey().substring(0,7);
-      seleccionarMes(porMes[mesActual]?mesActual:meses[0]);
-    } catch { document.getElementById('historialContent').innerHTML='<div class="empty-state">Sin conexión</div>'; }
+      if (res.ok) _historialData=res.records||{};
+    } catch {}
   }
 
-  function seleccionarMes(mes) {
-    document.querySelectorAll('#mesSelectorContainer .mes-btn').forEach(btn=>btn.classList.toggle('activo',btn.textContent===formatMesCorto(mes)));
-    const clases=_historialData[mes]||[];
-    document.getElementById('histMes').textContent=clases.length;
-    document.getElementById('histSectionTitle').textContent='Clases · '+formatMesLargo(mes);
-    if (!clases.length) { document.getElementById('historialContent').innerHTML='<div class="empty-state">Sin clases este mes</div>'; return; }
-    document.getElementById('historialContent').innerHTML=clases.map(c=>`
-      <div class="dia-row"><span class="dia-fecha">${formatDateLong(c.fecha)}</span><span class="dia-hora">${c.hora}</span></div>`).join('');
+  function verClasesPeriodoAlumno() {
+    const rut=localStorage.getItem(RUT_KEY);
+    if (!rut) return;
+    const mes=document.getElementById('histFiltroMes').value.padStart(2,'0');
+    const anio=document.getElementById('histFiltroAnio').value;
+    const periodo=`${anio}-${mes}`;
+    const clases=[];
+    Object.keys(_historialData).forEach(fecha=>{
+      if (fecha.substring(0,7)===periodo) {
+        const misClases=(_historialData[fecha]||[]).filter(r=>String(r.rut).trim().toLowerCase()===rut);
+        if (misClases.length>0) clases.push({ fecha, hora:misClases[0].hora });
+      }
+    });
+    clases.sort((a,b)=>b.fecha.localeCompare(a.fecha));
+    const content=document.getElementById('historialContent');
+    if (!clases.length) {
+      content.innerHTML=`
+        <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,90,0,0.2);">
+          0 clases en este período
+        </div>
+        <div class="empty-state">Sin clases registradas en este período</div>`;
+      return;
+    }
+    content.innerHTML=`
+      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,90,0,0.2);">
+        ${clases.length} clase${clases.length!==1?'s':''} en ${formatMesLargo(periodo)}
+      </div>
+      ${clases.map(c=>`
+        <div class="dia-row">
+          <span class="dia-fecha">${formatDateLong(c.fecha)}</span>
+          <span class="dia-hora">${c.hora}</span>
+        </div>`).join('')}`;
   }
 
   function closeHistorial() { document.getElementById('historialOverlay').classList.add('hidden'); }
