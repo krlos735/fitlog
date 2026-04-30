@@ -112,7 +112,7 @@
     .alumno-nombre { font-size:15px; font-weight:500; color:#f0ede8; }
     .alumno-rut { font-size:11px; color:#555; }
     .alumno-plan { font-size:11px; color:#ff9500; }
-    .alumno-restantes { font-size:11px; }
+    .alumno-restantes { font-size:11px; color:#f0ede8; }
     .alumno-restantes.pocas { color:#ff9500; }
     .alumno-restantes.agotado { color:#ff4444; }
     .btn-eliminar { background:rgba(255,50,50,0.1); border:1px solid rgba(255,50,50,0.3); color:#ff4444; font-size:12px; padding:6px 12px; border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif; }
@@ -340,7 +340,8 @@
         <div class="success-msg" id="agregarMsg"></div>
       </div>
       <div class="historial-section-title">Lista de alumnos</div>
-      <div id="listaAlumnos"><div class="admin-loading"><span class="loading-dot"></span></div></div>
+      <button class="btn-accion btn-accion-ghost" style="margin-bottom:12px;" onclick="loadAlumnos()">👥 VER LISTA DE ALUMNOS</button>
+      <div id="listaAlumnos"></div>
     </div>
 
     <!-- Tab Asistencia del día -->
@@ -709,23 +710,26 @@
     const fechaInicio=document.getElementById('newFechaInicio').value;
     const msg=document.getElementById('agregarMsg');
     if (!rut||!nombre||!fechaInicio) { msg.style.color='#ff3b3b'; msg.textContent='Completa todos los campos'; return; }
-    msg.textContent='';
+    msg.style.color='#888'; msg.textContent='⏳ Guardando...';
     try {
       const res=await fetchAPI({ action:'agregarAlumno', rut, nombre, profesor:_profeActual, plan, fechaInicio });
       if (res.ok) {
         msg.style.color='#00c851'; msg.textContent='✓ Alumno agregado';
         document.getElementById('newRut').value=''; document.getElementById('newNombre').value='';
-        loadAlumnos(); setTimeout(()=>msg.textContent='',3000);
+        document.getElementById('listaAlumnos').innerHTML='';
+        setTimeout(()=>msg.textContent='',3000);
       } else { msg.style.color='#ff3b3b'; msg.textContent=res.error||'Error'; }
     } catch { msg.style.color='#ff3b3b'; msg.textContent='Sin conexión'; }
   }
 
   async function eliminarAlumno(rut,nombre) {
     if (!confirm('¿Eliminar a '+nombre+'?')) return;
+    const lista=document.getElementById('listaAlumnos');
+    lista.innerHTML='<div class="admin-loading"><span class="loading-dot"></span> Eliminando...</div>';
     try {
       const res=await fetchAPI({ action:'eliminarAlumno', rut, profesor:_profeActual });
-      if (res.ok) loadAlumnos(); else alert('Error: '+(res.error||'No se pudo eliminar'));
-    } catch { alert('Sin conexión'); }
+      if (res.ok) loadAlumnos(); else { alert('Error: '+(res.error||'No se pudo eliminar')); loadAlumnos(); }
+    } catch { alert('Sin conexión'); loadAlumnos(); }
   }
 
   function onAlumnoChange() {
@@ -856,14 +860,15 @@
   async function eliminarClase(fecha) {
     if (!_alumnoSeleccionado) return;
     if (!confirm('¿Eliminar clase del '+formatDateLong(fecha)+'?')) return;
+    document.getElementById('profeHistContent').innerHTML='<div class="admin-loading"><span class="loading-dot"></span> Eliminando...</div>';
     try {
       const res=await fetchAPI({ action:'eliminarClase', rut:_alumnoSeleccionado.rut, profesor:_profeActual, fecha });
       if (res.ok) {
         const r=await fetchAPI({ action:'records' });
         if (r.ok) _profeRecords=r.records||{};
         verAsistenciaPeriodo();
-      } else { alert('Error: '+(res.error||'No se pudo eliminar')); }
-    } catch { alert('Sin conexión'); }
+      } else { alert('Error: '+(res.error||'No se pudo eliminar')); verAsistenciaPeriodo(); }
+    } catch { alert('Sin conexión'); verAsistenciaPeriodo(); }
   }
 
   // ── Historial alumno ───────────────────────────────────────────────────────
