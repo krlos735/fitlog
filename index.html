@@ -616,8 +616,7 @@
       if (alumRes.ok) {
         _alumnoInfoCache={};
         alumRes.alumnos.forEach(a=>{ _alumnoInfoCache[a.rut]=a; });
-        _renderAlumnos(alumRes.alumnos);
-        // Habilitar selector con alumnos
+        // Solo poblar el selector, NO la lista de alumnos
         const sel = document.getElementById('alumnoSelector');
         sel.disabled = false;
         sel.innerHTML = '<option value="">— Selecciona un alumno —</option>' +
