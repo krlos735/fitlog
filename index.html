@@ -335,8 +335,9 @@
           <option value="2">Plan 2 — 3x semana (12 clases)</option>
           <option value="3">Plan 3 — 4x semana (16 clases)</option>
         </select>
+        <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:4px;">Fecha de inicio del plan</div>
         <input class="input-small" type="date" id="newFechaInicio" />
-        <button class="btn-accion btn-accion-primary" style="margin-top:4px;" onclick="agregarAlumno()">AGREGAR ALUMNO</button>
+        <button class="btn-accion btn-accion-primary" style="margin-top:4px;" id="btnAgregarAlumno" onclick="agregarAlumno()">AGREGAR ALUMNO</button>
         <div class="success-msg" id="agregarMsg"></div>
       </div>
       <div class="historial-section-title">Lista de alumnos</div>
@@ -708,8 +709,12 @@
     const plan=document.getElementById('newPlan').value;
     const fechaInicio=document.getElementById('newFechaInicio').value;
     const msg=document.getElementById('agregarMsg');
+    const btn=document.getElementById('btnAgregarAlumno');
     if (!rut||!nombre||!fechaInicio) { msg.style.color='#ff3b3b'; msg.textContent='Completa todos los campos'; return; }
-    msg.style.color='#888'; msg.textContent='⏳ Guardando...';
+    msg.textContent='';
+    btn.textContent='⏳ GUARDANDO...';
+    btn.style.opacity='0.7';
+    btn.style.pointerEvents='none';
     try {
       const res=await fetchAPI({ action:'agregarAlumno', rut, nombre, profesor:_profeActual, plan, fechaInicio });
       if (res.ok) {
@@ -719,6 +724,9 @@
         setTimeout(()=>msg.textContent='',3000);
       } else { msg.style.color='#ff3b3b'; msg.textContent=res.error||'Error'; }
     } catch { msg.style.color='#ff3b3b'; msg.textContent='Sin conexión'; }
+    btn.textContent='AGREGAR ALUMNO';
+    btn.style.opacity='1';
+    btn.style.pointerEvents='auto';
   }
 
   async function eliminarAlumno(rut,nombre) {
