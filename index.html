@@ -389,14 +389,29 @@
     </div>
 
     <div id="viewCheckin" class="checkin-card hidden fadeUp">
-      <div class="avatar" id="avatarLetter">?</div>
+      <!-- Avatar con dot de estado -->
+      <div style="position:relative;width:88px;height:88px;margin:0 auto 16px;">
+        <div class="avatar" id="avatarLetter" style="margin:0;">?</div>
+        <div style="position:absolute;bottom:2px;right:2px;width:20px;height:20px;background:#00c851;border-radius:50%;border:3px solid #0a0a0a;"></div>
+      </div>
       <div class="greeting">Bienvenido de vuelta</div>
       <div class="name-display" id="nameDisplay">—</div>
       <div class="date-display" id="dateDisplay">—</div>
-      <div class="plan-badge" id="planBadge">— clases restantes</div>
+
+      <!-- Tarjeta plan con barra -->
+      <div class="plan-info-box hidden" id="checkinPlanBox" style="text-align:left;margin-bottom:28px;">
+        <div class="plan-info-header">
+          <span class="plan-info-title" id="checkinPlanTitle">Plan —</span>
+          <span class="plan-info-count" id="checkinPlanCount">— / —</span>
+        </div>
+        <div class="plan-progress-bar"><div class="plan-progress-fill" id="checkinPlanFill" style="width:0%"></div></div>
+        <div class="plan-restantes" id="checkinPlanRestantes">—</div>
+      </div>
+      <div class="plan-badge hidden" id="planBadge" style="margin-bottom:28px;">— clases restantes</div>
+
       <button class="checkin-btn" id="btnCheckin" ontouchstart="handleCheckinTouch(event)" onclick="handleCheckinClick(event)">⚡ REGISTRAR</button>
       <button class="btn-stats" onclick="openHistorial()">📊 VER MI ASISTENCIA</button>
-      <button class="btn btn-ghost" id="btnNotMe" onclick="changeName()">—</button>
+      <button class="btn btn-ghost" id="btnNotMe" onclick="changeName()" style="color:#888;border-color:rgba(255,255,255,0.15);">—</button>
     </div>
 
     <div id="viewSuccess" class="hidden" style="text-align:center;animation:fadeUp 0.3s ease both">
@@ -500,20 +515,31 @@
     document.getElementById('dateDisplay').textContent  = todayLabel();
     document.getElementById('btnNotMe').textContent     = 'No soy '+name.split(' ')[0];
     const btn   = document.getElementById('btnCheckin');
+    const planBox = document.getElementById('checkinPlanBox');
     const badge = document.getElementById('planBadge');
+
     if (planInfo) {
-      const { plan, restantes, planAgotado } = planInfo;
+      const { plan, restantes, total, clasesUsadas, planAgotado } = planInfo;
+      const pct = Math.min(100, Math.round(((clasesUsadas||0) / total) * 100));
+      document.getElementById('checkinPlanTitle').textContent = PLAN_NOMBRES[plan] || 'Plan';
+      document.getElementById('checkinPlanCount').textContent = `${clasesUsadas||0} / ${total} clases`;
+      document.getElementById('checkinPlanFill').style.width = pct + '%';
+      document.getElementById('checkinPlanFill').className = 'plan-progress-fill' + (planAgotado ? ' agotado' : '');
+      const restEl = document.getElementById('checkinPlanRestantes');
+      restEl.textContent = planAgotado ? '⚠️ Plan agotado — contacta a tu profe' : restantes + ' clases restantes';
+      restEl.className = 'plan-restantes' + (planAgotado ? ' agotado' : restantes <= 2 ? ' pocas' : '');
+      planBox.classList.remove('hidden');
+      badge.classList.add('hidden');
+
       if (planAgotado) {
-        badge.textContent = '⚠️ Plan agotado — contacta a tu profe';
-        badge.className = 'plan-badge agotado';
         btn.disabled = true; btn.innerHTML = '⚠️ PLAN AGOTADO';
       } else {
-        badge.textContent = `${PLAN_NOMBRES[plan]||'Plan'} · ${restantes} clase${restantes!==1?'s':''} restante${restantes!==1?'s':''}`;
-        badge.className = restantes<=2 ? 'plan-badge agotado' : 'plan-badge';
         if (getLock()) { btn.disabled=true; btn.innerHTML='✓ YA REGISTRADO HOY'; }
         else { btn.disabled=false; btn.innerHTML='⚡ REGISTRAR'; }
       }
     } else {
+      planBox.classList.add('hidden');
+      badge.classList.remove('hidden');
       badge.textContent='— clases'; badge.className='plan-badge';
       if (getLock()) { btn.disabled=true; btn.innerHTML='✓ YA REGISTRADO HOY'; }
       else { btn.disabled=false; btn.innerHTML='⚡ REGISTRAR'; }
