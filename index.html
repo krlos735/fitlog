@@ -818,7 +818,8 @@
     }
     document.getElementById('dividerFiltro').classList.remove('hidden');
     document.getElementById('filtroMesBox').classList.remove('hidden');
-  }
+    // Mostrar formulario agregar clase inmediatamente
+    toggleFormClase(true);
 
   function verAsistenciaPeriodo() {
     if (!_alumnoSeleccionado) return;
@@ -892,8 +893,10 @@
     const fecha=document.getElementById('nuevaFecha').value;
     const hora=document.getElementById('nuevaHora').value;
     const msg=document.getElementById('claseMsg');
+    const btn=document.querySelector('#formAgregarClase .btn-confirmar');
     if (!fecha||!hora) { msg.style.color='#ff3b3b'; msg.textContent='Selecciona fecha y hora'; return; }
     msg.textContent='';
+    btn.textContent='⏳ GUARDANDO...'; btn.style.opacity='0.7'; btn.style.pointerEvents='none';
     try {
       const res=await fetchAPI({ action:'agregarClase', rut:_alumnoSeleccionado.rut, nombre:_alumnoSeleccionado.nombre, profesor:_profeActual, fecha, hora });
       if (res.ok) {
@@ -903,6 +906,7 @@
         setTimeout(()=>{ toggleFormClase(false); verAsistenciaPeriodo(); },1000);
       } else { msg.style.color='#ff3b3b'; msg.textContent=res.error||'Error'; }
     } catch { msg.style.color='#ff3b3b'; msg.textContent='Sin conexión'; }
+    btn.textContent='GUARDAR'; btn.style.opacity='1'; btn.style.pointerEvents='auto';
   }
 
   async function eliminarClase(fecha) {
