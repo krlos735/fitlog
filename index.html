@@ -317,6 +317,8 @@
         <button class="btn-accion btn-accion-secondary" id="btnVerAsistencia" onclick="toggleAsistenciaPeriodo()">📋 VER ASISTENCIA</button>
       </div>
 
+      <button class="btn-accion btn-accion-ghost hidden" id="btnAgregarClaseVisible" onclick="toggleFormClase(true)">➕ AGREGAR CLASE MANUAL</button>
+
       <!-- Formulario agregar clase manual -->
       <div class="form-agregar-clase hidden" id="formAgregarClase">
         <div class="form-title" style="color:#ff9500;">➕ Agregar clase manual</div>
@@ -824,8 +826,10 @@
     toggleRenovar(false); toggleFormClase(false);
     document.getElementById('profePlanBox').classList.add('hidden');
     document.getElementById('btnRenovarPlan').classList.add('hidden');
+    document.getElementById('btnAgregarClaseVisible').classList.add('hidden');
     document.getElementById('dividerFiltro').classList.add('hidden');
     document.getElementById('filtroMesBox').classList.add('hidden');
+    document.getElementById('formAgregarClase').classList.add('hidden');
     document.getElementById('profeHistContent').innerHTML='';
     const btnVer=document.getElementById('btnVerAsistencia');
     if (btnVer) btnVer.textContent='📋 VER ASISTENCIA';
@@ -856,6 +860,7 @@
     }
     document.getElementById('dividerFiltro').classList.remove('hidden');
     document.getElementById('filtroMesBox').classList.remove('hidden');
+    document.getElementById('btnAgregarClaseVisible').classList.remove('hidden');
   }
 
   function toggleAsistenciaPeriodo() {
@@ -889,18 +894,12 @@
     if (btn) btn.textContent = '🔼 OCULTAR ASISTENCIA';
     if (!clases.length) {
       document.getElementById('profeHistContent').innerHTML=`
-        <div style="margin-bottom:12px;">
-          <button class="btn-accion btn-accion-secondary" onclick="toggleFormClase(true)">➕ AGREGAR CLASE MANUAL</button>
-        </div>
         <div class="empty-state">Sin clases en este período</div>`;
       return;
     }
     document.getElementById('profeHistContent').innerHTML=`
       <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,90,0,0.2);">
         ${clases.length} clase${clases.length!==1?'s':''} en este período
-      </div>
-      <div style="margin-bottom:12px;">
-        <button class="btn-accion btn-accion-secondary" onclick="toggleFormClase(true)">➕ AGREGAR CLASE MANUAL</button>
       </div>
       ${clases.map(c=>`
         <div class="dia-row-profe">
