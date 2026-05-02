@@ -770,6 +770,7 @@
       if (res.ok) loadAlumnos(); else { alert('Error: '+(res.error||'No se pudo reactivar')); loadAlumnos(); }
     } catch { alert('Sin conexión'); loadAlumnos(); }
   }
+  async function eliminarAlumno(rut, nombre) {
     if (!confirm('¿Eliminar a '+nombre+'?')) return;
     const lista=document.getElementById('listaAlumnos');
     lista.innerHTML='<div class="admin-loading"><span class="loading-dot"></span> Eliminando...</div>';
