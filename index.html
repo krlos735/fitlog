@@ -399,10 +399,9 @@
     </div>
 
     <div id="viewCheckin" class="checkin-card hidden fadeUp">
-      <!-- Header: solo FITMOTION + ☰ -->
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+      <!-- Header: solo FITMOTION -->
+      <div style="display:flex;justify-content:flex-start;align-items:center;margin-bottom:24px;">
         <div class="logo" style="margin:0;font-size:36px;">FITMOTION</div>
-        <button onclick="openPin()" style="background:rgba(255,255,255,0.06);border:none;color:#555;font-size:18px;width:36px;height:36px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;">☰</button>
       </div>
 
       <!-- Avatar centrado con dot -->
@@ -561,7 +560,7 @@
     thumb.style.left = '4px';
     thumb.innerHTML = '⚡';
     fill.style.width = (thumb.offsetWidth + 8) + 'px';
-    if (label) { label.style.opacity = '1'; label.textContent = 'DESLIZA PARA REGISTRAR →'; }
+    if (label) { label.style.opacity = '1'; label.style.color = 'rgba(255,150,0,0.6)'; label.textContent = 'DESLIZA PARA REGISTRAR →'; }
   }
 
   function disableSlider(mode) {
