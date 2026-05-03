@@ -26,8 +26,8 @@
     @keyframes shake  { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)} }
 
     .fadeUp { animation:fadeUp 0.45s ease both; }
-    .logo { font-family:'Bebas Neue',sans-serif; font-size:52px; letter-spacing:4px; color:#ff5a00; line-height:1; user-select:none; text-shadow:0 0 40px rgba(255,90,0,0.4); margin-bottom:4px; }
-    .logo-sub { font-size:11px; letter-spacing:5px; text-transform:uppercase; color:#555; margin-bottom:48px; }
+    .logo { font-family:'Bebas Neue',sans-serif; font-size:42px; letter-spacing:4px; color:#ff5a00; line-height:1; user-select:none; text-shadow:0 0 40px rgba(255,90,0,0.4); margin-bottom:2px; }
+    .logo-sub { font-size:10px; letter-spacing:5px; text-transform:uppercase; color:#555; margin-bottom:20px; }
     .section-title { font-size:13px; letter-spacing:4px; text-transform:uppercase; color:#ff5a00; margin-bottom:16px; }
     .big-text { font-family:'Bebas Neue',sans-serif; font-size:38px; letter-spacing:2px; line-height:1.1; margin-bottom:8px; }
     .sub-text { font-size:14px; color:#777; margin-bottom:36px; line-height:1.6; }
@@ -42,33 +42,44 @@
     .btn:active { transform:scale(0.97); }
     .btn-primary { background:#ff5a00; color:#fff; box-shadow:0 8px 32px rgba(255,90,0,0.35); }
     .btn-primary.inactivo { color:rgba(255,255,255,0.4)!important; box-shadow:none; cursor:not-allowed; pointer-events:none; }
-    .btn-ghost { background:transparent; border:1px solid rgba(255,255,255,0.12); color:#555; font-size:13px; letter-spacing:2px; padding:12px; margin-top:12px; font-family:'DM Sans',sans-serif; }
-    .btn-stats { background:rgba(255,90,0,0.1); border:1px solid rgba(255,90,0,0.3); color:#ff5a00; font-size:16px; letter-spacing:2px; padding:12px; margin-top:12px; font-family:'Bebas Neue',sans-serif; border-radius:12px; width:100%; cursor:pointer; }
+    .btn-ghost { background:transparent; border:1px solid rgba(255,255,255,0.15); color:#888; font-size:13px; letter-spacing:2px; padding:10px; margin-top:8px; font-family:'DM Sans',sans-serif; }
+    .btn-stats { background:rgba(255,90,0,0.1); border:1px solid rgba(255,90,0,0.3); color:#ff5a00; font-size:14px; letter-spacing:2px; padding:10px; margin-top:8px; font-family:'Bebas Neue',sans-serif; border-radius:12px; width:100%; cursor:pointer; }
 
     .checkin-card { text-align:center; }
-    .avatar { width:88px; height:88px; border-radius:50%; background:linear-gradient(135deg,#ff5a00,#ff9500); display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue',sans-serif; font-size:36px; color:#fff; margin:0 auto 24px; box-shadow:0 8px 32px rgba(255,90,0,0.4); }
-    .greeting { font-size:13px; letter-spacing:4px; text-transform:uppercase; color:#555; margin-bottom:8px; }
-    .name-display { font-family:'Bebas Neue',sans-serif; font-size:44px; letter-spacing:2px; margin-bottom:6px; }
-    .date-display { font-size:13px; color:#555; margin-bottom:32px; text-transform:capitalize; }
-    .plan-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(255,90,0,0.1); border:1px solid rgba(255,90,0,0.25); border-radius:20px; padding:6px 14px; margin-bottom:24px; font-size:13px; color:#ff9500; }
+    .avatar { width:76px; height:76px; border-radius:50%; background:linear-gradient(135deg,#ff5a00,#ff9500); display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue',sans-serif; font-size:30px; color:#fff; margin:0; box-shadow:0 8px 32px rgba(255,90,0,0.4); }
+    .greeting { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:#555; margin-bottom:4px; }
+    .name-display { font-family:'Bebas Neue',sans-serif; font-size:38px; letter-spacing:2px; margin-bottom:2px; }
+    .date-display { font-size:12px; color:#555; margin-bottom:12px; text-transform:capitalize; }
+    .plan-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(255,90,0,0.1); border:1px solid rgba(255,90,0,0.25); border-radius:20px; padding:5px 12px; margin-bottom:12px; font-size:12px; color:#ff9500; }
     .plan-badge.agotado { background:rgba(255,50,50,0.1); border-color:rgba(255,50,50,0.3); color:#ff4444; }
+
+    /* Slider de registro */
+    .slider-track { position:relative; width:100%; height:64px; background:rgba(255,90,0,0.15); border:1px solid rgba(255,90,0,0.25); border-radius:50px; overflow:hidden; margin-bottom:8px; user-select:none; touch-action:none; }
+    .slider-fill { position:absolute; left:0; top:0; height:100%; background:rgba(255,90,0,0.25); border-radius:50px; width:56px; transition:width 0.05s; pointer-events:none; }
+    .slider-thumb { position:absolute; left:4px; top:4px; width:56px; height:56px; background:#ff5a00; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px; box-shadow:0 4px 20px rgba(255,90,0,0.5); cursor:grab; z-index:2; transition:left 0.05s; }
+    .slider-thumb:active { cursor:grabbing; }
+    .slider-label { position:absolute; right:20px; top:50%; transform:translateY(-50%); font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:3px; color:rgba(255,150,0,0.6); pointer-events:none; z-index:1; }
+    .slider-track.done { background:rgba(0,200,80,0.2); border-color:rgba(0,200,80,0.3); }
+    .slider-track.done .slider-thumb { background:#00c851; box-shadow:0 4px 20px rgba(0,200,80,0.5); }
+    .slider-track.disabled { opacity:0.5; pointer-events:none; }
+
     .checkin-btn { width:100%; padding:24px; border:none; border-radius:16px; background:#ff5a00; color:#fff; font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:4px; cursor:pointer; box-shadow:0 12px 40px rgba(255,90,0,0.4); transition:transform 0.15s; display:flex; align-items:center; justify-content:center; gap:12px; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
     .checkin-btn:active { transform:scale(0.97); }
     .checkin-btn:disabled { opacity:0.6; cursor:not-allowed; pointer-events:none; }
-    .success-icon { width:100px; height:100px; border-radius:50%; background:linear-gradient(135deg,#00c851,#00a844); display:flex; align-items:center; justify-content:center; font-size:48px; margin:0 auto 28px; animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both; box-shadow:0 12px 40px rgba(0,200,80,0.4); }
-    .already-icon { width:100px; height:100px; border-radius:50%; background:linear-gradient(135deg,#ff9500,#ff5a00); display:flex; align-items:center; justify-content:center; font-size:48px; margin:0 auto 28px; animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both; box-shadow:0 12px 40px rgba(255,150,0,0.4); }
-    .agotado-icon { width:100px; height:100px; border-radius:50%; background:linear-gradient(135deg,#ff3b3b,#cc0000); display:flex; align-items:center; justify-content:center; font-size:48px; margin:0 auto 28px; animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both; box-shadow:0 12px 40px rgba(255,50,50,0.4); }
-    .success-name { font-family:'Bebas Neue',sans-serif; font-size:40px; letter-spacing:2px; margin-bottom:8px; }
+    .success-icon { width:90px; height:90px; border-radius:50%; background:linear-gradient(135deg,#00c851,#00a844); display:flex; align-items:center; justify-content:center; font-size:44px; margin:0 auto 20px; animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both; box-shadow:0 12px 40px rgba(0,200,80,0.4); }
+    .already-icon { width:90px; height:90px; border-radius:50%; background:linear-gradient(135deg,#ff9500,#ff5a00); display:flex; align-items:center; justify-content:center; font-size:44px; margin:0 auto 20px; animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both; box-shadow:0 12px 40px rgba(255,150,0,0.4); }
+    .agotado-icon { width:90px; height:90px; border-radius:50%; background:linear-gradient(135deg,#ff3b3b,#cc0000); display:flex; align-items:center; justify-content:center; font-size:44px; margin:0 auto 20px; animation:popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) both; box-shadow:0 12px 40px rgba(255,50,50,0.4); }
+    .success-name { font-family:'Bebas Neue',sans-serif; font-size:36px; letter-spacing:2px; margin-bottom:6px; }
     .success-time { font-size:13px; color:#555; }
 
-    .plan-info-box { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px; margin-bottom:16px; }
-    .plan-info-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
-    .plan-info-title { font-size:12px; letter-spacing:3px; text-transform:uppercase; color:#ff5a00; }
-    .plan-info-count { font-size:13px; color:#888; }
-    .plan-progress-bar { width:100%; height:8px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; margin-bottom:8px; }
+    .plan-info-box { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:12px 14px; margin-bottom:12px; }
+    .plan-info-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+    .plan-info-title { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:#ff5a00; }
+    .plan-info-count { font-size:12px; color:#888; }
+    .plan-progress-bar { width:100%; height:6px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden; margin-bottom:6px; }
     .plan-progress-fill { height:100%; border-radius:4px; background:linear-gradient(90deg,#ff5a00,#ff9500); transition:width 0.5s ease; }
     .plan-progress-fill.agotado { background:linear-gradient(90deg,#ff3b3b,#cc0000); }
-    .plan-restantes { font-size:12px; color:#555; text-align:right; }
+    .plan-restantes { font-size:11px; color:#555; text-align:right; }
     .plan-restantes.pocas { color:#ff9500; }
     .plan-restantes.agotado { color:#ff3b3b; }
 
@@ -391,16 +402,16 @@
 
     <div id="viewCheckin" class="checkin-card hidden fadeUp">
       <!-- Avatar con dot de estado -->
-      <div style="position:relative;width:88px;height:88px;margin:0 auto 16px;">
+      <div style="position:relative;width:76px;height:76px;margin:0 auto 12px;">
         <div class="avatar" id="avatarLetter" style="margin:0;">?</div>
-        <div style="position:absolute;bottom:2px;right:2px;width:20px;height:20px;background:#00c851;border-radius:50%;border:3px solid #0a0a0a;"></div>
+        <div style="position:absolute;bottom:2px;right:2px;width:18px;height:18px;background:#00c851;border-radius:50%;border:3px solid #0a0a0a;"></div>
       </div>
       <div class="greeting">Bienvenido de vuelta</div>
       <div class="name-display" id="nameDisplay">—</div>
       <div class="date-display" id="dateDisplay">—</div>
 
-      <!-- Tarjeta plan con barra -->
-      <div class="plan-info-box hidden" id="checkinPlanBox" style="text-align:left;margin-bottom:28px;">
+      <!-- Tarjeta plan -->
+      <div class="plan-info-box hidden" id="checkinPlanBox" style="text-align:left;">
         <div class="plan-info-header">
           <span class="plan-info-title" id="checkinPlanTitle">Plan —</span>
           <span class="plan-info-count" id="checkinPlanCount">— / —</span>
@@ -408,9 +419,15 @@
         <div class="plan-progress-bar"><div class="plan-progress-fill" id="checkinPlanFill" style="width:0%"></div></div>
         <div class="plan-restantes" id="checkinPlanRestantes">—</div>
       </div>
-      <div class="plan-badge hidden" id="planBadge" style="margin-bottom:28px;">— clases restantes</div>
+      <div class="plan-badge hidden" id="planBadge" style="margin-bottom:12px;">— clases restantes</div>
 
-      <button class="checkin-btn" id="btnCheckin" ontouchstart="handleCheckinTouch(event)" onclick="handleCheckinClick(event)">⚡ REGISTRAR</button>
+      <!-- Slider de registro -->
+      <div class="slider-track" id="sliderTrack">
+        <div class="slider-fill" id="sliderFill"></div>
+        <div class="slider-thumb" id="sliderThumb">⚡</div>
+        <div class="slider-label" id="sliderLabel">REGISTRAR →</div>
+      </div>
+
       <button class="btn-stats" onclick="openHistorial()">📊 VER MI ASISTENCIA</button>
       <button class="btn btn-ghost" id="btnNotMe" onclick="changeName()" style="color:#888;border-color:rgba(255,255,255,0.15);">—</button>
     </div>
@@ -446,7 +463,91 @@
   const PROF_KEY = 'fitlog:profesor';
   const PLAN_KEY = 'fitlog:plan';
 
-  let _touchHandled = false;
+  // ── Slider de registro ─────────────────────────────────────────────────────
+  let _sliderDragging = false;
+  let _sliderStartX = 0;
+  let _sliderLocked = false;
+
+  function initSlider() {
+    const track = document.getElementById('sliderTrack');
+    const thumb = document.getElementById('sliderThumb');
+    if (!track || !thumb) return;
+
+    function onStart(e) {
+      if (_sliderLocked) return;
+      _sliderDragging = true;
+      _sliderStartX = (e.touches ? e.touches[0].clientX : e.clientX) - thumb.offsetLeft;
+      e.preventDefault();
+    }
+    function onMove(e) {
+      if (!_sliderDragging) return;
+      const trackW = track.offsetWidth;
+      const thumbW = thumb.offsetWidth;
+      const x = (e.touches ? e.touches[0].clientX : e.clientX) - _sliderStartX;
+      const maxX = trackW - thumbW - 4;
+      const clamped = Math.max(4, Math.min(x, maxX));
+      thumb.style.left = clamped + 'px';
+      document.getElementById('sliderFill').style.width = (clamped + thumbW) + 'px';
+      const pct = (clamped - 4) / (maxX - 4);
+      document.getElementById('sliderLabel').style.opacity = Math.max(0, 1 - pct * 2);
+      if (pct >= 0.95) onRelease();
+    }
+    function onRelease() {
+      if (!_sliderDragging) return;
+      _sliderDragging = false;
+      const track = document.getElementById('sliderTrack');
+      const thumb = document.getElementById('sliderThumb');
+      const maxX = track.offsetWidth - thumb.offsetWidth - 4;
+      const pct = (thumb.offsetLeft - 4) / (maxX - 4);
+      if (pct >= 0.95) {
+        _sliderLocked = true;
+        track.classList.add('done');
+        thumb.style.left = maxX + 'px';
+        document.getElementById('sliderFill').style.width = '100%';
+        document.getElementById('sliderLabel').style.opacity = '0';
+        thumb.innerHTML = '✓';
+        doCheckIn();
+      } else {
+        thumb.style.transition = 'left 0.3s ease';
+        thumb.style.left = '4px';
+        document.getElementById('sliderFill').style.width = '60px';
+        document.getElementById('sliderLabel').style.opacity = '1';
+        setTimeout(() => thumb.style.transition = '', 300);
+      }
+    }
+
+    thumb.addEventListener('touchstart', onStart, { passive: false });
+    thumb.addEventListener('mousedown', onStart);
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('touchend', onRelease);
+    document.addEventListener('mouseup', onRelease);
+  }
+
+  function resetSlider() {
+    _sliderLocked = false; _sliderDragging = false;
+    const track = document.getElementById('sliderTrack');
+    const thumb = document.getElementById('sliderThumb');
+    const fill  = document.getElementById('sliderFill');
+    const label = document.getElementById('sliderLabel');
+    if (!track) return;
+    track.classList.remove('done','disabled');
+    thumb.style.left = '4px'; thumb.innerHTML = '⚡';
+    fill.style.width = '60px';
+    if (label) { label.style.opacity = '1'; label.textContent = 'REGISTRAR →'; }
+  }
+
+  function disableSlider(text) {
+    _sliderLocked = true;
+    const track = document.getElementById('sliderTrack');
+    const thumb = document.getElementById('sliderThumb');
+    const label = document.getElementById('sliderLabel');
+    if (!track) return;
+    track.classList.add('disabled');
+    if (text === 'done') { track.classList.add('done'); thumb.innerHTML = '✓'; }
+    else { thumb.innerHTML = '⚠️'; }
+    if (label) label.textContent = text === 'done' ? 'YA REGISTRADO HOY' : text;
+  }
   let _pinValue = '';
   let _profeActual = '';
   let _historialData = {};
@@ -515,9 +616,8 @@
     document.getElementById('nameDisplay').textContent  = name.toUpperCase();
     document.getElementById('dateDisplay').textContent  = todayLabel();
     document.getElementById('btnNotMe').textContent     = 'No soy '+name.split(' ')[0];
-    const btn   = document.getElementById('btnCheckin');
     const planBox = document.getElementById('checkinPlanBox');
-    const badge = document.getElementById('planBadge');
+    const badge   = document.getElementById('planBadge');
 
     if (planInfo) {
       const { plan, restantes, total, clasesUsadas, planAgotado } = planInfo;
@@ -529,21 +629,14 @@
       const restEl = document.getElementById('checkinPlanRestantes');
       restEl.textContent = planAgotado ? '⚠️ Plan agotado — contacta a tu profe' : restantes + ' clases restantes';
       restEl.className = 'plan-restantes' + (planAgotado ? ' agotado' : restantes <= 2 ? ' pocas' : '');
-      planBox.classList.remove('hidden');
-      badge.classList.add('hidden');
-
-      if (planAgotado) {
-        btn.disabled = true; btn.innerHTML = '⚠️ PLAN AGOTADO';
-      } else {
-        if (getLock()) { btn.disabled=true; btn.innerHTML='✓ YA REGISTRADO HOY'; }
-        else { btn.disabled=false; btn.innerHTML='⚡ REGISTRAR'; }
-      }
+      planBox.classList.remove('hidden'); badge.classList.add('hidden');
+      if (planAgotado) disableSlider('PLAN AGOTADO');
+      else if (getLock()) disableSlider('done');
+      else resetSlider();
     } else {
-      planBox.classList.add('hidden');
-      badge.classList.remove('hidden');
+      planBox.classList.add('hidden'); badge.classList.remove('hidden');
       badge.textContent='— clases'; badge.className='plan-badge';
-      if (getLock()) { btn.disabled=true; btn.innerHTML='✓ YA REGISTRADO HOY'; }
-      else { btn.disabled=false; btn.innerHTML='⚡ REGISTRAR'; }
+      if (getLock()) disableSlider('done'); else resetSlider();
     }
     showOnly('viewCheckin');
   }
@@ -588,9 +681,6 @@
     inp.classList.add('error'); setTimeout(()=>inp.classList.remove('error'),600);
   }
 
-  function handleCheckinTouch(e) { e.preventDefault(); _touchHandled=true; doCheckIn(); }
-  function handleCheckinClick(e) { if (_touchHandled) { _touchHandled=false; return; } doCheckIn(); }
-
   async function doCheckIn() {
     if (getLock()) return;
     const planInfo = JSON.parse(localStorage.getItem(PLAN_KEY)||'null');
@@ -598,8 +688,6 @@
     setLock();
     const rut=localStorage.getItem(RUT_KEY), name=localStorage.getItem(NAME_KEY), profesor=localStorage.getItem(PROF_KEY);
     if (!rut||!name||!profesor) { clearLock(); return; }
-    const btn = document.getElementById('btnCheckin');
-    btn.disabled=true; btn.innerHTML='<span class="loading-white"></span>';
     try {
       const res = await fetchAPI({ action:'checkin', rut, nombre:name, profesor });
       if (res.ok) {
@@ -1059,7 +1147,7 @@
   function formatMesCorto(key) { const [y,m]=key.split('-').map(Number); return new Date(y,m-1,1).toLocaleDateString('es-CL',{month:'short',year:'2-digit'}).toUpperCase(); }
   function formatMesLargo(key) { const [y,m]=key.split('-').map(Number); return new Date(y,m-1,1).toLocaleDateString('es-CL',{month:'long',year:'numeric'}).toUpperCase(); }
 
-  window.addEventListener('DOMContentLoaded',init);
+  window.addEventListener('DOMContentLoaded', () => { initSlider(); init(); });
 </script>
 </body>
 </html>
