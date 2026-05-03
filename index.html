@@ -733,45 +733,44 @@
     const rut=localStorage.getItem(RUT_KEY), name=localStorage.getItem(NAME_KEY), profesor=localStorage.getItem(PROF_KEY);
     if (!rut||!name||!profesor) { clearLock(); return; }
 
-    // Mostrar cargando en el slider
+    // Indicador cargando
     const thumb = document.getElementById('sliderThumb');
     const label = document.getElementById('sliderLabel');
     if (thumb) thumb.innerHTML = '⏳';
-    if (label) { label.textContent = 'REGISTRANDO...'; label.style.color = 'rgba(255,150,0,0.8)'; label.style.opacity = '1'; }
+    if (label) { label.textContent='REGISTRANDO...'; label.style.color='rgba(255,150,0,0.8)'; label.style.opacity='1'; }
 
     try {
       const res = await fetchAPI({ action:'checkin', rut, nombre:name, profesor });
       if (res.ok) {
-        // Actualizar caché del plan
-        if (planInfo) {
-          planInfo.restantes = res.restantes;
-          planInfo.clasesUsadas = (planInfo.clasesUsadas||0) + 1;
-          planInfo.planAgotado = res.restantes === 0;
-          localStorage.setItem(PLAN_KEY, JSON.stringify(planInfo));
+        // Pedir datos frescos al servidor
+        const fresh = await fetchAPI({ action:'validate', rut });
+        let newPlan = planInfo;
+        if (fresh.ok) {
+          newPlan = { plan:fresh.plan, restantes:fresh.restantes, total:fresh.total, clasesUsadas:fresh.clasesUsadas, planAgotado:fresh.planAgotado };
+          localStorage.setItem(PLAN_KEY, JSON.stringify(newPlan));
         }
-        document.getElementById('successName').textContent=name.toUpperCase();
-        document.getElementById('successTime').textContent=todayLabel()+' · '+timeNow();
+        document.getElementById('successName').textContent = name.toUpperCase();
+        document.getElementById('successTime').textContent = todayLabel()+' · '+timeNow();
         showOnly('viewSuccess');
-        setTimeout(()=>loadCheckinView(name, JSON.parse(localStorage.getItem(PLAN_KEY)||'null')), 3500);
+        setTimeout(() => {
+          disableSlider('done');
+          loadCheckinView(name, newPlan);
+        }, 3500);
       } else if (res.error==='plan_agotado') {
-        document.getElementById('agotadoName').textContent=name.toUpperCase();
+        document.getElementById('agotadoName').textContent = name.toUpperCase();
         showOnly('viewAgotado');
-        setTimeout(()=>loadCheckinView(name, planInfo), 4000);
+        setTimeout(() => loadCheckinView(name, planInfo), 4000);
       } else if (res.error&&res.error.includes('Ya registraste')) {
-        document.getElementById('alreadyName').textContent=name.toUpperCase();
+        document.getElementById('alreadyName').textContent = name.toUpperCase();
         showOnly('viewAlready');
-        setTimeout(()=>loadCheckinView(name, planInfo), 3000);
+        setTimeout(() => { disableSlider('done'); loadCheckinView(name, planInfo); }, 3000);
       } else {
         alert('Error: '+(res.error||'Intenta de nuevo'));
-        clearLock();
-        resetSlider();
-        loadCheckinView(name, planInfo);
+        clearLock(); resetSlider();
       }
     } catch {
       alert('Sin conexión.');
-      clearLock();
-      resetSlider();
-      loadCheckinView(name, planInfo);
+      clearLock(); resetSlider();
     }
   }
 
