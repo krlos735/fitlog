@@ -708,7 +708,7 @@
         localStorage.setItem(PLAN_KEY, JSON.stringify({ plan:res.plan, restantes:res.restantes, total:res.total, clasesUsadas:res.clasesUsadas, planAgotado:res.planAgotado }));
         if (res.yaRegistrado) setLock(); else clearLock();
         btn.classList.remove('inactivo'); btn.textContent='CONTINUAR'; btn.style.opacity='1';
-        loadCheckinView(res.nombre, { plan:res.plan, restantes:res.restantes, total:res.total, planAgotado:res.planAgotado });
+        loadCheckinView(res.nombre, { plan:res.plan, restantes:res.restantes, total:res.total, clasesUsadas:res.clasesUsadas, planAgotado:res.planAgotado });
       } else {
         showRutError('RUT no autorizado. Habla con tu profe.');
         btn.classList.remove('inactivo'); btn.textContent='CONTINUAR'; btn.style.opacity='1';
