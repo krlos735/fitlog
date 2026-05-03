@@ -20,6 +20,8 @@
     .app::after  { content:''; position:fixed; bottom:-30%; right:-20%; width:60vw; height:60vw; background:radial-gradient(circle,rgba(255,200,0,0.06) 0%,transparent 70%); pointer-events:none; }
     .card { width:100%; max-width:380px; position:relative; z-index:1; }
 
+    @keyframes glowPulse { 0%,100%{transform:scale(1);opacity:0.5} 50%{transform:scale(1.2);opacity:1} }
+    @keyframes dropIn { 0%{opacity:0;transform:translateY(-30px) scale(0.7)} 100%{opacity:1;transform:translateY(0) scale(1)} }
     @keyframes sliderPulse {
       0%,100% { box-shadow: 0 0 6px 1px rgba(255,90,0,0.2); border-color: rgba(255,90,0,0.25); }
       50%      { box-shadow: 0 0 18px 4px rgba(255,90,0,0.45); border-color: rgba(255,90,0,0.6); }
@@ -379,6 +381,50 @@
       <div id="profeContent"><div class="admin-loading"><span class="loading-dot"></span></div></div>
     </div>
 
+  </div>
+</div>
+
+<!-- OVERLAY NUEVO ALUMNO -->
+<div class="overlay hidden" id="nuevoAlumnoOverlay" style="display:flex;align-items:center;justify-content:center;">
+  <div style="width:100%;max-width:320px;background:#0d0d0d;border-radius:32px;padding:36px 28px;display:flex;flex-direction:column;align-items:center;gap:20px;border:1px solid rgba(255,90,0,0.2);">
+    <!-- Ícono pesa con glow -->
+    <div style="position:relative;width:120px;height:120px;display:flex;align-items:center;justify-content:center;">
+      <div id="pesaGlow" style="position:absolute;width:96px;height:96px;border-radius:50%;background:rgba(255,90,0,0.15);animation:glowPulse 1.8s ease-in-out infinite;"></div>
+      <svg id="pesaSvg" width="88" height="88" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:dropIn 0.6s cubic-bezier(0.175,0.885,0.32,1.275) both;position:relative;z-index:1;">
+        <rect x="4" y="22" width="16" height="36" rx="5" fill="#ff5a00"/>
+        <rect x="20" y="28" width="8" height="24" rx="3" fill="#ff7a30"/>
+        <rect x="28" y="34" width="24" height="12" rx="3" fill="#888"/>
+        <rect x="52" y="28" width="8" height="24" rx="3" fill="#ff7a30"/>
+        <rect x="60" y="22" width="16" height="36" rx="5" fill="#ff5a00"/>
+        <rect x="6" y="26" width="4" height="10" rx="2" fill="rgba(255,255,255,0.2)"/>
+        <rect x="70" y="26" width="4" height="10" rx="2" fill="rgba(255,255,255,0.2)"/>
+      </svg>
+    </div>
+
+    <!-- Textos -->
+    <div style="text-align:center;">
+      <p style="font-size:10px;color:#555;letter-spacing:4px;text-transform:uppercase;margin:0 0 8px;">¡Nuevo miembro!</p>
+      <p style="font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;color:#f0ede8;margin:0 0 6px;" id="nuevoNombre">—</p>
+      <p style="font-size:13px;color:#ff9500;margin:0;" id="nuevoPlan">—</p>
+    </div>
+
+    <!-- Línea separadora -->
+    <div style="width:100%;height:1px;background:rgba(255,255,255,0.07);"></div>
+
+    <!-- Info -->
+    <div style="width:100%;display:flex;justify-content:space-between;align-items:center;">
+      <div style="text-align:center;flex:1;">
+        <p style="font-size:10px;color:#444;letter-spacing:2px;text-transform:uppercase;margin:0 0 4px;">Inicio</p>
+        <p style="font-size:14px;font-weight:500;color:#f0ede8;margin:0;" id="nuevoInicio">—</p>
+      </div>
+      <div style="width:1px;height:32px;background:rgba(255,255,255,0.07);"></div>
+      <div style="text-align:center;flex:1;">
+        <p style="font-size:10px;color:#444;letter-spacing:2px;text-transform:uppercase;margin:0 0 4px;">Clases</p>
+        <p style="font-size:14px;font-weight:500;color:#ff5a00;margin:0;" id="nuevoClases">—</p>
+      </div>
+    </div>
+
+    <button onclick="closeNuevoAlumno()" style="width:100%;padding:14px;border:none;border-radius:12px;background:#ff5a00;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;margin-top:4px;">LISTO</button>
   </div>
 </div>
 
@@ -1013,10 +1059,24 @@
     try {
       const res=await fetchAPI({ action:'agregarAlumno', rut, nombre, profesor:_profeActual, plan, fechaInicio });
       if (res.ok) {
-        msg.style.color='#00c851'; msg.textContent='✓ Alumno agregado';
-        document.getElementById('newRut').value=''; document.getElementById('newNombre').value='';
+        const planNombres = { 1:'Plan 1 · 2x semana · 8 clases', 2:'Plan 2 · 3x semana · 12 clases', 3:'Plan 3 · 4x semana · 16 clases' };
+        const planClases  = { 1:'8 disponibles', 2:'12 disponibles', 3:'16 disponibles' };
+        const [y,m,d] = fechaInicio.split('-');
+        const fechaLabel = new Date(+y,+m-1,+d).toLocaleDateString('es-CL',{day:'numeric',month:'long',year:'numeric'});
+        document.getElementById('nuevoNombre').textContent  = nombre.toUpperCase();
+        document.getElementById('nuevoPlan').textContent    = planNombres[plan] || 'Plan '+plan;
+        document.getElementById('nuevoInicio').textContent  = fechaLabel;
+        document.getElementById('nuevoClases').textContent  = planClases[plan] || '—';
+        // Reiniciar animación de la pesa
+        const svg = document.getElementById('pesaSvg');
+        svg.style.animation = 'none';
+        svg.offsetHeight;
+        svg.style.animation = 'dropIn 0.6s cubic-bezier(0.175,0.885,0.32,1.275) both';
+        document.getElementById('nuevoAlumnoOverlay').classList.remove('hidden');
+        document.getElementById('newRut').value='';
+        document.getElementById('newNombre').value='';
         document.getElementById('listaAlumnos').innerHTML='';
-        setTimeout(()=>msg.textContent='',3000);
+        setTimeout(()=>document.getElementById('agregarMsg').textContent='',3000);
       } else { msg.style.color='#ff3b3b'; msg.textContent=res.error||'Error'; }
     } catch { msg.style.color='#ff3b3b'; msg.textContent='Sin conexión'; }
     btn.textContent='AGREGAR ALUMNO';
@@ -1267,7 +1327,9 @@
         </div>`).join('')}`;
   }
 
-  function closeHistorial() { document.getElementById('historialOverlay').classList.add('hidden'); }
+  function closeNuevoAlumno() {
+    document.getElementById('nuevoAlumnoOverlay').classList.add('hidden');
+  }
 
   // ── API ────────────────────────────────────────────────────────────────────
   async function fetchAPI(body) {
