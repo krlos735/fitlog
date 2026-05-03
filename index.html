@@ -492,47 +492,54 @@
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const colors = ['#ff5a00','#ff9500','#ffcc00','#00c851','#fff','#ff3b3b','#a855f7'];
+    const colors = ['#ff5a00','#ff9500','#ffcc00','#00c851','#ffffff','#ff3b3b','#a855f7','#3b82f6'];
     const pieces = [];
-    const count  = 120;
+    const count  = 150;
 
     for (let i = 0; i < count; i++) {
+      const delay = Math.random() * 60; // frames de delay para efecto escalonado
       pieces.push({
         x: Math.random() * canvas.width,
-        y: -10,
-        w: Math.random() * 10 + 4,
-        h: Math.random() * 6 + 3,
+        y: -20 - Math.random() * 200,
+        w: Math.random() * 12 + 5,
+        h: Math.random() * 5 + 3,
         color: colors[Math.floor(Math.random() * colors.length)],
-        vx: (Math.random() - 0.5) * 6,
-        vy: Math.random() * 4 + 2,
-        gravity: 0.15,
+        vx: (Math.random() - 0.5) * 3,
+        vy: Math.random() * 3 + 1,
+        gravity: 0.08 + Math.random() * 0.08,
         rotation: Math.random() * 360,
-        rotSpeed: (Math.random() - 0.5) * 8,
-        opacity: 1
+        rotSpeed: (Math.random() - 0.5) * 6,
+        opacity: 1,
+        delay
       });
     }
 
     let frame = 0;
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      let allDone = true;
       pieces.forEach(p => {
+        if (frame < p.delay) { allDone = false; return; }
         p.x  += p.vx;
         p.y  += p.vy;
         p.vy += p.gravity;
-        p.vx *= 0.99;
+        p.vx += (Math.random() - 0.5) * 0.1; // ligero wobble
         p.rotation += p.rotSpeed;
-        if (frame > 60) p.opacity -= 0.015;
+        if (p.y > canvas.height * 0.7) p.opacity -= 0.02;
         p.opacity = Math.max(0, p.opacity);
+        if (p.y < canvas.height && p.opacity > 0) allDone = false;
         ctx.save();
         ctx.globalAlpha = p.opacity;
         ctx.translate(p.x, p.y);
         ctx.rotate(p.rotation * Math.PI / 180);
         ctx.fillStyle = p.color;
-        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.w/2, p.h/2, 0, 0, Math.PI * 2);
+        ctx.fill();
         ctx.restore();
       });
       frame++;
-      if (frame < 140) requestAnimationFrame(animate);
+      if (!allDone) requestAnimationFrame(animate);
       else ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
     animate();
