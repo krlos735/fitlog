@@ -402,16 +402,23 @@
 
     <div id="viewCheckin" class="checkin-card hidden fadeUp">
       <!-- Avatar con dot de estado -->
-      <div style="position:relative;width:76px;height:76px;margin:0 auto 12px;">
+      <div style="position:relative;width:76px;height:76px;margin:0 auto 14px;">
         <div class="avatar" id="avatarLetter" style="margin:0;">?</div>
         <div style="position:absolute;bottom:2px;right:2px;width:18px;height:18px;background:#00c851;border-radius:50%;border:3px solid #0a0a0a;"></div>
       </div>
       <div class="greeting">Bienvenido de vuelta</div>
       <div class="name-display" id="nameDisplay">—</div>
-      <div class="date-display" id="dateDisplay">—</div>
+      <div class="date-display" id="dateDisplay" style="margin-bottom:20px;">—</div>
 
-      <!-- Tarjeta plan -->
-      <div class="plan-info-box hidden" id="checkinPlanBox" style="text-align:left;">
+      <!-- Slider de registro PRIMERO -->
+      <div class="slider-track" id="sliderTrack" style="margin-bottom:16px;">
+        <div class="slider-fill" id="sliderFill"></div>
+        <div class="slider-thumb" id="sliderThumb">⚡</div>
+        <div class="slider-label" id="sliderLabel">DESLIZA PARA REGISTRAR →</div>
+      </div>
+
+      <!-- Tarjeta plan DEBAJO -->
+      <div class="plan-info-box hidden" id="checkinPlanBox" style="text-align:left;margin-bottom:14px;">
         <div class="plan-info-header">
           <span class="plan-info-title" id="checkinPlanTitle">Plan —</span>
           <span class="plan-info-count" id="checkinPlanCount">— / —</span>
@@ -419,16 +426,9 @@
         <div class="plan-progress-bar"><div class="plan-progress-fill" id="checkinPlanFill" style="width:0%"></div></div>
         <div class="plan-restantes" id="checkinPlanRestantes">—</div>
       </div>
-      <div class="plan-badge hidden" id="planBadge" style="margin-bottom:12px;">— clases restantes</div>
+      <div class="plan-badge hidden" id="planBadge" style="margin-bottom:14px;">— clases restantes</div>
 
-      <!-- Slider de registro -->
-      <div class="slider-track" id="sliderTrack">
-        <div class="slider-fill" id="sliderFill"></div>
-        <div class="slider-thumb" id="sliderThumb">⚡</div>
-        <div class="slider-label" id="sliderLabel">REGISTRAR →</div>
-      </div>
-
-      <button class="btn-stats" onclick="openHistorial()">📊 VER MI ASISTENCIA</button>
+      <button class="btn-stats" onclick="openHistorial()" style="margin-top:0;">📊 VER MI ASISTENCIA</button>
       <button class="btn btn-ghost" id="btnNotMe" onclick="changeName()" style="color:#888;border-color:rgba(255,255,255,0.15);">—</button>
     </div>
 
