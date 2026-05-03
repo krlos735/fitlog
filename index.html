@@ -448,9 +448,10 @@
       <button class="btn btn-ghost" id="btnNotMe" onclick="changeName()" style="color:#666;border-color:rgba(255,255,255,0.1);margin-top:0;">—</button>
     </div>
 
-    <div id="viewSuccess" class="hidden" style="text-align:center;animation:fadeUp 0.3s ease both">
+    <div id="viewSuccess" class="hidden" style="text-align:center;animation:fadeUp 0.3s ease both;position:relative;">
+      <canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;"></canvas>
       <div class="success-icon">✓</div>
-      <div class="section-title">¡Asistencia registrada!</div>
+      <div class="section-title" style="color:#00c851;">¡Asistencia registrada!</div>
       <div class="success-name" id="successName">—</div>
       <div class="success-time" id="successTime">—</div>
     </div>
@@ -479,7 +480,59 @@
   const PROF_KEY = 'fitlog:profesor';
   const PLAN_KEY = 'fitlog:plan';
 
-  // ── Slider de registro ─────────────────────────────────────────────────────
+  // ── Confeti ────────────────────────────────────────────────────────────────
+  function launchConfetti() {
+    const canvas = document.getElementById('confettiCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const colors = ['#ff5a00','#ff9500','#ffcc00','#00c851','#fff','#ff3b3b','#a855f7'];
+    const pieces = [];
+    const count  = 120;
+
+    for (let i = 0; i < count; i++) {
+      pieces.push({
+        x: canvas.width / 2,
+        y: canvas.height * 0.35,
+        w: Math.random() * 10 + 4,
+        h: Math.random() * 6 + 3,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vx: (Math.random() - 0.5) * 18,
+        vy: (Math.random() * -18) - 4,
+        gravity: 0.5,
+        rotation: Math.random() * 360,
+        rotSpeed: (Math.random() - 0.5) * 8,
+        opacity: 1
+      });
+    }
+
+    let frame = 0;
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pieces.forEach(p => {
+        p.x  += p.vx;
+        p.y  += p.vy;
+        p.vy += p.gravity;
+        p.vx *= 0.99;
+        p.rotation += p.rotSpeed;
+        if (frame > 60) p.opacity -= 0.015;
+        p.opacity = Math.max(0, p.opacity);
+        ctx.save();
+        ctx.globalAlpha = p.opacity;
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation * Math.PI / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        ctx.restore();
+      });
+      frame++;
+      if (frame < 140) requestAnimationFrame(animate);
+      else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    animate();
+  }
   let _sliderDragging = false;
   let _sliderStartX = 0;
   let _sliderLocked = false;
@@ -745,6 +798,7 @@
     document.getElementById('successName').textContent = name.toUpperCase();
     document.getElementById('successTime').textContent = todayLabel()+' · '+timeNow();
     showOnly('viewSuccess');
+    launchConfetti();
     setTimeout(() => { disableSlider('done'); loadCheckinView(name, newPlan); }, 3000);
 
     // ── Sincronizar con servidor en background ───────────────────────────────
