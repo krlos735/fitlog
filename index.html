@@ -183,6 +183,7 @@
   </style>
 </head>
 <body>
+<canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;display:block;"></canvas>
 
 <!-- HISTORIAL ALUMNO -->
 <div class="overlay hidden" id="historialOverlay">
@@ -453,7 +454,6 @@
     </div>
 
     <div id="viewSuccess" class="hidden" style="text-align:center;animation:fadeUp 0.3s ease both;position:relative;">
-      <canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;"></canvas>
       <div class="success-icon">✓</div>
       <div class="section-title" style="color:#00c851;">¡Asistencia registrada!</div>
       <div class="success-name" id="successName">—</div>
@@ -490,7 +490,6 @@
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-    // Forzar tamaño real del viewport
     canvas.style.position = 'fixed';
     canvas.style.top = '0';
     canvas.style.left = '0';
@@ -498,8 +497,8 @@
     canvas.style.height = '100vh';
     canvas.style.zIndex = '9999';
     canvas.style.pointerEvents = 'none';
-    canvas.width  = window.screen.width;
-    canvas.height = window.screen.height;
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
 
     const W = canvas.width;
     const H = canvas.height;
@@ -511,7 +510,7 @@
     for (let i = 0; i < count; i++) {
       pieces.push({
         x: Math.random() * W,
-        y: -Math.random() * H * 0.5,
+        y: -(Math.random() * 100 + 20),
         w: Math.random() * 14 + 6,
         h: Math.random() * 6 + 3,
         color: colors[Math.floor(Math.random() * colors.length)],
