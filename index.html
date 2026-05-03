@@ -400,11 +400,11 @@
 
     <div id="viewCheckin" class="checkin-card hidden fadeUp">
       <!-- Header: FITMOTION + avatar con dot -->
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-        <div class="logo" style="margin:0;font-size:36px;">FITMOTION</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
+        <div class="logo" style="margin:0;font-size:38px;">FITMOTION</div>
         <div style="display:flex;align-items:center;gap:10px;">
-          <div style="position:relative;width:42px;height:42px;">
-            <div class="avatar" id="avatarLetter" style="width:42px;height:42px;font-size:16px;margin:0;">?</div>
+          <div style="position:relative;width:40px;height:40px;">
+            <div class="avatar" id="avatarLetter" style="width:40px;height:40px;font-size:16px;margin:0;">?</div>
             <div style="position:absolute;bottom:1px;right:1px;width:12px;height:12px;background:#00c851;border-radius:50%;border:2px solid #0a0a0a;"></div>
           </div>
           <button onclick="openPin()" style="background:rgba(255,255,255,0.06);border:none;color:#555;font-size:18px;width:36px;height:36px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;">☰</button>
@@ -412,14 +412,14 @@
       </div>
 
       <!-- Nombre y fecha -->
-      <div style="margin-bottom:18px;">
-        <div class="greeting" style="margin-bottom:2px;">Bienvenido de vuelta</div>
-        <div class="name-display" id="nameDisplay" style="font-size:40px;margin-bottom:2px;">—</div>
+      <div style="margin-bottom:28px;">
+        <div class="greeting" style="margin-bottom:4px;">Bienvenido de vuelta</div>
+        <div class="name-display" id="nameDisplay" style="font-size:42px;margin-bottom:4px;">—</div>
         <div class="date-display" id="dateDisplay" style="margin-bottom:0;">—</div>
       </div>
 
       <!-- Plan card -->
-      <div class="plan-info-box hidden" id="checkinPlanBox" style="text-align:left;margin-bottom:16px;">
+      <div class="plan-info-box hidden" id="checkinPlanBox" style="text-align:left;margin-bottom:20px;">
         <div class="plan-info-header">
           <span class="plan-info-title" id="checkinPlanTitle">Plan —</span>
           <span class="plan-info-count" id="checkinPlanCount">— / —</span>
@@ -427,17 +427,17 @@
         <div class="plan-progress-bar"><div class="plan-progress-fill" id="checkinPlanFill" style="width:0%"></div></div>
         <div class="plan-restantes" id="checkinPlanRestantes">—</div>
       </div>
-      <div class="plan-badge hidden" id="planBadge" style="margin-bottom:16px;">— clases restantes</div>
+      <div class="plan-badge hidden" id="planBadge" style="margin-bottom:20px;">— clases restantes</div>
 
       <!-- Slider -->
-      <div class="slider-track" id="sliderTrack" style="margin-bottom:12px;">
+      <div class="slider-track" id="sliderTrack" style="margin-bottom:16px;">
         <div class="slider-fill" id="sliderFill"></div>
         <div class="slider-thumb" id="sliderThumb">⚡</div>
         <div class="slider-label" id="sliderLabel">DESLIZA PARA REGISTRAR →</div>
       </div>
 
       <!-- Ver asistencia -->
-      <button class="btn-stats" onclick="openHistorial()" style="margin-top:0;margin-bottom:8px;">📊 VER MI ASISTENCIA</button>
+      <button class="btn-stats" onclick="openHistorial()" style="margin-bottom:8px;">📊 VER MI ASISTENCIA</button>
       <button class="btn btn-ghost" id="btnNotMe" onclick="changeName()" style="color:#777;border-color:rgba(255,255,255,0.12);margin-top:0;">—</button>
     </div>
 
@@ -482,54 +482,63 @@
     const thumb = document.getElementById('sliderThumb');
     if (!track || !thumb) return;
 
+    let startClientX = 0;
+    let startThumbLeft = 0;
+
+    function getClientX(e) { return e.touches ? e.touches[0].clientX : e.clientX; }
+
     function onStart(e) {
       if (_sliderLocked) return;
       _sliderDragging = true;
+      startClientX  = getClientX(e);
+      startThumbLeft = thumb.offsetLeft;
+      thumb.style.transition = 'none';
       e.preventDefault();
     }
+
     function onMove(e) {
       if (!_sliderDragging) return;
-      const trackW = track.offsetWidth;
-      const thumbW = thumb.offsetWidth;
-      const x = (e.touches ? e.touches[0].clientX : e.clientX) - _sliderStartX;
-      const maxX = trackW - thumbW - 4;
-      const clamped = Math.max(4, Math.min(x, maxX));
-      thumb.style.left = clamped + 'px';
-      document.getElementById('sliderFill').style.width = (clamped + thumbW) + 'px';
-      const pct = (clamped - 4) / (maxX - 4);
+      const dx    = getClientX(e) - startClientX;
+      const maxX  = track.offsetWidth - thumb.offsetWidth - 4;
+      const newX  = Math.max(4, Math.min(startThumbLeft + dx, maxX));
+      thumb.style.left = newX + 'px';
+      document.getElementById('sliderFill').style.width = (newX + thumb.offsetWidth) + 'px';
+      const pct = (newX - 4) / Math.max(1, maxX - 4);
       document.getElementById('sliderLabel').style.opacity = Math.max(0, 1 - pct * 2);
-      if (pct >= 0.95) onRelease();
+      if (pct >= 0.95) { _sliderDragging = false; completeSlider(); }
     }
+
     function onRelease() {
       if (!_sliderDragging) return;
       _sliderDragging = false;
-      const track = document.getElementById('sliderTrack');
-      const thumb = document.getElementById('sliderThumb');
       const maxX = track.offsetWidth - thumb.offsetWidth - 4;
-      const pct = (thumb.offsetLeft - 4) / (maxX - 4);
-      if (pct >= 0.95) {
-        _sliderLocked = true;
-        track.classList.add('done');
-        thumb.style.left = maxX + 'px';
-        document.getElementById('sliderFill').style.width = '100%';
-        document.getElementById('sliderLabel').style.opacity = '0';
-        thumb.innerHTML = '✓';
-        doCheckIn();
-      } else {
-        thumb.style.transition = 'left 0.3s ease';
-        thumb.style.left = '4px';
-        document.getElementById('sliderFill').style.width = '60px';
-        document.getElementById('sliderLabel').style.opacity = '1';
-        setTimeout(() => thumb.style.transition = '', 300);
-      }
+      const pct  = (thumb.offsetLeft - 4) / Math.max(1, maxX - 4);
+      if (pct >= 0.95) { completeSlider(); return; }
+      thumb.style.transition = 'left 0.3s ease';
+      thumb.style.left = '4px';
+      document.getElementById('sliderFill').style.width = thumb.offsetWidth + 8 + 'px';
+      document.getElementById('sliderLabel').style.opacity = '1';
+      setTimeout(() => { thumb.style.transition = ''; }, 300);
+    }
+
+    function completeSlider() {
+      _sliderLocked = true;
+      const maxX = track.offsetWidth - thumb.offsetWidth - 4;
+      thumb.style.transition = 'left 0.15s ease';
+      thumb.style.left = maxX + 'px';
+      document.getElementById('sliderFill').style.width = '100%';
+      document.getElementById('sliderLabel').style.opacity = '0';
+      track.classList.add('done');
+      thumb.innerHTML = '✓';
+      setTimeout(doCheckIn, 200);
     }
 
     thumb.addEventListener('touchstart', onStart, { passive: false });
-    thumb.addEventListener('mousedown', onStart);
-    document.addEventListener('touchmove', onMove, { passive: false });
-    document.addEventListener('mousemove', onMove);
-    document.addEventListener('touchend', onRelease);
-    document.addEventListener('mouseup', onRelease);
+    thumb.addEventListener('mousedown',  onStart);
+    window.addEventListener('touchmove', onMove,    { passive: false });
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('touchend',  onRelease);
+    window.addEventListener('mouseup',   onRelease);
   }
 
   function resetSlider() {
