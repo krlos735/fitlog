@@ -399,44 +399,46 @@
     </div>
 
     <div id="viewCheckin" class="checkin-card hidden fadeUp">
-      <!-- Header: FITMOTION + avatar con dot -->
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
-        <div class="logo" style="margin:0;font-size:38px;">FITMOTION</div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div style="position:relative;width:40px;height:40px;">
-            <div class="avatar" id="avatarLetter" style="width:40px;height:40px;font-size:16px;margin:0;">?</div>
-            <div style="position:absolute;bottom:1px;right:1px;width:12px;height:12px;background:#00c851;border-radius:50%;border:2px solid #0a0a0a;"></div>
-          </div>
-          <button onclick="openPin()" style="background:rgba(255,255,255,0.06);border:none;color:#555;font-size:18px;width:36px;height:36px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;">☰</button>
+      <!-- Header: solo FITMOTION + ☰ -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+        <div class="logo" style="margin:0;font-size:36px;">FITMOTION</div>
+        <button onclick="openPin()" style="background:rgba(255,255,255,0.06);border:none;color:#555;font-size:18px;width:36px;height:36px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;">☰</button>
+      </div>
+
+      <!-- Avatar centrado con dot -->
+      <div style="display:flex;justify-content:center;margin-bottom:14px;">
+        <div style="position:relative;width:72px;height:72px;">
+          <div class="avatar" id="avatarLetter" style="width:72px;height:72px;font-size:28px;margin:0;"></div>
+          <div style="position:absolute;bottom:2px;right:2px;width:16px;height:16px;background:#00c851;border-radius:50%;border:2.5px solid #0a0a0a;"></div>
         </div>
       </div>
 
-      <!-- Nombre y fecha -->
-      <div style="margin-bottom:28px;">
+      <!-- Nombre y fecha centrados -->
+      <div style="text-align:center;margin-bottom:22px;">
         <div class="greeting" style="margin-bottom:4px;">Bienvenido de vuelta</div>
-        <div class="name-display" id="nameDisplay" style="font-size:42px;margin-bottom:4px;">—</div>
+        <div class="name-display" id="nameDisplay" style="font-size:40px;margin-bottom:3px;">—</div>
         <div class="date-display" id="dateDisplay" style="margin-bottom:0;">—</div>
       </div>
 
-      <!-- Plan card rediseñada -->
-      <div class="plan-info-box hidden" id="checkinPlanBox" style="text-align:left;margin-bottom:20px;padding:16px 18px;">
+      <!-- Plan card -->
+      <div class="plan-info-box hidden" id="checkinPlanBox" style="text-align:left;margin-bottom:18px;padding:16px 18px;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
           <div>
             <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:3px;" id="checkinPlanTitle">Plan —</div>
-            <div style="font-size:22px;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;color:#f0ede8;" id="checkinPlanSubtitle">— clases</div>
+            <div style="font-size:20px;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;color:#f0ede8;" id="checkinPlanSubtitle">— clases</div>
           </div>
           <div style="text-align:right;">
             <div style="font-size:11px;color:#555;margin-bottom:2px;">usadas</div>
-            <div style="font-size:28px;font-family:'Bebas Neue',sans-serif;line-height:1;" id="checkinPlanCount">—</div>
+            <div style="font-size:26px;font-family:'Bebas Neue',sans-serif;line-height:1;color:#f0ede8;" id="checkinPlanCount">—</div>
           </div>
         </div>
         <div class="plan-progress-bar" style="height:8px;margin-bottom:8px;"><div class="plan-progress-fill" id="checkinPlanFill" style="width:0%"></div></div>
         <div class="plan-restantes" id="checkinPlanRestantes">—</div>
       </div>
-      <div class="plan-badge hidden" id="planBadge" style="margin-bottom:20px;">— clases restantes</div>
+      <div class="plan-badge hidden" id="planBadge" style="margin-bottom:18px;">— clases restantes</div>
 
       <!-- Slider -->
-      <div class="slider-track" id="sliderTrack" style="margin-bottom:16px;">
+      <div class="slider-track" id="sliderTrack" style="margin-bottom:12px;">
         <div class="slider-fill" id="sliderFill"></div>
         <div class="slider-thumb" id="sliderThumb">⚡</div>
         <div class="slider-label" id="sliderLabel">DESLIZA PARA REGISTRAR →</div>
@@ -444,7 +446,7 @@
 
       <!-- Ver asistencia -->
       <button class="btn-stats" onclick="openHistorial()" style="margin-bottom:8px;">📊 VER MI ASISTENCIA</button>
-      <button class="btn btn-ghost" id="btnNotMe" onclick="changeName()" style="color:#777;border-color:rgba(255,255,255,0.12);margin-top:0;">—</button>
+      <button class="btn btn-ghost" id="btnNotMe" onclick="changeName()" style="color:#666;border-color:rgba(255,255,255,0.1);margin-top:0;">—</button>
     </div>
 
     <div id="viewSuccess" class="hidden" style="text-align:center;animation:fadeUp 0.3s ease both">
