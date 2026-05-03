@@ -733,44 +733,39 @@
     const rut=localStorage.getItem(RUT_KEY), name=localStorage.getItem(NAME_KEY), profesor=localStorage.getItem(PROF_KEY);
     if (!rut||!name||!profesor) { clearLock(); return; }
 
-    // Indicador cargando
-    const thumb = document.getElementById('sliderThumb');
-    const label = document.getElementById('sliderLabel');
-    if (thumb) thumb.innerHTML = '⏳';
-    if (label) { label.textContent='REGISTRANDO...'; label.style.color='rgba(255,150,0,0.8)'; label.style.opacity='1'; }
+    // ── Optimistic UI: mostrar éxito inmediatamente ──────────────────────────
+    const newPlan = planInfo ? {
+      ...planInfo,
+      restantes: Math.max(0, (planInfo.restantes||0) - 1),
+      clasesUsadas: (planInfo.clasesUsadas||0) + 1,
+      planAgotado: ((planInfo.restantes||0) - 1) <= 0
+    } : null;
+    if (newPlan) localStorage.setItem(PLAN_KEY, JSON.stringify(newPlan));
 
+    document.getElementById('successName').textContent = name.toUpperCase();
+    document.getElementById('successTime').textContent = todayLabel()+' · '+timeNow();
+    showOnly('viewSuccess');
+    setTimeout(() => { disableSlider('done'); loadCheckinView(name, newPlan); }, 3000);
+
+    // ── Sincronizar con servidor en background ───────────────────────────────
     try {
       const res = await fetchAPI({ action:'checkin', rut, nombre:name, profesor });
       if (res.ok) {
-        // Pedir datos frescos al servidor
-        const fresh = await fetchAPI({ action:'validate', rut });
-        let newPlan = planInfo;
-        if (fresh.ok) {
-          newPlan = { plan:fresh.plan, restantes:fresh.restantes, total:fresh.total, clasesUsadas:fresh.clasesUsadas, planAgotado:fresh.planAgotado };
-          localStorage.setItem(PLAN_KEY, JSON.stringify(newPlan));
-        }
-        document.getElementById('successName').textContent = name.toUpperCase();
-        document.getElementById('successTime').textContent = todayLabel()+' · '+timeNow();
-        showOnly('viewSuccess');
-        setTimeout(() => {
-          disableSlider('done');
-          loadCheckinView(name, newPlan);
-        }, 3500);
-      } else if (res.error==='plan_agotado') {
-        document.getElementById('agotadoName').textContent = name.toUpperCase();
-        showOnly('viewAgotado');
-        setTimeout(() => loadCheckinView(name, planInfo), 4000);
-      } else if (res.error&&res.error.includes('Ya registraste')) {
-        document.getElementById('alreadyName').textContent = name.toUpperCase();
-        showOnly('viewAlready');
-        setTimeout(() => { disableSlider('done'); loadCheckinView(name, planInfo); }, 3000);
+        // Corregir con datos reales del servidor
+        const corrected = newPlan ? { ...newPlan, restantes: res.restantes, planAgotado: res.restantes === 0 } : null;
+        if (corrected) localStorage.setItem(PLAN_KEY, JSON.stringify(corrected));
+      } else if (res.error && res.error.includes('Ya registraste')) {
+        // Ya estaba registrado — no pasa nada, el lock ya está puesto
+      } else if (res.error === 'plan_agotado') {
+        // Revertir — el plan ya estaba agotado
+        if (planInfo) localStorage.setItem(PLAN_KEY, JSON.stringify(planInfo));
       } else {
-        alert('Error: '+(res.error||'Intenta de nuevo'));
-        clearLock(); resetSlider();
+        // Error real — revertir
+        clearLock();
+        if (planInfo) localStorage.setItem(PLAN_KEY, JSON.stringify(planInfo));
       }
     } catch {
-      alert('Sin conexión.');
-      clearLock(); resetSlider();
+      // Sin conexión — dejamos el optimistic state, se sincronizará la próxima vez
     }
   }
 
