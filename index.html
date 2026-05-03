@@ -627,7 +627,10 @@
     const rut  = localStorage.getItem(RUT_KEY);
     const name = localStorage.getItem(NAME_KEY);
     if (rut && name) {
-      loadCheckinView(name, JSON.parse(localStorage.getItem(PLAN_KEY)||'null'));
+      // Mostrar caché inmediatamente
+      const cached = JSON.parse(localStorage.getItem(PLAN_KEY)||'null');
+      loadCheckinView(name, cached);
+      // Actualizar desde servidor en background
       try {
         const res = await fetchAPI({ action:'validate', rut });
         if (res.ok) {
@@ -635,7 +638,11 @@
           localStorage.setItem(PROF_KEY, res.profesor);
           localStorage.setItem(PLAN_KEY, JSON.stringify({ plan:res.plan, restantes:res.restantes, total:res.total, clasesUsadas:res.clasesUsadas, planAgotado:res.planAgotado }));
           if (res.yaRegistrado) setLock(); else clearLock();
-          loadCheckinView(res.nombre, { plan:res.plan, restantes:res.restantes, total:res.total, clasesUsadas:res.clasesUsadas, planAgotado:res.planAgotado });
+          // Solo actualiza si los datos cambiaron vs caché
+          const planActual = { plan:res.plan, restantes:res.restantes, total:res.total, clasesUsadas:res.clasesUsadas, planAgotado:res.planAgotado };
+          if (!cached || JSON.stringify(cached) !== JSON.stringify(planActual)) {
+            loadCheckinView(res.nombre, planActual);
+          }
         } else { changeName(); }
       } catch {}
     } else { showOnly('viewRut'); }
