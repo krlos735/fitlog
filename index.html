@@ -418,13 +418,19 @@
         <div class="date-display" id="dateDisplay" style="margin-bottom:0;">—</div>
       </div>
 
-      <!-- Plan card -->
-      <div class="plan-info-box hidden" id="checkinPlanBox" style="text-align:left;margin-bottom:20px;">
-        <div class="plan-info-header">
-          <span class="plan-info-title" id="checkinPlanTitle">Plan —</span>
-          <span class="plan-info-count" id="checkinPlanCount">— / —</span>
+      <!-- Plan card rediseñada -->
+      <div class="plan-info-box hidden" id="checkinPlanBox" style="text-align:left;margin-bottom:20px;padding:16px 18px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+          <div>
+            <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:3px;" id="checkinPlanTitle">Plan —</div>
+            <div style="font-size:22px;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;color:#f0ede8;" id="checkinPlanSubtitle">— clases</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:11px;color:#555;margin-bottom:2px;">usadas</div>
+            <div style="font-size:28px;font-family:'Bebas Neue',sans-serif;line-height:1;" id="checkinPlanCount">—</div>
+          </div>
         </div>
-        <div class="plan-progress-bar"><div class="plan-progress-fill" id="checkinPlanFill" style="width:0%"></div></div>
+        <div class="plan-progress-bar" style="height:8px;margin-bottom:8px;"><div class="plan-progress-fill" id="checkinPlanFill" style="width:0%"></div></div>
         <div class="plan-restantes" id="checkinPlanRestantes">—</div>
       </div>
       <div class="plan-badge hidden" id="planBadge" style="margin-bottom:20px;">— clases restantes</div>
@@ -549,21 +555,33 @@
     const label = document.getElementById('sliderLabel');
     if (!track) return;
     track.classList.remove('done','disabled');
-    thumb.style.left = '4px'; thumb.innerHTML = '⚡';
-    fill.style.width = '60px';
-    if (label) { label.style.opacity = '1'; label.textContent = 'REGISTRAR →'; }
+    thumb.style.transition = '';
+    thumb.style.left = '4px';
+    thumb.innerHTML = '⚡';
+    fill.style.width = (thumb.offsetWidth + 8) + 'px';
+    if (label) { label.style.opacity = '1'; label.textContent = 'DESLIZA PARA REGISTRAR →'; }
   }
 
-  function disableSlider(text) {
+  function disableSlider(mode) {
     _sliderLocked = true;
     const track = document.getElementById('sliderTrack');
     const thumb = document.getElementById('sliderThumb');
+    const fill  = document.getElementById('sliderFill');
     const label = document.getElementById('sliderLabel');
     if (!track) return;
-    track.classList.add('disabled');
-    if (text === 'done') { track.classList.add('done'); thumb.innerHTML = '✓'; }
-    else { thumb.innerHTML = '⚠️'; }
-    if (label) label.textContent = text === 'done' ? 'YA REGISTRADO HOY' : text;
+    track.classList.remove('done','disabled');
+    if (mode === 'done') {
+      track.classList.add('done');
+      thumb.style.transition = '';
+      thumb.style.left = (track.offsetWidth - thumb.offsetWidth - 4) + 'px';
+      fill.style.width = '100%';
+      thumb.innerHTML = '✓';
+      if (label) { label.style.opacity = '1'; label.textContent = 'YA REGISTRADO HOY'; label.style.color = 'rgba(0,200,80,0.7)'; }
+    } else {
+      track.classList.add('disabled');
+      thumb.innerHTML = '⚠️';
+      if (label) { label.style.opacity = '1'; label.textContent = mode; label.style.color = 'rgba(255,50,50,0.7)'; }
+    }
   }
   let _pinValue = '';
   let _profeActual = '';
@@ -640,7 +658,8 @@
       const { plan, restantes, total, clasesUsadas, planAgotado } = planInfo;
       const pct = Math.min(100, Math.round(((clasesUsadas||0) / total) * 100));
       document.getElementById('checkinPlanTitle').textContent = PLAN_NOMBRES[plan] || 'Plan';
-      document.getElementById('checkinPlanCount').textContent = `${clasesUsadas||0} / ${total} clases`;
+      document.getElementById('checkinPlanSubtitle').textContent = PLAN_CLASES[plan] + ' clases totales';
+      document.getElementById('checkinPlanCount').textContent = `${clasesUsadas||0} / ${total}`;
       document.getElementById('checkinPlanFill').style.width = pct + '%';
       document.getElementById('checkinPlanFill').className = 'plan-progress-fill' + (planAgotado ? ' agotado' : '');
       const restEl = document.getElementById('checkinPlanRestantes');
