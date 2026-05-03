@@ -523,7 +523,7 @@
 </div>
 
 <script>
-  const API      = 'https://script.google.com/macros/s/AKfycbx3M93tLMaKA_7uTEGG94uuRoX5whpc0D0cpPnEBidzYo2ufP6tHGQhIkiG55j3JCCogg/exec';
+  const API      = 'https://script.google.com/macros/s/AKfycbyhuaQwXRpYwNxBIke5A-Psov9lnWYMiByTI9N2n8v_k1orc94jlVlrpU5jG5t2mvvubA/exec';
   const RUT_KEY  = 'fitlog:rut';
   const NAME_KEY = 'fitlog:nombre';
   const LOCK_KEY = 'fitlog:lock';
@@ -1353,11 +1353,10 @@
 
   // ── API ────────────────────────────────────────────────────────────────────
   async function fetchAPI(body) {
-    const res = await fetch(API, {
-      method: 'POST',
-      redirect: 'follow',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(body)
+    const params = new URLSearchParams({ body: JSON.stringify(body) });
+    const res = await fetch(`${API}?${params}`, {
+      method: 'GET',
+      redirect: 'follow'
     });
     return res.json();
   }
