@@ -889,7 +889,18 @@
   }
 
   // ── PIN ────────────────────────────────────────────────────────────────────
-  function openPin() { _pinValue=''; updatePinDisplay(); document.getElementById('pinError').textContent=''; document.getElementById('pinOverlay').classList.remove('hidden'); }
+  function openPin() {
+    _pinValue = '';
+    document.getElementById('pinError').textContent = '';
+    // Resetear dots completamente
+    for (let i = 0; i < 4; i++) {
+      const dot = document.getElementById('pd'+i);
+      dot.classList.remove('filled');
+      dot.style.background = '';
+      dot.style.animation  = '';
+    }
+    document.getElementById('pinOverlay').classList.remove('hidden');
+  }
   function closePin() { document.getElementById('pinOverlay').classList.add('hidden'); _pinValue=''; }
   function pinPress(d) { if (_pinValue.length>=4) return; _pinValue+=d; updatePinDisplay(); if (_pinValue.length===4) setTimeout(validatePin,200); }
   function pinDelete() { _pinValue=_pinValue.slice(0,-1); updatePinDisplay(); }
@@ -1154,25 +1165,31 @@
 
     const alumnoInfo=_alumnoInfoCache[rut];
     if (alumnoInfo) {
-      // Plan info — pedir al servidor solo si no tenemos datos frescos
-      document.getElementById('profePlanBox').classList.add('hidden');
+      // Mostrar cargando en tarjeta del plan
+      document.getElementById('profePlanTitle').textContent = PLAN_NOMBRES[alumnoInfo.plan]||'Plan';
+      document.getElementById('profePlanCount').textContent = '...';
+      document.getElementById('profePlanFill').style.width = '0%';
+      document.getElementById('profePlanRestantes').textContent = 'Cargando...';
+      document.getElementById('profePlanBox').classList.remove('hidden');
+      document.getElementById('renovarPlan').value=alumnoInfo.plan;
+      document.getElementById('renovarFecha').value=todayKey();
+
+      // Pedir datos frescos al servidor
       fetchAPI({ action:'getInfoAlumno', rut, profesor:_profeActual }).then(res=>{
         if (!res.ok) return;
         const total=res.total, usadas=res.clasesUsadas, restantes=res.restantes;
         const pct=Math.min(100,Math.round((usadas/total)*100));
         const agotado=restantes===0;
-        document.getElementById('profePlanTitle').textContent=PLAN_NOMBRES[alumnoInfo.plan]||'Plan';
         document.getElementById('profePlanCount').textContent=`${usadas} / ${total} clases`;
         document.getElementById('profePlanFill').style.width=pct+'%';
         document.getElementById('profePlanFill').className='plan-progress-fill'+(agotado?' agotado':'');
         const restEl=document.getElementById('profePlanRestantes');
         restEl.textContent=agotado?'⚠️ Plan agotado':restantes+' clases restantes';
         restEl.className='plan-restantes'+(agotado?' agotado':restantes<=2?' pocas':'');
-        document.getElementById('profePlanBox').classList.remove('hidden');
-        document.getElementById('renovarPlan').value=alumnoInfo.plan;
-        document.getElementById('renovarFecha').value=todayKey();
         document.getElementById('btnRenovarPlan').classList.remove('hidden');
-      }).catch(()=>{});
+      }).catch(()=>{
+        document.getElementById('profePlanRestantes').textContent='Error al cargar';
+      });
     }
     document.getElementById('dividerFiltro').classList.remove('hidden');
     document.getElementById('filtroMesBox').classList.remove('hidden');
