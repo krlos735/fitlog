@@ -1256,8 +1256,19 @@
       const res=await fetchAPI({ action:'agregarClase', rut:_alumnoSeleccionado.rut, nombre:_alumnoSeleccionado.nombre, profesor:_profeActual, fecha, hora });
       if (res.ok) {
         msg.style.color='#00c851'; msg.textContent='✓ Clase agregada';
-        const r=await fetchAPI({ action:'records' });
-        if (r.ok) _profeRecords=r.records||{};
+        // Actualizar tarjeta del plan
+        const infoRes = await fetchAPI({ action:'getInfoAlumno', rut:_alumnoSeleccionado.rut, profesor:_profeActual });
+        if (infoRes.ok) {
+          const {total, clasesUsadas, restantes} = infoRes;
+          const pct = Math.min(100, Math.round((clasesUsadas/total)*100));
+          const agotado = restantes === 0;
+          document.getElementById('profePlanCount').textContent=`${clasesUsadas} / ${total} clases`;
+          document.getElementById('profePlanFill').style.width=pct+'%';
+          document.getElementById('profePlanFill').className='plan-progress-fill'+(agotado?' agotado':'');
+          const restEl=document.getElementById('profePlanRestantes');
+          restEl.textContent=agotado?'⚠️ Plan agotado':restantes+' clases restantes';
+          restEl.className='plan-restantes'+(agotado?' agotado':restantes<=2?' pocas':'');
+        }
         setTimeout(()=>{ toggleFormClase(false); verAsistenciaPeriodo(); },1000);
       } else { msg.style.color='#ff3b3b'; msg.textContent=res.error||'Error'; }
     } catch { msg.style.color='#ff3b3b'; msg.textContent='Sin conexión'; }
@@ -1271,8 +1282,19 @@
     try {
       const res=await fetchAPI({ action:'eliminarClase', rut:_alumnoSeleccionado.rut, profesor:_profeActual, fecha });
       if (res.ok) {
-        const r=await fetchAPI({ action:'records' });
-        if (r.ok) _profeRecords=r.records||{};
+        // Actualizar tarjeta del plan
+        const infoRes = await fetchAPI({ action:'getInfoAlumno', rut:_alumnoSeleccionado.rut, profesor:_profeActual });
+        if (infoRes.ok) {
+          const {total, clasesUsadas, restantes} = infoRes;
+          const pct = Math.min(100, Math.round((clasesUsadas/total)*100));
+          const agotado = restantes === 0;
+          document.getElementById('profePlanCount').textContent=`${clasesUsadas} / ${total} clases`;
+          document.getElementById('profePlanFill').style.width=pct+'%';
+          document.getElementById('profePlanFill').className='plan-progress-fill'+(agotado?' agotado':'');
+          const restEl=document.getElementById('profePlanRestantes');
+          restEl.textContent=agotado?'⚠️ Plan agotado':restantes+' clases restantes';
+          restEl.className='plan-restantes'+(agotado?' agotado':restantes<=2?' pocas':'');
+        }
         verAsistenciaPeriodo();
       } else { alert('Error: '+(res.error||'No se pudo eliminar')); verAsistenciaPeriodo(); }
     } catch { alert('Sin conexión'); verAsistenciaPeriodo(); }
