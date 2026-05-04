@@ -898,11 +898,18 @@
 
   async function validatePin() {
     document.getElementById('pinError').textContent='';
+    // Mostrar cargando
+    const dots = document.querySelectorAll('.pin-dot');
+    dots.forEach(d => { d.style.background='#ff5a00'; d.style.animation='pulse 0.6s ease infinite'; });
     try {
       const res = await fetchAPI({ action:'validarProfesor', pin:_pinValue });
+      dots.forEach(d => { d.style.animation=''; });
       if (res.ok) { _profeActual=res.profesor; closePin(); openProfe(); }
       else { document.getElementById('pinError').textContent='PIN incorrecto'; _pinValue=''; updatePinDisplay(); }
-    } catch { document.getElementById('pinError').textContent='Sin conexión'; _pinValue=''; updatePinDisplay(); }
+    } catch {
+      dots.forEach(d => { d.style.animation=''; });
+      document.getElementById('pinError').textContent='Sin conexión'; _pinValue=''; updatePinDisplay();
+    }
   }
 
   // ── Panel Profe ────────────────────────────────────────────────────────────
