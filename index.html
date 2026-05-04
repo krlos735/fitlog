@@ -889,23 +889,36 @@
   }
 
   // ── PIN ────────────────────────────────────────────────────────────────────
+  function pinPress(d) {
+    if (_pinValue.length >= 4) return;
+    _pinValue += d;
+    updatePinDisplay();
+    if (_pinValue.length === 4) setTimeout(validatePin, 200);
+  }
+  function pinDelete() { _pinValue = _pinValue.slice(0,-1); updatePinDisplay(); }
+  function pinClear()  { _pinValue = ''; updatePinDisplay(); }
+
+  function updatePinDisplay() {
+    for (let i = 0; i < 4; i++) {
+      const dot = document.getElementById('pd'+i);
+      dot.style.animation = '';
+      dot.style.background = '';
+      dot.classList.toggle('filled', i < _pinValue.length);
+    }
+  }
+
   function openPin() {
     _pinValue = '';
     document.getElementById('pinError').textContent = '';
-    // Resetear dots completamente
-    for (let i = 0; i < 4; i++) {
-      const dot = document.getElementById('pd'+i);
-      dot.classList.remove('filled');
-      dot.style.background = '';
-      dot.style.animation  = '';
-    }
+    updatePinDisplay();
     document.getElementById('pinOverlay').classList.remove('hidden');
   }
-  function closePin() { document.getElementById('pinOverlay').classList.add('hidden'); _pinValue=''; }
-  function pinPress(d) { if (_pinValue.length>=4) return; _pinValue+=d; updatePinDisplay(); if (_pinValue.length===4) setTimeout(validatePin,200); }
-  function pinDelete() { _pinValue=_pinValue.slice(0,-1); updatePinDisplay(); }
-  function pinClear()  { _pinValue=''; updatePinDisplay(); }
-  function updatePinDisplay() { for(let i=0;i<4;i++) document.getElementById('pd'+i).classList.toggle('filled',i<_pinValue.length); }
+
+  function closePin() {
+    _pinValue = '';
+    updatePinDisplay();
+    document.getElementById('pinOverlay').classList.add('hidden');
+  }
 
   async function validatePin() {
     document.getElementById('pinError').textContent='';
