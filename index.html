@@ -522,275 +522,259 @@
   </div>
 </div>
 
-<script>
-  const API      = 'https://script.google.com/macros/s/AKfycbyhuaQwXRpYwNxBIke5A-Psov9lnWYMiByTI9N2n8v_k1orc94jlVlrpU5jG5t2mvvubA/exec';
+<script type="module">
+  import { initializeApp }                                          from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
+  import { getFirestore, doc, getDoc, getDocs, setDoc, updateDoc,
+           collection, query, where, orderBy }                     from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBL3dkalfVQqMb1AS4SVGXO5cu-DRdeicc",
+    authDomain: "fitmotion-91abc.firebaseapp.com",
+    projectId: "fitmotion-91abc",
+    storageBucket: "fitmotion-91abc.firebasestorage.app",
+    messagingSenderId: "1076272580031",
+    appId: "1:1076272580031:web:02d50d4584bb101a164d0a"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
   const RUT_KEY  = 'fitlog:rut';
   const NAME_KEY = 'fitlog:nombre';
   const LOCK_KEY = 'fitlog:lock';
   const PROF_KEY = 'fitlog:profesor';
   const PLAN_KEY = 'fitlog:plan';
 
+  const PLAN_CLASES  = { 1:8, 2:12, 3:16 };
+  const PLAN_NOMBRES = { 1:'Plan 1 — 2x semana', 2:'Plan 2 — 3x semana', 3:'Plan 3 — 4x semana' };
+
+  // ── Helpers Firebase ───────────────────────────────────────────────────────
+  const cleanRut = v => String(v).replace(/\./g,'').trim().toLowerCase();
+
+  async function fbGetAlumno(rut) {
+    // Buscar en todos los profesores
+    const profSnap = await getDocs(collection(db,'profesores'));
+    for (const profDoc of profSnap.docs) {
+      const profesor = profDoc.id;
+      const alumnoRef = doc(db, `alumnos_${profesor}`, cleanRut(rut));
+      const alumnoSnap = await getDoc(alumnoRef);
+      if (alumnoSnap.exists()) return { ...alumnoSnap.data(), profesor };
+    }
+    return null;
+  }
+
+  async function fbContarClases(rut, profesor, fechaInicio) {
+    const col = collection(db, `asistencia_${profesor}`);
+    const q   = query(col, where('rut','==',rut), where('estado','==','activa'));
+    const snap = await getDocs(q);
+    let count = 0;
+    snap.forEach(d => { if (!fechaInicio || d.data().fecha >= fechaInicio) count++; });
+    return count;
+  }
+
+  async function fbYaRegistroHoy(rut, profesor) {
+    const hoy = todayKey();
+    const col  = collection(db, `asistencia_${profesor}`);
+    const q    = query(col, where('rut','==',rut), where('fecha','==',hoy), where('estado','==','activa'));
+    const snap = await getDocs(q);
+    return !snap.empty;
+  }
+
   // ── Confeti ────────────────────────────────────────────────────────────────
   function launchConfetti() {
     const canvas = document.getElementById('confettiCanvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-
-    canvas.style.position = 'fixed';
-    canvas.style.top = '0';
-    canvas.style.left = '0';
-    canvas.style.width = '100vw';
-    canvas.style.height = '100vh';
-    canvas.style.zIndex = '9999';
-    canvas.style.pointerEvents = 'none';
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const W = canvas.width;
-    const H = canvas.height;
-
-    const colors = ['#ff5a00','#ff9500','#ffcc00','#00c851','#ffffff','#ff3b3b','#a855f7','#3b82f6','#ec4899'];
-    const pieces = [];
-    const count  = 200;
-
-    for (let i = 0; i < count; i++) {
-      pieces.push({
-        x: Math.random() * W,
-        y: -(Math.random() * 100 + 20),
-        w: Math.random() * 14 + 6,
-        h: Math.random() * 6 + 3,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        vx: (Math.random() - 0.5) * 4,
-        vy: Math.random() * 2 + 1.5,
-        gravity: 0.06 + Math.random() * 0.06,
-        rotation: Math.random() * 360,
-        rotSpeed: (Math.random() - 0.5) * 7,
-        opacity: 1,
-      });
-    }
-
-    let frame = 0;
+    canvas.style.position='fixed'; canvas.style.top='0'; canvas.style.left='0';
+    canvas.style.width='100vw'; canvas.style.height='100vh';
+    canvas.style.zIndex='9999'; canvas.style.pointerEvents='none';
+    canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+    const W=canvas.width, H=canvas.height;
+    const colors=['#ff5a00','#ff9500','#ffcc00','#00c851','#ffffff','#ff3b3b','#a855f7','#3b82f6','#ec4899'];
+    const pieces=[];
+    for (let i=0;i<200;i++) pieces.push({
+      x:Math.random()*W, y:-(Math.random()*100+20),
+      w:Math.random()*14+6, h:Math.random()*6+3,
+      color:colors[Math.floor(Math.random()*colors.length)],
+      vx:(Math.random()-0.5)*4, vy:Math.random()*2+1.5,
+      gravity:0.06+Math.random()*0.06, rotation:Math.random()*360,
+      rotSpeed:(Math.random()-0.5)*7, opacity:1
+    });
+    let frame=0;
     function animate() {
-      ctx.clearRect(0, 0, W, H);
-      let alive = false;
-      pieces.forEach(p => {
-        p.x  += p.vx + Math.sin(frame * 0.02 + p.y * 0.01) * 0.5;
-        p.y  += p.vy;
-        p.vy += p.gravity;
-        p.rotation += p.rotSpeed;
-        if (p.y > H * 0.75) p.opacity -= 0.018;
-        p.opacity = Math.max(0, p.opacity);
-        if (p.y < H && p.opacity > 0) alive = true;
-
-        ctx.save();
-        ctx.globalAlpha = p.opacity;
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.rotation * Math.PI / 180);
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.ellipse(0, 0, p.w/2, p.h/2, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
+      ctx.clearRect(0,0,W,H); let alive=false;
+      pieces.forEach(p=>{
+        p.x+=p.vx+Math.sin(frame*0.02+p.y*0.01)*0.5; p.y+=p.vy; p.vy+=p.gravity; p.rotation+=p.rotSpeed;
+        if (p.y>H*0.75) p.opacity-=0.018;
+        p.opacity=Math.max(0,p.opacity);
+        if (p.y<H&&p.opacity>0) alive=true;
+        ctx.save(); ctx.globalAlpha=p.opacity; ctx.translate(p.x,p.y); ctx.rotate(p.rotation*Math.PI/180);
+        ctx.fillStyle=p.color; ctx.beginPath(); ctx.ellipse(0,0,p.w/2,p.h/2,0,0,Math.PI*2); ctx.fill(); ctx.restore();
       });
-      frame++;
-      if (alive) requestAnimationFrame(animate);
-      else ctx.clearRect(0, 0, W, H);
+      frame++; if (alive) requestAnimationFrame(animate); else ctx.clearRect(0,0,W,H);
     }
     animate();
   }
-  let _sliderDragging = false;
-  let _sliderStartX = 0;
-  let _sliderLocked = false;
+
+  // ── Slider ─────────────────────────────────────────────────────────────────
+  let _sliderDragging=false, _sliderLocked=false;
 
   function initSlider() {
-    const track = document.getElementById('sliderTrack');
-    const thumb = document.getElementById('sliderThumb');
-    if (!track || !thumb) return;
-
-    let startClientX = 0;
-    let startThumbLeft = 0;
-
-    function getClientX(e) { return e.touches ? e.touches[0].clientX : e.clientX; }
-
+    const track=document.getElementById('sliderTrack');
+    const thumb=document.getElementById('sliderThumb');
+    if (!track||!thumb) return;
+    let startClientX=0, startThumbLeft=0;
+    function getClientX(e) { return e.touches?e.touches[0].clientX:e.clientX; }
     function onStart(e) {
       if (_sliderLocked) return;
-      _sliderDragging = true;
-      startClientX  = getClientX(e);
-      startThumbLeft = thumb.offsetLeft;
-      thumb.style.transition = 'none';
-      e.preventDefault();
+      _sliderDragging=true; startClientX=getClientX(e); startThumbLeft=thumb.offsetLeft;
+      thumb.style.transition='none'; e.preventDefault();
     }
-
     function onMove(e) {
       if (!_sliderDragging) return;
-      const dx    = getClientX(e) - startClientX;
-      const maxX  = track.offsetWidth - thumb.offsetWidth - 4;
-      const newX  = Math.max(4, Math.min(startThumbLeft + dx, maxX));
-      thumb.style.left = newX + 'px';
-      document.getElementById('sliderFill').style.width = (newX + thumb.offsetWidth) + 'px';
-      const pct = (newX - 4) / Math.max(1, maxX - 4);
-      document.getElementById('sliderLabel').style.opacity = Math.max(0, 1 - pct * 2);
-      if (pct >= 0.95) { _sliderDragging = false; completeSlider(); }
+      const dx=getClientX(e)-startClientX;
+      const maxX=track.offsetWidth-thumb.offsetWidth-4;
+      const newX=Math.max(4,Math.min(startThumbLeft+dx,maxX));
+      thumb.style.left=newX+'px';
+      document.getElementById('sliderFill').style.width=(newX+thumb.offsetWidth)+'px';
+      const pct=(newX-4)/Math.max(1,maxX-4);
+      document.getElementById('sliderLabel').style.opacity=Math.max(0,1-pct*2);
+      if (pct>=0.95) { _sliderDragging=false; completeSlider(); }
     }
-
     function onRelease() {
-      if (!_sliderDragging) return;
-      _sliderDragging = false;
-      const maxX = track.offsetWidth - thumb.offsetWidth - 4;
-      const pct  = (thumb.offsetLeft - 4) / Math.max(1, maxX - 4);
-      if (pct >= 0.95) { completeSlider(); return; }
-      thumb.style.transition = 'left 0.3s ease';
-      thumb.style.left = '4px';
-      document.getElementById('sliderFill').style.width = thumb.offsetWidth + 8 + 'px';
-      document.getElementById('sliderLabel').style.opacity = '1';
-      setTimeout(() => { thumb.style.transition = ''; }, 300);
+      if (!_sliderDragging) return; _sliderDragging=false;
+      const maxX=track.offsetWidth-thumb.offsetWidth-4;
+      const pct=(thumb.offsetLeft-4)/Math.max(1,maxX-4);
+      if (pct>=0.95) { completeSlider(); return; }
+      thumb.style.transition='left 0.3s ease'; thumb.style.left='4px';
+      document.getElementById('sliderFill').style.width=thumb.offsetWidth+8+'px';
+      document.getElementById('sliderLabel').style.opacity='1';
+      setTimeout(()=>{ thumb.style.transition=''; },300);
     }
-
     function completeSlider() {
-      _sliderLocked = true;
-      const maxX = track.offsetWidth - thumb.offsetWidth - 4;
-      thumb.style.transition = 'left 0.15s ease';
-      thumb.style.left = maxX + 'px';
-      document.getElementById('sliderFill').style.width = '100%';
-      document.getElementById('sliderLabel').style.opacity = '0';
-      track.classList.add('done');
-      thumb.innerHTML = '✓';
-      setTimeout(doCheckIn, 200);
+      _sliderLocked=true;
+      const maxX=track.offsetWidth-thumb.offsetWidth-4;
+      thumb.style.transition='left 0.15s ease'; thumb.style.left=maxX+'px';
+      document.getElementById('sliderFill').style.width='100%';
+      document.getElementById('sliderLabel').style.opacity='0';
+      track.classList.add('done'); thumb.innerHTML='✓';
+      setTimeout(doCheckIn,200);
     }
-
-    thumb.addEventListener('touchstart', onStart, { passive: false });
-    thumb.addEventListener('mousedown',  onStart);
-    window.addEventListener('touchmove', onMove,    { passive: false });
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('touchend',  onRelease);
-    window.addEventListener('mouseup',   onRelease);
+    thumb.addEventListener('touchstart',onStart,{passive:false});
+    thumb.addEventListener('mousedown',onStart);
+    window.addEventListener('touchmove',onMove,{passive:false});
+    window.addEventListener('mousemove',onMove);
+    window.addEventListener('touchend',onRelease);
+    window.addEventListener('mouseup',onRelease);
   }
 
   function resetSlider() {
-    _sliderLocked = false; _sliderDragging = false;
-    const track = document.getElementById('sliderTrack');
-    const thumb = document.getElementById('sliderThumb');
-    const fill  = document.getElementById('sliderFill');
-    const label = document.getElementById('sliderLabel');
+    _sliderLocked=false; _sliderDragging=false;
+    const track=document.getElementById('sliderTrack');
+    const thumb=document.getElementById('sliderThumb');
+    const fill=document.getElementById('sliderFill');
+    const label=document.getElementById('sliderLabel');
     if (!track) return;
     track.classList.remove('done','disabled');
-    thumb.style.transition = '';
-    thumb.style.left = '4px';
-    thumb.innerHTML = '⚡';
-    fill.style.width = (thumb.offsetWidth + 8) + 'px';
-    if (label) { label.style.opacity = '1'; label.style.color = 'rgba(255,150,0,0.6)'; label.textContent = 'DESLIZA PARA REGISTRAR →'; }
+    thumb.style.transition=''; thumb.style.left='4px'; thumb.innerHTML='⚡';
+    fill.style.width=(thumb.offsetWidth+8)+'px';
+    if (label) { label.style.opacity='1'; label.style.color='rgba(255,150,0,0.6)'; label.textContent='DESLIZA PARA REGISTRAR →'; }
   }
 
   function disableSlider(mode) {
-    _sliderLocked = true;
-    const track = document.getElementById('sliderTrack');
-    const thumb = document.getElementById('sliderThumb');
-    const fill  = document.getElementById('sliderFill');
-    const label = document.getElementById('sliderLabel');
+    _sliderLocked=true;
+    const track=document.getElementById('sliderTrack');
+    const thumb=document.getElementById('sliderThumb');
+    const fill=document.getElementById('sliderFill');
+    const label=document.getElementById('sliderLabel');
     if (!track) return;
     track.classList.remove('done','disabled');
-    if (mode === 'done') {
+    if (mode==='done') {
       track.classList.add('done');
-      thumb.style.transition = '';
-      thumb.style.left = (track.offsetWidth - thumb.offsetWidth - 4) + 'px';
-      fill.style.width = '100%';
-      thumb.innerHTML = '✓';
-      if (label) { label.style.opacity = '1'; label.textContent = 'YA REGISTRADO HOY'; label.style.color = 'rgba(0,200,80,0.7)'; }
+      thumb.style.transition=''; thumb.style.left=(track.offsetWidth-thumb.offsetWidth-4)+'px';
+      fill.style.width='100%'; thumb.innerHTML='✓';
+      if (label) { label.style.opacity='1'; label.textContent='YA REGISTRADO HOY'; label.style.color='rgba(0,200,80,0.8)'; }
     } else {
-      track.classList.add('disabled');
-      thumb.innerHTML = '⚠️';
-      if (label) { label.style.opacity = '1'; label.textContent = mode; label.style.color = 'rgba(255,50,50,0.7)'; }
+      track.classList.add('disabled'); thumb.innerHTML='⚠️';
+      if (label) { label.style.opacity='1'; label.textContent=mode; label.style.color='rgba(255,50,50,0.7)'; }
     }
   }
-  let _pinValue = '';
-  let _profeActual = '';
-  let _historialData = {};
-  let _profeHistorialData = {};
-  let _profeRecords = {};
-  let _alumnoSeleccionado = null;
-  let _alumnoInfoCache = {};
-
-  const PLAN_CLASES  = { 1:8, 2:12, 3:16 };
-  const PLAN_NOMBRES = { 1:'Plan 1 — 2x semana', 2:'Plan 2 — 3x semana', 3:'Plan 3 — 4x semana' };
 
   // ── Lock ───────────────────────────────────────────────────────────────────
   function getLock() {
-    const s = localStorage.getItem(LOCK_KEY);
-    if (!s) return false;
-    const { date } = JSON.parse(s);
-    if (date !== todayKey()) { localStorage.removeItem(LOCK_KEY); return false; }
+    const s=localStorage.getItem(LOCK_KEY); if (!s) return false;
+    const {date}=JSON.parse(s);
+    if (date!==todayKey()) { localStorage.removeItem(LOCK_KEY); return false; }
     return true;
   }
-  function setLock()   { localStorage.setItem(LOCK_KEY, JSON.stringify({ date: todayKey() })); }
+  function setLock()   { localStorage.setItem(LOCK_KEY,JSON.stringify({date:todayKey()})); }
   function clearLock() { localStorage.removeItem(LOCK_KEY); }
 
   // ── RUT ────────────────────────────────────────────────────────────────────
   function formatRut(input) {
-    let v = input.value.replace(/[^0-9kK]/g,'').toUpperCase();
-    if (v.length > 1) v = v.slice(0,-1)+'-'+v.slice(-1);
-    input.value = v;
+    let v=input.value.replace(/[^0-9kK]/g,'').toUpperCase();
+    if (v.length>1) v=v.slice(0,-1)+'-'+v.slice(-1);
+    input.value=v;
   }
-  function formatRutInput(input) { formatRut(input); }
+  window.formatRutInput = input => formatRut(input);
 
   function checkRutInput() {
-    const v = document.getElementById('rutInput').value.trim();
-    const btn = document.getElementById('btnValidate');
-    if (v.length < 3) btn.classList.add('inactivo'); else btn.classList.remove('inactivo');
-    document.getElementById('rutError').textContent = '';
+    const v=document.getElementById('rutInput').value.trim();
+    const btn=document.getElementById('btnValidate');
+    if (v.length<3) btn.classList.add('inactivo'); else btn.classList.remove('inactivo');
+    document.getElementById('rutError').textContent='';
     document.getElementById('rutInput').classList.remove('error');
   }
+  window.checkRutInput = checkRutInput;
 
   // ── Init ───────────────────────────────────────────────────────────────────
   async function init() {
-    const rut  = localStorage.getItem(RUT_KEY);
-    const name = localStorage.getItem(NAME_KEY);
-    if (rut && name) {
-      // Mostrar caché inmediatamente
-      const cached = JSON.parse(localStorage.getItem(PLAN_KEY)||'null');
-      loadCheckinView(name, cached);
-      // Actualizar desde servidor en background
+    const rut=localStorage.getItem(RUT_KEY);
+    const name=localStorage.getItem(NAME_KEY);
+    if (rut&&name) {
+      const cached=JSON.parse(localStorage.getItem(PLAN_KEY)||'null');
+      loadCheckinView(name,cached);
       try {
-        const res = await fetchAPI({ action:'validate', rut });
-        if (res.ok) {
-          localStorage.setItem(NAME_KEY, res.nombre);
-          localStorage.setItem(PROF_KEY, res.profesor);
-          localStorage.setItem(PLAN_KEY, JSON.stringify({ plan:res.plan, restantes:res.restantes, total:res.total, clasesUsadas:res.clasesUsadas, planAgotado:res.planAgotado }));
-          if (res.yaRegistrado) setLock(); else clearLock();
-          // Solo actualiza si los datos cambiaron vs caché
-          const planActual = { plan:res.plan, restantes:res.restantes, total:res.total, clasesUsadas:res.clasesUsadas, planAgotado:res.planAgotado };
-          if (!cached || JSON.stringify(cached) !== JSON.stringify(planActual)) {
-            loadCheckinView(res.nombre, planActual);
-          }
-        } else { changeName(); }
+        const alumno=await fbGetAlumno(rut);
+        if (!alumno||alumno.estado==='inactivo') { changeName(); return; }
+        const usadas=await fbContarClases(rut,alumno.profesor,alumno.fechaInicio);
+        const total=PLAN_CLASES[alumno.plan]||8;
+        const restantes=Math.max(0,total-usadas);
+        const planAgotado=restantes===0;
+        const yaRegistrado=await fbYaRegistroHoy(rut,alumno.profesor);
+        if (yaRegistrado) setLock(); else clearLock();
+        const planInfo={plan:alumno.plan,restantes,total,clasesUsadas:usadas,planAgotado};
+        localStorage.setItem(PLAN_KEY,JSON.stringify(planInfo));
+        localStorage.setItem(PROF_KEY,alumno.profesor);
+        const cached2=JSON.parse(localStorage.getItem(PLAN_KEY)||'null');
+        if (!cached||JSON.stringify(cached)!==JSON.stringify(cached2)) loadCheckinView(alumno.nombre,planInfo);
       } catch {}
     } else { showOnly('viewRut'); }
   }
 
   function showOnly(id) {
-    ['viewLoading','viewRut','viewCheckin','viewSuccess','viewAlready','viewAgotado'].forEach(v => {
-      document.getElementById(v).classList.toggle('hidden', v !== id);
+    ['viewLoading','viewRut','viewCheckin','viewSuccess','viewAlready','viewAgotado'].forEach(v=>{
+      document.getElementById(v).classList.toggle('hidden',v!==id);
     });
   }
 
-  function loadCheckinView(name, planInfo) {
-    document.getElementById('avatarLetter').textContent = name.charAt(0).toUpperCase();
-    document.getElementById('nameDisplay').textContent  = name.toUpperCase();
-    document.getElementById('dateDisplay').textContent  = todayLabel();
-    document.getElementById('btnNotMe').textContent     = 'No soy '+name.split(' ')[0];
-    const planBox = document.getElementById('checkinPlanBox');
-    const badge   = document.getElementById('planBadge');
-
+  function loadCheckinView(name,planInfo) {
+    document.getElementById('avatarLetter').textContent=name.charAt(0).toUpperCase();
+    document.getElementById('nameDisplay').textContent=name.toUpperCase();
+    document.getElementById('dateDisplay').textContent=todayLabel();
+    document.getElementById('btnNotMe').textContent='No soy '+name.split(' ')[0];
+    const planBox=document.getElementById('checkinPlanBox');
+    const badge=document.getElementById('planBadge');
     if (planInfo) {
-      const { plan, restantes, total, clasesUsadas, planAgotado } = planInfo;
-      const pct = Math.min(100, Math.round(((clasesUsadas||0) / total) * 100));
-      document.getElementById('checkinPlanTitle').textContent = PLAN_NOMBRES[plan] || 'Plan';
-      document.getElementById('checkinPlanSubtitle').textContent = PLAN_CLASES[plan] + ' clases totales';
-      document.getElementById('checkinPlanCount').textContent = `${clasesUsadas||0} / ${total}`;
-      document.getElementById('checkinPlanFill').style.width = pct + '%';
-      document.getElementById('checkinPlanFill').className = 'plan-progress-fill' + (planAgotado ? ' agotado' : '');
-      const restEl = document.getElementById('checkinPlanRestantes');
-      restEl.textContent = planAgotado ? '⚠️ Plan agotado — contacta a tu profe' : restantes + ' clases restantes';
-      restEl.className = 'plan-restantes' + (planAgotado ? ' agotado' : restantes <= 2 ? ' pocas' : '');
+      const {plan,restantes,total,clasesUsadas,planAgotado}=planInfo;
+      const pct=Math.min(100,Math.round(((clasesUsadas||0)/total)*100));
+      document.getElementById('checkinPlanTitle').textContent=PLAN_NOMBRES[plan]||'Plan';
+      document.getElementById('checkinPlanSubtitle').textContent=(PLAN_CLASES[plan]||8)+' clases totales';
+      document.getElementById('checkinPlanCount').textContent=`${clasesUsadas||0} / ${total}`;
+      document.getElementById('checkinPlanFill').style.width=pct+'%';
+      document.getElementById('checkinPlanFill').className='plan-progress-fill'+(planAgotado?' agotado':'');
+      const restEl=document.getElementById('checkinPlanRestantes');
+      restEl.textContent=planAgotado?'⚠️ Plan agotado — contacta a tu profe':restantes+' clases restantes';
+      restEl.className='plan-restantes'+(planAgotado?' agotado':restantes<=2?' pocas':'');
       planBox.classList.remove('hidden'); badge.classList.add('hidden');
       if (planAgotado) disableSlider('PLAN AGOTADO');
       else if (getLock()) disableSlider('done');
@@ -804,29 +788,37 @@
   }
 
   function changeName() {
-    clearLock(); _touchHandled=false;
+    clearLock();
     [RUT_KEY,NAME_KEY,PROF_KEY,PLAN_KEY].forEach(k=>localStorage.removeItem(k));
     document.getElementById('rutInput').value='';
     document.getElementById('rutError').textContent='';
     document.getElementById('btnValidate').classList.add('inactivo');
     showOnly('viewRut');
   }
+  window.changeName=changeName;
 
   async function validateRut() {
-    const btn = document.getElementById('btnValidate');
+    const btn=document.getElementById('btnValidate');
     if (btn.classList.contains('inactivo')) return;
-    const rut = document.getElementById('rutInput').value.replace(/\./g,'').trim().toLowerCase();
+    const rut=document.getElementById('rutInput').value.replace(/\./g,'').trim().toLowerCase();
     if (!rut) return;
     btn.classList.add('inactivo'); btn.innerHTML='VERIFICANDO...'; btn.style.opacity='0.7';
     try {
-      const res = await fetchAPI({ action:'validate', rut });
-      if (res.ok) {
-        localStorage.setItem(RUT_KEY, rut); localStorage.setItem(NAME_KEY, res.nombre);
-        localStorage.setItem(PROF_KEY, res.profesor);
-        localStorage.setItem(PLAN_KEY, JSON.stringify({ plan:res.plan, restantes:res.restantes, total:res.total, clasesUsadas:res.clasesUsadas, planAgotado:res.planAgotado }));
-        if (res.yaRegistrado) setLock(); else clearLock();
+      const alumno=await fbGetAlumno(rut);
+      if (alumno&&alumno.estado!=='inactivo') {
+        localStorage.setItem(RUT_KEY,rut);
+        localStorage.setItem(NAME_KEY,alumno.nombre);
+        localStorage.setItem(PROF_KEY,alumno.profesor);
+        const usadas=await fbContarClases(rut,alumno.profesor,alumno.fechaInicio);
+        const total=PLAN_CLASES[alumno.plan]||8;
+        const restantes=Math.max(0,total-usadas);
+        const planAgotado=restantes===0;
+        const yaRegistrado=await fbYaRegistroHoy(rut,alumno.profesor);
+        if (yaRegistrado) setLock(); else clearLock();
+        const planInfo={plan:alumno.plan,restantes,total,clasesUsadas:usadas,planAgotado};
+        localStorage.setItem(PLAN_KEY,JSON.stringify(planInfo));
         btn.classList.remove('inactivo'); btn.textContent='CONTINUAR'; btn.style.opacity='1';
-        loadCheckinView(res.nombre, { plan:res.plan, restantes:res.restantes, total:res.total, clasesUsadas:res.clasesUsadas, planAgotado:res.planAgotado });
+        loadCheckinView(alumno.nombre,planInfo);
       } else {
         showRutError('RUT no autorizado. Habla con tu profe.');
         btn.classList.remove('inactivo'); btn.textContent='CONTINUAR'; btn.style.opacity='1';
@@ -836,113 +828,115 @@
       btn.classList.remove('inactivo'); btn.textContent='CONTINUAR'; btn.style.opacity='1';
     }
   }
+  window.validateRut=validateRut;
 
   function showRutError(msg) {
-    document.getElementById('rutError').textContent = msg;
-    const inp = document.getElementById('rutInput');
+    document.getElementById('rutError').textContent=msg;
+    const inp=document.getElementById('rutInput');
     inp.classList.add('error'); setTimeout(()=>inp.classList.remove('error'),600);
   }
 
   async function doCheckIn() {
     if (getLock()) return;
-    const planInfo = JSON.parse(localStorage.getItem(PLAN_KEY)||'null');
-    if (planInfo && planInfo.planAgotado) return;
+    const planInfo=JSON.parse(localStorage.getItem(PLAN_KEY)||'null');
+    if (planInfo&&planInfo.planAgotado) return;
     setLock();
-    const rut=localStorage.getItem(RUT_KEY), name=localStorage.getItem(NAME_KEY), profesor=localStorage.getItem(PROF_KEY);
+    const rut=localStorage.getItem(RUT_KEY);
+    const name=localStorage.getItem(NAME_KEY);
+    const profesor=localStorage.getItem(PROF_KEY);
     if (!rut||!name||!profesor) { clearLock(); return; }
 
-    // ── Optimistic UI: mostrar éxito inmediatamente ──────────────────────────
-    const newPlan = planInfo ? {
-      ...planInfo,
-      restantes: Math.max(0, (planInfo.restantes||0) - 1),
-      clasesUsadas: (planInfo.clasesUsadas||0) + 1,
-      planAgotado: ((planInfo.restantes||0) - 1) <= 0
-    } : null;
-    if (newPlan) localStorage.setItem(PLAN_KEY, JSON.stringify(newPlan));
-
-    document.getElementById('successName').textContent = name.toUpperCase();
-    document.getElementById('successTime').textContent = todayLabel()+' · '+timeNow();
+    // Optimistic UI
+    const newPlan=planInfo?{...planInfo,restantes:Math.max(0,(planInfo.restantes||0)-1),clasesUsadas:(planInfo.clasesUsadas||0)+1,planAgotado:((planInfo.restantes||0)-1)<=0}:null;
+    if (newPlan) localStorage.setItem(PLAN_KEY,JSON.stringify(newPlan));
+    document.getElementById('successName').textContent=name.toUpperCase();
+    document.getElementById('successTime').textContent=todayLabel()+' · '+timeNow();
     showOnly('viewSuccess');
     launchConfetti();
-    setTimeout(() => { disableSlider('done'); loadCheckinView(name, newPlan); }, 3000);
+    setTimeout(()=>{ disableSlider('done'); loadCheckinView(name,newPlan); },3000);
 
-    // ── Sincronizar con servidor en background ───────────────────────────────
+    // Sincronizar en background
     try {
-      const res = await fetchAPI({ action:'checkin', rut, nombre:name, profesor });
-      if (res.ok) {
-        // Corregir con datos reales del servidor
-        const corrected = newPlan ? { ...newPlan, restantes: res.restantes, planAgotado: res.restantes === 0 } : null;
-        if (corrected) localStorage.setItem(PLAN_KEY, JSON.stringify(corrected));
-      } else if (res.error && res.error.includes('Ya registraste')) {
-        // Ya estaba registrado — no pasa nada, el lock ya está puesto
-      } else if (res.error === 'plan_agotado') {
-        // Revertir — el plan ya estaba agotado
-        if (planInfo) localStorage.setItem(PLAN_KEY, JSON.stringify(planInfo));
-      } else {
-        // Error real — revertir
-        clearLock();
-        if (planInfo) localStorage.setItem(PLAN_KEY, JSON.stringify(planInfo));
-      }
-    } catch {
-      // Sin conexión — dejamos el optimistic state, se sincronizará la próxima vez
-    }
+      const hoy=todayKey();
+      const hora=timeNow();
+      const id=`${cleanRut(rut)}_${hoy}_${hora.replace(':','')}`;
+      await setDoc(doc(db,`asistencia_${profesor}`,id),{
+        rut,nombre:name,fecha:hoy,hora,estado:'activa',info:'',manual:false,profesor
+      });
+    } catch {}
   }
 
   // ── PIN ────────────────────────────────────────────────────────────────────
-  function openPin() { _pinValue=''; updatePinDisplay(); document.getElementById('pinError').textContent=''; document.getElementById('pinOverlay').classList.remove('hidden'); }
-  function closePin() { document.getElementById('pinOverlay').classList.add('hidden'); _pinValue=''; }
+  let _pinValue='', _profeActual='';
+
+  function openPin() {
+    _pinValue='';
+    document.getElementById('pinError').textContent='';
+    updatePinDisplay();
+    document.getElementById('pinOverlay').classList.remove('hidden');
+  }
+  function closePin() { _pinValue=''; updatePinDisplay(); document.getElementById('pinOverlay').classList.add('hidden'); }
   function pinPress(d) { if (_pinValue.length>=4) return; _pinValue+=d; updatePinDisplay(); if (_pinValue.length===4) setTimeout(validatePin,200); }
   function pinDelete() { _pinValue=_pinValue.slice(0,-1); updatePinDisplay(); }
   function pinClear()  { _pinValue=''; updatePinDisplay(); }
-  function updatePinDisplay() { for(let i=0;i<4;i++) document.getElementById('pd'+i).classList.toggle('filled',i<_pinValue.length); }
+  function updatePinDisplay() {
+    for (let i=0;i<4;i++) {
+      const dot=document.getElementById('pd'+i);
+      dot.style.animation=''; dot.style.background='';
+      dot.classList.toggle('filled',i<_pinValue.length);
+    }
+  }
+  window.openPin=openPin; window.closePin=closePin;
+  window.pinPress=pinPress; window.pinDelete=pinDelete; window.pinClear=pinClear;
 
   async function validatePin() {
     document.getElementById('pinError').textContent='';
-    // Mostrar cargando
-    const dots = document.querySelectorAll('.pin-dot');
-    dots.forEach(d => { d.style.background='#ff5a00'; d.style.animation='pulse 0.6s ease infinite'; });
+    const dots=document.querySelectorAll('.pin-dot');
+    dots.forEach(d=>{ d.style.background='#ff5a00'; d.style.animation='pulse 0.6s ease infinite'; });
     try {
-      const res = await fetchAPI({ action:'validarProfesor', pin:_pinValue });
-      dots.forEach(d => { d.style.animation=''; });
-      if (res.ok) { _profeActual=res.profesor; closePin(); openProfe(); }
+      const snap=await getDocs(collection(db,'profesores'));
+      let found=false;
+      snap.forEach(d=>{ if (d.data().pin===_pinValue) { _profeActual=d.id; found=true; } });
+      dots.forEach(d=>{ d.style.animation=''; });
+      if (found) { closePin(); openProfe(); }
       else { document.getElementById('pinError').textContent='PIN incorrecto'; _pinValue=''; updatePinDisplay(); }
     } catch {
-      dots.forEach(d => { d.style.animation=''; });
+      dots.forEach(d=>{ d.style.animation=''; });
       document.getElementById('pinError').textContent='Sin conexión'; _pinValue=''; updatePinDisplay();
     }
   }
 
   // ── Panel Profe ────────────────────────────────────────────────────────────
+  let _alumnoInfoCache={}, _alumnoSeleccionado=null;
+
   async function openProfe() {
     document.getElementById('profeTitulo').textContent='👨‍🏫 '+_profeActual.toUpperCase();
     document.getElementById('profeOverlay').classList.remove('hidden');
     resetHistorialTab();
-
-    const anioSel = document.getElementById('filtroAnio');
-    const anioActual = new Date().getFullYear();
-    anioSel.innerHTML = [anioActual-1, anioActual, anioActual+1].map(y=>`<option value="${y}" ${y===anioActual?'selected':''}>${y}</option>`).join('');
-    document.getElementById('filtroMes').value = new Date().getMonth()+1;
-
-    // Solo cargar alumnos — instantáneo
+    const anioSel=document.getElementById('filtroAnio');
+    const anioActual=new Date().getFullYear();
+    anioSel.innerHTML=[anioActual-1,anioActual,anioActual+1].map(y=>`<option value="${y}" ${y===anioActual?'selected':''}>${y}</option>`).join('');
+    document.getElementById('filtroMes').value=new Date().getMonth()+1;
     try {
-      const alumRes = await fetchAPI({ action:'getAlumnos', profesor:_profeActual });
-      if (alumRes.ok) {
-        _alumnoInfoCache={};
-        alumRes.alumnos.forEach(a=>{ _alumnoInfoCache[a.rut]=a; });
-        alumRes.inactivos?.forEach(a=>{ _alumnoInfoCache[a.rut]=a; });
-        const sel = document.getElementById('alumnoSelector');
-        sel.disabled = false;
-        sel.innerHTML = '<option value="">— Selecciona un alumno —</option>' +
-          alumRes.alumnos.map(a=>`<option value="${a.rut}" data-nombre="${a.nombre}">${a.nombre}</option>`).join('');
-        _renderAlumnosSinRecords(alumRes.alumnos, alumRes.inactivos||[]);
-      }
+      const snap=await getDocs(collection(db,`alumnos_${_profeActual}`));
+      const activos=[], inactivos=[];
+      snap.forEach(d=>{ const a={...d.data()}; if (a.estado==='inactivo') inactivos.push(a); else activos.push(a); _alumnoInfoCache[cleanRut(a.rut)]=a; });
+      const sel=document.getElementById('alumnoSelector');
+      sel.disabled=false;
+      sel.innerHTML='<option value="">— Selecciona un alumno —</option>'+
+        activos.map(a=>`<option value="${cleanRut(a.rut)}" data-nombre="${a.nombre}">${a.nombre}</option>`).join('');
+      _renderAlumnosSinRecords(activos,inactivos);
     } catch {}
     switchTab('historial');
   }
+  window.openProfe=openProfe;
+
+  function closeProfe() { document.getElementById('profeOverlay').classList.add('hidden'); resetHistorialTab(); }
+  window.closeProfe=closeProfe;
 
   function resetHistorialTab() {
-    _alumnoSeleccionado=null; _profeHistorialData={};
-    const sel = document.getElementById('alumnoSelector');
+    _alumnoSeleccionado=null;
+    const sel=document.getElementById('alumnoSelector');
     sel.disabled=true; sel.value='';
     sel.innerHTML='<option value="">⏳ Cargando alumnos...</option>';
     document.getElementById('profePlanBox').classList.add('hidden');
@@ -950,13 +944,11 @@
     document.getElementById('renovarBox').classList.add('hidden');
     document.getElementById('dividerFiltro').classList.add('hidden');
     document.getElementById('filtroMesBox').classList.add('hidden');
+    document.getElementById('btnAgregarClaseVisible').classList.add('hidden');
     document.getElementById('formAgregarClase').classList.add('hidden');
     document.getElementById('profeHistContent').innerHTML='';
-  }
-
-  function closeProfe() {
-    document.getElementById('profeOverlay').classList.add('hidden');
-    resetHistorialTab();
+    const btnVer=document.getElementById('btnVerAsistencia');
+    if (btnVer) btnVer.textContent='📋 VER ASISTENCIA';
   }
 
   function switchTab(tab) {
@@ -967,17 +959,22 @@
     });
     if (tab==='hoy') _renderHoy();
   }
+  window.switchTab=switchTab;
 
   async function _renderHoy() {
     document.getElementById('profeContent').innerHTML='<div class="admin-loading"><span class="loading-dot"></span></div>';
     try {
-      const res = await fetchAPI({ action:'getRecordsHoy', profesor:_profeActual });
-      if (!res.ok || !res.records.length) { document.getElementById('profeContent').innerHTML='<div class="empty-state">Sin asistencia hoy</div>'; return; }
       const hoy=todayKey();
+      const col=collection(db,`asistencia_${_profeActual}`);
+      const q=query(col,where('fecha','==',hoy),where('estado','==','activa'));
+      const snap=await getDocs(q);
+      const records=[];
+      snap.forEach(d=>records.push(d.data()));
+      if (!records.length) { document.getElementById('profeContent').innerHTML='<div class="empty-state">Sin asistencia hoy</div>'; return; }
       document.getElementById('profeContent').innerHTML=`
         <div class="day-block">
-          <div class="day-label">${formatDate(hoy)}<span class="day-count">· ${res.records.length} asistentes</span></div>
-          ${res.records.map(r=>`
+          <div class="day-label">${formatDate(hoy)}<span class="day-count">· ${records.length} asistentes</span></div>
+          ${records.map(r=>`
             <div class="attendee-row">
               <div class="attendee-info"><span class="attendee-name">${r.nombre}</span><span class="attendee-rut">${r.rut}</span></div>
               <span class="attendee-time">${r.hora}</span>
@@ -986,156 +983,98 @@
     } catch { document.getElementById('profeContent').innerHTML='<div class="empty-state">Sin conexión</div>'; }
   }
 
-  function _renderAlumnosSinRecords(alumnos, inactivos=[]) {
+  function _renderAlumnosSinRecords(alumnos,inactivos=[]) {
     document.getElementById('newFechaInicio').value=todayKey();
-    if (!alumnos||!alumnos.length) {
-      document.getElementById('listaAlumnos').innerHTML='<div class="empty-state">Sin alumnos activos</div>';
-    } else {
-      document.getElementById('listaAlumnos').innerHTML=alumnos.map(a=>`
-        <div class="alumno-row">
+    document.getElementById('listaAlumnos').innerHTML=!alumnos||!alumnos.length
+      ?'<div class="empty-state">Sin alumnos activos</div>'
+      :alumnos.map(a=>`<div class="alumno-row">
           <div class="alumno-info">
             <span class="alumno-nombre">${a.nombre}</span>
             <span class="alumno-rut">${a.rut}</span>
             <span class="alumno-plan">${PLAN_NOMBRES[a.plan]||'Plan '+a.plan}</span>
           </div>
-          <button class="btn-eliminar" onclick="eliminarAlumno('${a.rut}','${a.nombre}')" title="Desactivar">✕</button>
+          <button class="btn-eliminar" onclick="eliminarAlumno('${cleanRut(a.rut)}','${a.nombre}')">✕</button>
         </div>`).join('');
-    }
-    if (inactivos&&inactivos.length) {
-      document.getElementById('listaInactivos').innerHTML=`
-        <div class="historial-section-title" style="margin-top:24px;color:#555;">Alumnos inactivos (${inactivos.length})</div>
-        ${inactivos.map(a=>`
-          <div class="alumno-row" style="opacity:0.5;">
-            <div class="alumno-info"><span class="alumno-nombre">${a.nombre}</span><span class="alumno-rut">${a.rut}</span></div>
-            <button style="background:rgba(0,200,80,0.1);border:1px solid rgba(0,200,80,0.3);color:#00c851;font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="reactivarAlumno('${a.rut}','${a.nombre}')">↩ Reactivar</button>
-          </div>`).join('')}`;
-    } else { document.getElementById('listaInactivos').innerHTML=''; }
-  }
-
-  function _renderAlumnos(alumnos, inactivos=[]) {
-    document.getElementById('newFechaInicio').value=todayKey();
-
-    // Activos
-    if (!alumnos||!alumnos.length) {
-      document.getElementById('listaAlumnos').innerHTML='<div class="empty-state">Sin alumnos activos</div>';
-    } else {
-      document.getElementById('listaAlumnos').innerHTML=alumnos.map(a=>{
-        const total=PLAN_CLASES[a.plan]||8;
-        const fechaInicio=a.fechaInicio||'';
-        const usadas=Object.entries(_profeRecords).reduce((acc,[fecha,regs])=>{
-          if (fechaInicio&&fecha<fechaInicio) return acc;
-          return acc+regs.filter(r=>String(r.rut).trim().toLowerCase()===String(a.rut).trim().toLowerCase()&&r.profesor===_profeActual).length;
-        },0);
-        const restantes=Math.max(0,total-usadas);
-        const clase=restantes===0?'agotado':restantes<=2?'pocas':'';
-        return `<div class="alumno-row">
-          <div class="alumno-info">
-            <span class="alumno-nombre">${a.nombre}</span>
-            <span class="alumno-rut">${a.rut}</span>
-            <span class="alumno-plan">${PLAN_NOMBRES[a.plan]||'Plan '+a.plan}</span>
-            <span class="alumno-restantes ${clase}">${restantes===0?'⚠️ Plan agotado':restantes+' clases restantes'}</span>
-          </div>
-          <button class="btn-eliminar" onclick="eliminarAlumno('${a.rut}','${a.nombre}')" title="Desactivar">✕</button>
-        </div>`;
-      }).join('');
-    }
-
-    // Inactivos
-    if (inactivos&&inactivos.length) {
-      document.getElementById('listaInactivos').innerHTML=`
-        <div class="historial-section-title" style="margin-top:24px;color:#555;">Alumnos inactivos (${inactivos.length})</div>
-        ${inactivos.map(a=>`
-          <div class="alumno-row" style="opacity:0.5;">
-            <div class="alumno-info">
-              <span class="alumno-nombre">${a.nombre}</span>
-              <span class="alumno-rut">${a.rut}</span>
-            </div>
-            <button style="background:rgba(0,200,80,0.1);border:1px solid rgba(0,200,80,0.3);color:#00c851;font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;" onclick="reactivarAlumno('${a.rut}','${a.nombre}')">↩ Reactivar</button>
-          </div>`).join('')}`;
-    } else {
-      document.getElementById('listaInactivos').innerHTML='';
-    }
-
-    // Actualizar selector
-    const sel=document.getElementById('alumnoSelector');
-    sel.innerHTML='<option value="">— Selecciona un alumno —</option>'+
-      alumnos.map(a=>`<option value="${a.rut}" data-nombre="${a.nombre}">${a.nombre}</option>`).join('');
+    document.getElementById('listaInactivos').innerHTML=inactivos&&inactivos.length?`
+      <div class="historial-section-title" style="margin-top:24px;color:#555;">Alumnos inactivos (${inactivos.length})</div>
+      ${inactivos.map(a=>`<div class="alumno-row" style="opacity:0.5;">
+        <div class="alumno-info"><span class="alumno-nombre">${a.nombre}</span><span class="alumno-rut">${a.rut}</span></div>
+        <button style="background:rgba(0,200,80,0.1);border:1px solid rgba(0,200,80,0.3);color:#00c851;font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="reactivarAlumno('${cleanRut(a.rut)}','${a.nombre}')">↩ Reactivar</button>
+      </div>`).join('')}`:'';
   }
 
   async function loadAlumnos() {
     document.getElementById('listaAlumnos').innerHTML='<div class="admin-loading"><span class="loading-dot"></span></div>';
     document.getElementById('listaInactivos').innerHTML='';
     try {
-      const res=await fetchAPI({ action:'getAlumnos', profesor:_profeActual });
-      if (res.ok) {
-        _alumnoInfoCache={};
-        res.alumnos.forEach(a=>{_alumnoInfoCache[a.rut]=a;});
-        res.inactivos?.forEach(a=>{_alumnoInfoCache[a.rut]=a;});
-        _renderAlumnos(res.alumnos, res.inactivos||[]);
-      } else document.getElementById('listaAlumnos').innerHTML='<div class="empty-state">Error</div>';
+      const snap=await getDocs(collection(db,`alumnos_${_profeActual}`));
+      const activos=[], inactivos=[];
+      _alumnoInfoCache={};
+      snap.forEach(d=>{ const a=d.data(); _alumnoInfoCache[cleanRut(a.rut)]=a; if (a.estado==='inactivo') inactivos.push(a); else activos.push(a); });
+      _renderAlumnosSinRecords(activos,inactivos);
+      const sel=document.getElementById('alumnoSelector');
+      sel.innerHTML='<option value="">— Selecciona un alumno —</option>'+
+        activos.map(a=>`<option value="${cleanRut(a.rut)}" data-nombre="${a.nombre}">${a.nombre}</option>`).join('');
     } catch { document.getElementById('listaAlumnos').innerHTML='<div class="empty-state">Sin conexión</div>'; }
   }
+  window.loadAlumnos=loadAlumnos;
 
   async function agregarAlumno() {
-    const rut=document.getElementById('newRut').value.replace(/\./g,'').trim().toLowerCase();
+    const rutRaw=document.getElementById('newRut').value.replace(/\./g,'').trim().toLowerCase();
     const nombre=document.getElementById('newNombre').value.trim();
-    const plan=document.getElementById('newPlan').value;
+    const plan=parseInt(document.getElementById('newPlan').value);
     const fechaInicio=document.getElementById('newFechaInicio').value;
     const msg=document.getElementById('agregarMsg');
     const btn=document.getElementById('btnAgregarAlumno');
-    if (!rut||!nombre||!fechaInicio) { msg.style.color='#ff3b3b'; msg.textContent='Completa todos los campos'; return; }
-    msg.textContent='';
-    btn.textContent='⏳ GUARDANDO...';
-    btn.style.opacity='0.7';
-    btn.style.pointerEvents='none';
+    if (!rutRaw||!nombre||!fechaInicio) { msg.style.color='#ff3b3b'; msg.textContent='Completa todos los campos'; return; }
+    msg.textContent=''; btn.textContent='⏳ GUARDANDO...'; btn.style.opacity='0.7'; btn.style.pointerEvents='none';
     try {
-      const res=await fetchAPI({ action:'agregarAlumno', rut, nombre, profesor:_profeActual, plan, fechaInicio });
-      if (res.ok) {
-        const planNombres = { 1:'Plan 1 · 2x semana · 8 clases', 2:'Plan 2 · 3x semana · 12 clases', 3:'Plan 3 · 4x semana · 16 clases' };
-        const planClases  = { 1:'8 disponibles', 2:'12 disponibles', 3:'16 disponibles' };
-        const [y,m,d] = fechaInicio.split('-');
-        const fechaLabel = new Date(+y,+m-1,+d).toLocaleDateString('es-CL',{day:'numeric',month:'long',year:'numeric'});
-        document.getElementById('nuevoNombre').textContent  = nombre.toUpperCase();
-        document.getElementById('nuevoPlan').textContent    = planNombres[plan] || 'Plan '+plan;
-        document.getElementById('nuevoInicio').textContent  = fechaLabel;
-        document.getElementById('nuevoClases').textContent  = planClases[plan] || '—';
-        // Reiniciar animación de la pesa
-        const svg = document.getElementById('pesaSvg');
-        svg.style.animation = 'none';
-        svg.offsetHeight;
-        svg.style.animation = 'dropIn 0.6s cubic-bezier(0.175,0.885,0.32,1.275) both';
+      const ref=doc(db,`alumnos_${_profeActual}`,rutRaw);
+      const exists=await getDoc(ref);
+      if (exists.exists()) { msg.style.color='#ff3b3b'; msg.textContent='RUT ya existe'; }
+      else {
+        await setDoc(ref,{rut:rutRaw,nombre,plan,fechaInicio,estado:'activo',profesor:_profeActual});
+        const planNombres={1:'Plan 1 · 2x semana · 8 clases',2:'Plan 2 · 3x semana · 12 clases',3:'Plan 3 · 4x semana · 16 clases'};
+        const planClases={1:'8 disponibles',2:'12 disponibles',3:'16 disponibles'};
+        const [y,m,d]=fechaInicio.split('-');
+        const fechaLabel=new Date(+y,+m-1,+d).toLocaleDateString('es-CL',{day:'numeric',month:'long',year:'numeric'});
+        document.getElementById('nuevoNombre').textContent=nombre.toUpperCase();
+        document.getElementById('nuevoPlan').textContent=planNombres[plan]||'Plan '+plan;
+        document.getElementById('nuevoInicio').textContent=fechaLabel;
+        document.getElementById('nuevoClases').textContent=planClases[plan]||'—';
+        const svg=document.getElementById('pesaSvg');
+        svg.style.animation='none'; svg.offsetHeight; svg.style.animation='dropIn 0.6s cubic-bezier(0.175,0.885,0.32,1.275) both';
         document.getElementById('nuevoAlumnoOverlay').classList.remove('hidden');
-        document.getElementById('newRut').value='';
-        document.getElementById('newNombre').value='';
+        document.getElementById('newRut').value=''; document.getElementById('newNombre').value='';
         document.getElementById('listaAlumnos').innerHTML='';
-        setTimeout(()=>document.getElementById('agregarMsg').textContent='',3000);
-      } else { msg.style.color='#ff3b3b'; msg.textContent=res.error||'Error'; }
+        _alumnoInfoCache[rutRaw]={rut:rutRaw,nombre,plan,fechaInicio,estado:'activo',profesor:_profeActual};
+      }
     } catch { msg.style.color='#ff3b3b'; msg.textContent='Sin conexión'; }
-    btn.textContent='AGREGAR ALUMNO';
-    btn.style.opacity='1';
-    btn.style.pointerEvents='auto';
+    btn.textContent='AGREGAR ALUMNO'; btn.style.opacity='1'; btn.style.pointerEvents='auto';
   }
+  window.agregarAlumno=agregarAlumno;
 
-  async function reactivarAlumno(rut, nombre) {
-    if (!confirm('¿Reactivar a '+nombre+'?')) return;
-    const lista=document.getElementById('listaInactivos');
-    lista.innerHTML='<div class="admin-loading"><span class="loading-dot"></span> Reactivando...</div>';
-    try {
-      const res=await fetchAPI({ action:'reactivarAlumno', rut, profesor:_profeActual });
-      if (res.ok) loadAlumnos(); else { alert('Error: '+(res.error||'No se pudo reactivar')); loadAlumnos(); }
-    } catch { alert('Sin conexión'); loadAlumnos(); }
-  }
-  async function eliminarAlumno(rut, nombre) {
-    if (!confirm('¿Eliminar a '+nombre+'?')) return;
+  async function eliminarAlumno(rut,nombre) {
+    if (!confirm('¿Desactivar a '+nombre+'?')) return;
     const lista=document.getElementById('listaAlumnos');
-    lista.innerHTML='<div class="admin-loading"><span class="loading-dot"></span> Eliminando...</div>';
+    lista.innerHTML='<div class="admin-loading"><span class="loading-dot"></span> Desactivando...</div>';
     try {
-      const res=await fetchAPI({ action:'eliminarAlumno', rut, profesor:_profeActual });
-      if (res.ok) loadAlumnos(); else { alert('Error: '+(res.error||'No se pudo eliminar')); loadAlumnos(); }
+      await updateDoc(doc(db,`alumnos_${_profeActual}`,rut),{estado:'inactivo'});
+      loadAlumnos();
     } catch { alert('Sin conexión'); loadAlumnos(); }
   }
+  window.eliminarAlumno=eliminarAlumno;
 
-  function onAlumnoChange() {
+  async function reactivarAlumno(rut,nombre) {
+    if (!confirm('¿Reactivar a '+nombre+'?')) return;
+    try {
+      await updateDoc(doc(db,`alumnos_${_profeActual}`,rut),{estado:'activo'});
+      loadAlumnos();
+    } catch { alert('Sin conexión'); }
+  }
+  window.reactivarAlumno=reactivarAlumno;
+
+  async function onAlumnoChange() {
     const sel=document.getElementById('alumnoSelector');
     const rut=sel.value;
     const nombre=sel.options[sel.selectedIndex]?.dataset?.nombre||'';
@@ -1143,10 +1082,9 @@
     toggleRenovar(false); toggleFormClase(false);
     document.getElementById('profePlanBox').classList.add('hidden');
     document.getElementById('btnRenovarPlan').classList.add('hidden');
-    document.getElementById('btnAgregarClaseVisible').classList.add('hidden');
     document.getElementById('dividerFiltro').classList.add('hidden');
     document.getElementById('filtroMesBox').classList.add('hidden');
-    document.getElementById('formAgregarClase').classList.add('hidden');
+    document.getElementById('btnAgregarClaseVisible').classList.add('hidden');
     document.getElementById('profeHistContent').innerHTML='';
     const btnVer=document.getElementById('btnVerAsistencia');
     if (btnVer) btnVer.textContent='📋 VER ASISTENCIA';
@@ -1154,59 +1092,51 @@
 
     const alumnoInfo=_alumnoInfoCache[rut];
     if (alumnoInfo) {
-      // Plan info — pedir al servidor solo si no tenemos datos frescos
-      document.getElementById('profePlanBox').classList.add('hidden');
-      fetchAPI({ action:'getInfoAlumno', rut, profesor:_profeActual }).then(res=>{
-        if (!res.ok) return;
-        const total=res.total, usadas=res.clasesUsadas, restantes=res.restantes;
+      document.getElementById('profePlanTitle').textContent=PLAN_NOMBRES[alumnoInfo.plan]||'Plan';
+      document.getElementById('profePlanCount').textContent='...';
+      document.getElementById('profePlanFill').style.width='0%';
+      document.getElementById('profePlanRestantes').textContent='Cargando...';
+      document.getElementById('profePlanBox').classList.remove('hidden');
+      document.getElementById('renovarPlan').value=alumnoInfo.plan;
+      document.getElementById('renovarFecha').value=todayKey();
+      // Contar clases desde Firebase
+      fbContarClases(rut,_profeActual,alumnoInfo.fechaInicio).then(usadas=>{
+        const total=PLAN_CLASES[alumnoInfo.plan]||8;
+        const restantes=Math.max(0,total-usadas);
         const pct=Math.min(100,Math.round((usadas/total)*100));
         const agotado=restantes===0;
-        document.getElementById('profePlanTitle').textContent=PLAN_NOMBRES[alumnoInfo.plan]||'Plan';
         document.getElementById('profePlanCount').textContent=`${usadas} / ${total} clases`;
         document.getElementById('profePlanFill').style.width=pct+'%';
         document.getElementById('profePlanFill').className='plan-progress-fill'+(agotado?' agotado':'');
         const restEl=document.getElementById('profePlanRestantes');
         restEl.textContent=agotado?'⚠️ Plan agotado':restantes+' clases restantes';
         restEl.className='plan-restantes'+(agotado?' agotado':restantes<=2?' pocas':'');
-        document.getElementById('profePlanBox').classList.remove('hidden');
-        document.getElementById('renovarPlan').value=alumnoInfo.plan;
-        document.getElementById('renovarFecha').value=todayKey();
         document.getElementById('btnRenovarPlan').classList.remove('hidden');
-      }).catch(()=>{});
+      });
     }
     document.getElementById('dividerFiltro').classList.remove('hidden');
     document.getElementById('filtroMesBox').classList.remove('hidden');
     document.getElementById('btnAgregarClaseVisible').classList.remove('hidden');
   }
-
-  function toggleAsistenciaPeriodo() {
-    const content = document.getElementById('profeHistContent');
-    const btn = document.getElementById('btnVerAsistencia');
-    if (content.innerHTML !== '') {
-      content.innerHTML = '';
-      btn.textContent = '📋 VER ASISTENCIA';
-    } else {
-      verAsistenciaPeriodo();
-      btn.textContent = '🔼 OCULTAR ASISTENCIA';
-    }
-  }
+  window.onAlumnoChange=onAlumnoChange;
 
   async function verAsistenciaPeriodo() {
     if (!_alumnoSeleccionado) return;
-    const mes  = document.getElementById('filtroMes').value;
-    const anio = document.getElementById('filtroAnio').value;
-    const rut  = _alumnoSeleccionado.rut;
+    const mes=document.getElementById('filtroMes').value.padStart(2,'0');
+    const anio=document.getElementById('filtroAnio').value;
+    const prefix=`${anio}-${mes}`;
+    const rut=_alumnoSeleccionado.rut;
     toggleFormClase(false);
     document.getElementById('profeHistContent').innerHTML='<div class="admin-loading"><span class="loading-dot"></span></div>';
-    const btn = document.getElementById('btnVerAsistencia');
+    const btn=document.getElementById('btnVerAsistencia');
     if (btn) btn.textContent='🔼 OCULTAR ASISTENCIA';
     try {
-      const res = await fetchAPI({ action:'getRecordsMes', rut, profesor:_profeActual, mes, anio });
-      if (!res.ok) { document.getElementById('profeHistContent').innerHTML='<div class="empty-state">Error al cargar</div>'; return; }
-      const clases = res.records.sort((a,b)=>b.fecha.localeCompare(a.fecha));
-      // Guardar en caché local para eliminar/agregar
-      _profeRecords = {};
-      clases.forEach(c=>{ if(!_profeRecords[c.fecha]) _profeRecords[c.fecha]=[]; _profeRecords[c.fecha].push({rut, nombre:_alumnoSeleccionado.nombre, hora:c.hora, profesor:_profeActual, manual:c.manual}); });
+      const col=collection(db,`asistencia_${_profeActual}`);
+      const q=query(col,where('rut','==',rut));
+      const snap=await getDocs(q);
+      const clases=[];
+      snap.forEach(d=>{ const data=d.data(); if (data.fecha.startsWith(prefix)&&data.estado==='activa') clases.push({...data,id:d.id}); });
+      clases.sort((a,b)=>b.fecha.localeCompare(a.fecha));
       if (!clases.length) { document.getElementById('profeHistContent').innerHTML='<div class="empty-state">Sin clases en este período</div>'; return; }
       document.getElementById('profeHistContent').innerHTML=`
         <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,90,0,0.2);">
@@ -1218,37 +1148,47 @@
               <span class="dia-fecha">${formatDateLong(c.fecha)}</span>
               <span class="dia-hora">${c.hora}${c.manual?' &nbsp;<span class="dia-manual">MANUAL</span>':''}</span>
             </div>
-            <button class="btn-elim-clase" onclick="eliminarClase('${c.fecha}')">✕</button>
+            <button class="btn-elim-clase" onclick="eliminarClase('${c.id}','${c.fecha}')">✕</button>
           </div>`).join('')}`;
     } catch { document.getElementById('profeHistContent').innerHTML='<div class="empty-state">Sin conexión</div>'; }
   }
+  window.verAsistenciaPeriodo=verAsistenciaPeriodo;
+
+  async function toggleAsistenciaPeriodo() {
+    const content=document.getElementById('profeHistContent');
+    const btn=document.getElementById('btnVerAsistencia');
+    if (content.innerHTML!=='') { content.innerHTML=''; btn.textContent='📋 VER ASISTENCIA'; }
+    else { await verAsistenciaPeriodo(); }
+  }
+  window.toggleAsistenciaPeriodo=toggleAsistenciaPeriodo;
 
   function toggleRenovar(show) {
     document.getElementById('renovarBox').classList.toggle('hidden',!show);
     document.getElementById('btnRenovarPlan').classList.toggle('hidden',show);
     if (show) document.getElementById('renovarMsg').textContent='';
   }
+  window.toggleRenovar=toggleRenovar;
 
   function toggleFormClase(show) {
     document.getElementById('formAgregarClase').classList.toggle('hidden',!show);
     if (show) { document.getElementById('nuevaFecha').value=todayKey(); document.getElementById('claseMsg').textContent=''; }
   }
+  window.toggleFormClase=toggleFormClase;
 
   async function confirmarRenovar() {
     if (!_alumnoSeleccionado) return;
-    const plan=document.getElementById('renovarPlan').value;
+    const plan=parseInt(document.getElementById('renovarPlan').value);
     const fecha=document.getElementById('renovarFecha').value;
     const msg=document.getElementById('renovarMsg');
     if (!fecha) { msg.style.color='#ff3b3b'; msg.textContent='Selecciona fecha de inicio'; return; }
     try {
-      const res=await fetchAPI({ action:'renovarPlan', rut:_alumnoSeleccionado.rut, profesor:_profeActual, plan, fechaInicio:fecha });
-      if (res.ok) {
-        msg.style.color='#00c851'; msg.textContent='✓ Plan renovado';
-        if (_alumnoInfoCache[_alumnoSeleccionado.rut]) { _alumnoInfoCache[_alumnoSeleccionado.rut].plan=parseInt(plan); _alumnoInfoCache[_alumnoSeleccionado.rut].fechaInicio=fecha; }
-        setTimeout(()=>{ toggleRenovar(false); onAlumnoChange(); },1200);
-      } else { msg.style.color='#ff3b3b'; msg.textContent=res.error||'Error'; }
+      await updateDoc(doc(db,`alumnos_${_profeActual}`,_alumnoSeleccionado.rut),{plan,fechaInicio:fecha});
+      if (_alumnoInfoCache[_alumnoSeleccionado.rut]) { _alumnoInfoCache[_alumnoSeleccionado.rut].plan=plan; _alumnoInfoCache[_alumnoSeleccionado.rut].fechaInicio=fecha; }
+      msg.style.color='#00c851'; msg.textContent='✓ Plan renovado';
+      setTimeout(()=>{ toggleRenovar(false); onAlumnoChange(); },1200);
     } catch { msg.style.color='#ff3b3b'; msg.textContent='Sin conexión'; }
   }
+  window.confirmarRenovar=confirmarRenovar;
 
   async function agregarClase() {
     if (!_alumnoSeleccionado) return;
@@ -1257,71 +1197,69 @@
     const msg=document.getElementById('claseMsg');
     const btn=document.querySelector('#formAgregarClase .btn-confirmar');
     if (!fecha||!hora) { msg.style.color='#ff3b3b'; msg.textContent='Selecciona fecha y hora'; return; }
-    msg.textContent='';
-    btn.textContent='⏳ GUARDANDO...'; btn.style.opacity='0.7'; btn.style.pointerEvents='none';
+    msg.textContent=''; btn.textContent='⏳ GUARDANDO...'; btn.style.opacity='0.7'; btn.style.pointerEvents='none';
     try {
-      const res=await fetchAPI({ action:'agregarClase', rut:_alumnoSeleccionado.rut, nombre:_alumnoSeleccionado.nombre, profesor:_profeActual, fecha, hora });
-      if (res.ok) {
-        msg.style.color='#00c851'; msg.textContent='✓ Clase agregada';
-        // Actualizar tarjeta del plan
-        const infoRes = await fetchAPI({ action:'getInfoAlumno', rut:_alumnoSeleccionado.rut, profesor:_profeActual });
-        if (infoRes.ok) {
-          const {total, clasesUsadas, restantes} = infoRes;
-          const pct = Math.min(100, Math.round((clasesUsadas/total)*100));
-          const agotado = restantes === 0;
-          document.getElementById('profePlanCount').textContent=`${clasesUsadas} / ${total} clases`;
-          document.getElementById('profePlanFill').style.width=pct+'%';
-          document.getElementById('profePlanFill').className='plan-progress-fill'+(agotado?' agotado':'');
-          const restEl=document.getElementById('profePlanRestantes');
-          restEl.textContent=agotado?'⚠️ Plan agotado':restantes+' clases restantes';
-          restEl.className='plan-restantes'+(agotado?' agotado':restantes<=2?' pocas':'');
-        }
-        setTimeout(()=>{ toggleFormClase(false); verAsistenciaPeriodo(); },1000);
-      } else { msg.style.color='#ff3b3b'; msg.textContent=res.error||'Error'; }
+      const id=`${_alumnoSeleccionado.rut}_${fecha}_${hora.replace(':','')}`;
+      await setDoc(doc(db,`asistencia_${_profeActual}`,id),{
+        rut:_alumnoSeleccionado.rut, nombre:_alumnoSeleccionado.nombre,
+        fecha, hora, estado:'activa', info:'manual', manual:true, profesor:_profeActual
+      });
+      msg.style.color='#00c851'; msg.textContent='✓ Clase agregada';
+      // Actualizar tarjeta plan
+      const alumnoInfo=_alumnoInfoCache[_alumnoSeleccionado.rut];
+      if (alumnoInfo) {
+        const usadas=await fbContarClases(_alumnoSeleccionado.rut,_profeActual,alumnoInfo.fechaInicio);
+        const total=PLAN_CLASES[alumnoInfo.plan]||8;
+        const restantes=Math.max(0,total-usadas);
+        const pct=Math.min(100,Math.round((usadas/total)*100));
+        const agotado=restantes===0;
+        document.getElementById('profePlanCount').textContent=`${usadas} / ${total} clases`;
+        document.getElementById('profePlanFill').style.width=pct+'%';
+        const restEl=document.getElementById('profePlanRestantes');
+        restEl.textContent=agotado?'⚠️ Plan agotado':restantes+' clases restantes';
+        restEl.className='plan-restantes'+(agotado?' agotado':restantes<=2?' pocas':'');
+      }
+      setTimeout(()=>{ toggleFormClase(false); verAsistenciaPeriodo(); },1000);
     } catch { msg.style.color='#ff3b3b'; msg.textContent='Sin conexión'; }
     btn.textContent='GUARDAR'; btn.style.opacity='1'; btn.style.pointerEvents='auto';
   }
+  window.agregarClase=agregarClase;
 
-  async function eliminarClase(fecha) {
+  async function eliminarClase(id,fecha) {
     if (!_alumnoSeleccionado) return;
     if (!confirm('¿Eliminar clase del '+formatDateLong(fecha)+'?')) return;
     document.getElementById('profeHistContent').innerHTML='<div class="admin-loading"><span class="loading-dot"></span> Eliminando...</div>';
     try {
-      const res=await fetchAPI({ action:'eliminarClase', rut:_alumnoSeleccionado.rut, profesor:_profeActual, fecha });
-      if (res.ok) {
-        // Actualizar tarjeta del plan
-        const infoRes = await fetchAPI({ action:'getInfoAlumno', rut:_alumnoSeleccionado.rut, profesor:_profeActual });
-        if (infoRes.ok) {
-          const {total, clasesUsadas, restantes} = infoRes;
-          const pct = Math.min(100, Math.round((clasesUsadas/total)*100));
-          const agotado = restantes === 0;
-          document.getElementById('profePlanCount').textContent=`${clasesUsadas} / ${total} clases`;
-          document.getElementById('profePlanFill').style.width=pct+'%';
-          document.getElementById('profePlanFill').className='plan-progress-fill'+(agotado?' agotado':'');
-          const restEl=document.getElementById('profePlanRestantes');
-          restEl.textContent=agotado?'⚠️ Plan agotado':restantes+' clases restantes';
-          restEl.className='plan-restantes'+(agotado?' agotado':restantes<=2?' pocas':'');
-        }
-        verAsistenciaPeriodo();
-      } else { alert('Error: '+(res.error||'No se pudo eliminar')); verAsistenciaPeriodo(); }
+      const now=new Date();
+      const info='Eliminada '+now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0')+' '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+      await updateDoc(doc(db,`asistencia_${_profeActual}`,id),{estado:'eliminada',info});
+      // Actualizar tarjeta plan
+      const alumnoInfo=_alumnoInfoCache[_alumnoSeleccionado.rut];
+      if (alumnoInfo) {
+        const usadas=await fbContarClases(_alumnoSeleccionado.rut,_profeActual,alumnoInfo.fechaInicio);
+        const total=PLAN_CLASES[alumnoInfo.plan]||8;
+        const restantes=Math.max(0,total-usadas);
+        const pct=Math.min(100,Math.round((usadas/total)*100));
+        const agotado=restantes===0;
+        document.getElementById('profePlanCount').textContent=`${usadas} / ${total} clases`;
+        document.getElementById('profePlanFill').style.width=pct+'%';
+        const restEl=document.getElementById('profePlanRestantes');
+        restEl.textContent=agotado?'⚠️ Plan agotado':restantes+' clases restantes';
+        restEl.className='plan-restantes'+(agotado?' agotado':restantes<=2?' pocas':'');
+      }
+      verAsistenciaPeriodo();
     } catch { alert('Sin conexión'); verAsistenciaPeriodo(); }
   }
+  window.eliminarClase=eliminarClase;
 
   // ── Historial alumno ───────────────────────────────────────────────────────
   async function openHistorial() {
     document.getElementById('historialOverlay').classList.remove('hidden');
     document.getElementById('historialContent').innerHTML='';
-
-    // Inicializar filtro año
-    const anioSel = document.getElementById('histFiltroAnio');
-    const anioActual = new Date().getFullYear();
-    anioSel.innerHTML = [anioActual-1, anioActual, anioActual+1].map(y=>`<option value="${y}" ${y===anioActual?'selected':''}>${y}</option>`).join('');
-    document.getElementById('histFiltroMes').value = new Date().getMonth()+1;
-
-    const rut=localStorage.getItem(RUT_KEY);
-    if (!rut) return;
-
-    // Info plan desde caché local
+    const anioSel=document.getElementById('histFiltroAnio');
+    const anioActual=new Date().getFullYear();
+    anioSel.innerHTML=[anioActual-1,anioActual,anioActual+1].map(y=>`<option value="${y}" ${y===anioActual?'selected':''}>${y}</option>`).join('');
+    document.getElementById('histFiltroMes').value=new Date().getMonth()+1;
     const planInfo=JSON.parse(localStorage.getItem(PLAN_KEY)||'null');
     if (planInfo) {
       const {plan,restantes,total,clasesUsadas,planAgotado}=planInfo;
@@ -1334,63 +1272,40 @@
       restEl.textContent=planAgotado?'⚠️ Plan agotado — contacta a tu profe':restantes+' clases restantes';
       restEl.className='plan-restantes'+(planAgotado?' agotado':restantes<=2?' pocas':'');
     }
-
-    // Cargar records en background para tenerlos listos
-    try {
-      const res=await fetchAPI({ action:'records' });
-      if (res.ok) _historialData=res.records||{};
-    } catch {}
   }
+  window.openHistorial=openHistorial;
 
-  function verClasesPeriodoAlumno() {
+  async function verClasesPeriodoAlumno() {
     const rut=localStorage.getItem(RUT_KEY);
-    if (!rut) return;
+    const profesor=localStorage.getItem(PROF_KEY);
+    if (!rut||!profesor) return;
     const mes=document.getElementById('histFiltroMes').value.padStart(2,'0');
     const anio=document.getElementById('histFiltroAnio').value;
-    const periodo=`${anio}-${mes}`;
-    const clases=[];
-    Object.keys(_historialData).forEach(fecha=>{
-      if (fecha.substring(0,7)===periodo) {
-        const misClases=(_historialData[fecha]||[]).filter(r=>String(r.rut).trim().toLowerCase()===rut);
-        if (misClases.length>0) clases.push({ fecha, hora:misClases[0].hora });
-      }
-    });
-    clases.sort((a,b)=>b.fecha.localeCompare(a.fecha));
-    const content=document.getElementById('historialContent');
-    if (!clases.length) {
+    const prefix=`${anio}-${mes}`;
+    document.getElementById('historialContent').innerHTML='<div class="admin-loading"><span class="loading-dot"></span></div>';
+    try {
+      const col=collection(db,`asistencia_${profesor}`);
+      const q=query(col,where('rut','==',rut),where('estado','==','activa'));
+      const snap=await getDocs(q);
+      const clases=[];
+      snap.forEach(d=>{ const data=d.data(); if (data.fecha.startsWith(prefix)) clases.push(data); });
+      clases.sort((a,b)=>b.fecha.localeCompare(a.fecha));
+      const content=document.getElementById('historialContent');
+      if (!clases.length) { content.innerHTML=`<div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:12px;">0 clases en este período</div><div class="empty-state">Sin clases registradas</div>`; return; }
       content.innerHTML=`
         <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,90,0,0.2);">
-          0 clases en este período
+          ${clases.length} clase${clases.length!==1?'s':''} en ${formatMesLargo(prefix)}
         </div>
-        <div class="empty-state">Sin clases registradas en este período</div>`;
-      return;
-    }
-    content.innerHTML=`
-      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,90,0,0.2);">
-        ${clases.length} clase${clases.length!==1?'s':''} en ${formatMesLargo(periodo)}
-      </div>
-      ${clases.map(c=>`
-        <div class="dia-row">
-          <span class="dia-fecha">${formatDateLong(c.fecha)}</span>
-          <span class="dia-hora">${c.hora}</span>
-        </div>`).join('')}`;
+        ${clases.map(c=>`<div class="dia-row"><span class="dia-fecha">${formatDateLong(c.fecha)}</span><span class="dia-hora">${c.hora}</span></div>`).join('')}`;
+    } catch { document.getElementById('historialContent').innerHTML='<div class="empty-state">Sin conexión</div>'; }
   }
+  window.verClasesPeriodoAlumno=verClasesPeriodoAlumno;
 
   function closeHistorial() { document.getElementById('historialOverlay').classList.add('hidden'); }
+  window.closeHistorial=closeHistorial;
 
-  function closeNuevoAlumno() {
-    document.getElementById('nuevoAlumnoOverlay').classList.add('hidden');
-  }
-
-  // ── API ────────────────────────────────────────────────────────────────────
-  async function fetchAPI(body) {
-    const params = new URLSearchParams({ body: JSON.stringify(body) });
-    const res = await fetch(`${API}?${params}`, {
-      method: 'GET',
-      redirect: 'follow'
-    });
-    return res.json();
-  }
+  function closeNuevoAlumno() { document.getElementById('nuevoAlumnoOverlay').classList.add('hidden'); }
+  window.closeNuevoAlumno=closeNuevoAlumno;
 
   // ── Helpers ────────────────────────────────────────────────────────────────
   function todayKey() { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
