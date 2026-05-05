@@ -1316,6 +1316,37 @@
   function formatMesCorto(key) { const [y,m]=key.split('-').map(Number); return new Date(y,m-1,1).toLocaleDateString('es-CL',{month:'short',year:'2-digit'}).toUpperCase(); }
   function formatMesLargo(key) { const [y,m]=key.split('-').map(Number); return new Date(y,m-1,1).toLocaleDateString('es-CL',{month:'long',year:'numeric'}).toUpperCase(); }
 
+  // ── Exponer funciones globales para HTML inline events ─────────────────────
+  window.formatRut         = formatRut;
+  window.formatRutInput    = input => formatRut(input);
+  window.checkRutInput     = checkRutInput;
+  window.validateRut       = validateRut;
+  window.changeName        = changeName;
+  window.openPin           = openPin;
+  window.closePin          = closePin;
+  window.pinPress          = pinPress;
+  window.pinDelete         = pinDelete;
+  window.pinClear          = pinClear;
+  window.openProfe         = openProfe;
+  window.closeProfe        = closeProfe;
+  window.switchTab         = switchTab;
+  window.onAlumnoChange    = onAlumnoChange;
+  window.toggleRenovar     = toggleRenovar;
+  window.confirmarRenovar  = confirmarRenovar;
+  window.toggleFormClase   = toggleFormClase;
+  window.toggleAsistenciaPeriodo = toggleAsistenciaPeriodo;
+  window.verAsistenciaPeriodo    = verAsistenciaPeriodo;
+  window.verClasesPeriodoAlumno  = verClasesPeriodoAlumno;
+  window.agregarClase      = agregarClase;
+  window.eliminarClase     = eliminarClase;
+  window.agregarAlumno     = agregarAlumno;
+  window.eliminarAlumno    = eliminarAlumno;
+  window.reactivarAlumno   = reactivarAlumno;
+  window.loadAlumnos       = loadAlumnos;
+  window.openHistorial     = openHistorial;
+  window.closeHistorial    = closeHistorial;
+  window.closeNuevoAlumno  = closeNuevoAlumno;
+
   window.addEventListener('DOMContentLoaded', () => { initSlider(); init(); });
 </script>
 </body>
