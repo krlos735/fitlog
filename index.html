@@ -6,6 +6,12 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>FITMOTION — Asistencia</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#ff5a00" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="FitMotion" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1347,7 +1353,13 @@
   window.closeHistorial    = closeHistorial;
   window.closeNuevoAlumno  = closeNuevoAlumno;
 
-  window.addEventListener('DOMContentLoaded', () => { initSlider(); init(); });
+  window.addEventListener('DOMContentLoaded', () => {
+    initSlider(); init();
+    // Registrar service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/fitlog/service-worker.js').catch(()=>{});
+    }
+  });
 </script>
 </body>
 </html>
