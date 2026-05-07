@@ -593,6 +593,48 @@
   const PLAN_CLASES  = { 1:8, 2:12, 3:16 };
   const PLAN_NOMBRES = { 1:'Plan 1 — 2x semana', 2:'Plan 2 — 3x semana', 3:'Plan 3 — 4x semana' };
 
+  // ── Dropdown custom alumno ─────────────────────────────────────────────────
+  let _dropdownAlumnos = [];
+
+  function renderDropdownOptions(lista) {
+    const el = document.getElementById('dropdownOptions');
+    if (!el) return;
+    if (!lista.length) { el.innerHTML='<div style="padding:12px 16px;font-size:13px;color:#444;">Sin resultados</div>'; return; }
+    el.innerHTML = lista.map(a=>`
+      <div onclick="window.selectAlumno('${cleanRut(a.rut)}','${a.nombre.replace(/'/g,"\\'")}')" style="padding:11px 16px;font-size:14px;color:#f0ede8;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.04);" onmouseover="this.style.background='rgba(255,90,0,0.08)'" onmouseout="this.style.background='transparent'">
+        ${a.nombre}
+      </div>`).join('');
+  }
+
+  window.toggleAlumnoDropdown = function() {
+    const list = document.getElementById('alumnoDropdownList');
+    if (!list) return;
+    const isHidden = list.classList.contains('hidden');
+    list.classList.toggle('hidden', !isHidden);
+    if (isHidden) {
+      document.getElementById('dropdownSearch').value='';
+      renderDropdownOptions(_dropdownAlumnos);
+      setTimeout(()=>document.getElementById('dropdownSearch').focus(), 50);
+    }
+  };
+
+  window.filtrarDropdown = function() {
+    const q = document.getElementById('dropdownSearch').value.toLowerCase();
+    renderDropdownOptions(_dropdownAlumnos.filter(a=>a.nombre.toLowerCase().includes(q)));
+  };
+
+  window.selectAlumno = function(rut, nombre) {
+    document.getElementById('alumnoDropdownLabel').textContent = nombre;
+    document.getElementById('alumnoDropdownLabel').style.color = '#f0ede8';
+    document.getElementById('alumnoDropdownList').classList.add('hidden');
+    onAlumnoChangeWith(rut, nombre);
+  };
+
+  document.addEventListener('click', e => {
+    const wrap = document.getElementById('alumnoDropdownWrap');
+    if (wrap && !wrap.contains(e.target)) document.getElementById('alumnoDropdownList')?.classList.add('hidden');
+  });
+
   // ── Helpers Firebase ───────────────────────────────────────────────────────
   const cleanRut = v => String(v).replace(/\./g,'').trim().toLowerCase();
 
@@ -968,10 +1010,12 @@
       const activos=[], inactivos=[];
       snap.forEach(d=>{ const a={...d.data()}; if (a.estado==='inactivo') inactivos.push(a); else activos.push(a); _alumnoInfoCache[cleanRut(a.rut)]=a; });
       window._alumnosCache = activos;
-      const sel=document.getElementById('alumnoSelector');
-      sel.disabled=false;
-      sel.innerHTML='<option value="">— Selecciona un alumno —</option>'+
-        activos.map(a=>`<option value="${cleanRut(a.rut)}" data-nombre="${a.nombre}">${a.nombre}</option>`).join('');
+      _dropdownAlumnos = activos;
+      const btn = document.getElementById('alumnoDropdownBtn');
+      btn.disabled = false;
+      document.getElementById('alumnoDropdownLabel').textContent = '— Selecciona un alumno —';
+      document.getElementById('alumnoDropdownLabel').style.color = '#888';
+      renderDropdownOptions(activos);
       _renderAlumnosSinRecords(activos,inactivos);
     } catch {}
     switchTab('historial');
@@ -983,6 +1027,10 @@
 
   function resetHistorialTab() {
     _alumnoSeleccionado=null;
+    document.getElementById('alumnoDropdownLabel').textContent='⏳ Cargando alumnos...';
+    document.getElementById('alumnoDropdownLabel').style.color='#444';
+    document.getElementById('alumnoDropdownBtn').disabled=true;
+    document.getElementById('alumnoDropdownList')?.classList.add('hidden');
     const sel=document.getElementById('alumnoSelector');
     sel.disabled=true; sel.value='';
     sel.innerHTML='<option value="">⏳ Cargando alumnos...</option>';
@@ -1139,6 +1187,10 @@
     const sel=document.getElementById('alumnoSelector');
     const rut=sel.value;
     const nombre=sel.options[sel.selectedIndex]?.dataset?.nombre||'';
+    await onAlumnoChangeWith(rut, nombre);
+  }
+
+  async function onAlumnoChangeWith(rut, nombre) {
     _alumnoSeleccionado=rut?{rut,nombre}:null;
     toggleRenovar(false); toggleFormClase(false);
     document.getElementById('profePlanBox').classList.add('hidden');
@@ -1430,53 +1482,6 @@
   window.eliminarAlumno    = eliminarAlumno;
   window.reactivarAlumno   = reactivarAlumno;
   window.filtrarSelector = function() {};
-
-  // ── Dropdown custom alumno ─────────────────────────────────────────────────
-  let _dropdownAlumnos = [];
-
-  function renderDropdownOptions(lista) {
-    const el = document.getElementById('dropdownOptions');
-    if (!lista.length) { el.innerHTML='<div style="padding:12px 16px;font-size:13px;color:#444;">Sin resultados</div>'; return; }
-    el.innerHTML = lista.map(a=>`
-      <div onclick="selectAlumno('${cleanRut(a.rut)}','${a.nombre.replace(/'/g,"\\'")}','${cleanRut(a.rut)}')" style="padding:11px 16px;font-size:14px;color:#f0ede8;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.04);" onmouseover="this.style.background='rgba(255,90,0,0.08)'" onmouseout="this.style.background='transparent'">
-        ${a.nombre}
-      </div>`).join('');
-  }
-
-  window.toggleAlumnoDropdown = function() {
-    const list = document.getElementById('alumnoDropdownList');
-    const isHidden = list.classList.contains('hidden');
-    list.classList.toggle('hidden', !isHidden);
-    if (isHidden) {
-      document.getElementById('dropdownSearch').value='';
-      renderDropdownOptions(_dropdownAlumnos);
-      setTimeout(()=>document.getElementById('dropdownSearch').focus(), 50);
-    }
-  };
-
-  window.filtrarDropdown = function() {
-    const q = document.getElementById('dropdownSearch').value.toLowerCase();
-    renderDropdownOptions(_dropdownAlumnos.filter(a=>a.nombre.toLowerCase().includes(q)));
-  };
-
-  window.selectAlumno = function(rut, nombre) {
-    document.getElementById('alumnoDropdownLabel').textContent = nombre;
-    document.getElementById('alumnoDropdownLabel').style.color = '#f0ede8';
-    document.getElementById('alumnoDropdownList').classList.add('hidden');
-    // Simular selección
-    _alumnoSeleccionado = { rut, nombre };
-    // Llamar onAlumnoChange con los datos
-    const fakeChange = { rut, nombre };
-    onAlumnoChangeWith(rut, nombre);
-  };
-
-  // Cerrar dropdown al click fuera
-  document.addEventListener('click', e => {
-    const wrap = document.getElementById('alumnoDropdownWrap');
-    if (wrap && !wrap.contains(e.target)) {
-      document.getElementById('alumnoDropdownList')?.classList.add('hidden');
-    }
-  });
   window.openHistorial     = openHistorial;
   window.handleInstall       = handleInstall;
   window.closeHistorial    = closeHistorial;
