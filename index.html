@@ -287,12 +287,19 @@
 
       <!-- Selector alumno con loading -->
       <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:8px;">Alumno</div>
-      <input id="buscarAlumnoSelector" type="text" placeholder="🔍 Buscar alumno..." oninput="filtrarSelector()" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 14px;font-size:13px;color:#f0ede8;outline:none;margin-bottom:6px;box-sizing:border-box;font-family:'DM Sans',sans-serif;" />
-      <div style="position:relative;">
-        <select class="alumno-selector" id="alumnoSelector" onchange="onAlumnoChange()" disabled>
-          <option value="">⏳ Cargando alumnos...</option>
-        </select>
+      <div style="position:relative;" id="alumnoDropdownWrap">
+        <button id="alumnoDropdownBtn" onclick="toggleAlumnoDropdown()" disabled style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:13px 16px;font-size:15px;font-family:'DM Sans',sans-serif;color:#444;outline:none;margin-bottom:0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;text-align:left;">
+          <span id="alumnoDropdownLabel">⏳ Cargando alumnos...</span>
+          <span style="font-size:12px;color:#555;">▾</span>
+        </button>
+        <div id="alumnoDropdownList" class="hidden" style="position:absolute;top:calc(100% + 6px);left:0;right:0;background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);border-radius:12px;z-index:50;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.5);">
+          <div style="padding:8px;border-bottom:1px solid rgba(255,255,255,0.06);">
+            <input id="dropdownSearch" type="text" placeholder="Buscar..." oninput="filtrarDropdown()" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:8px 12px;font-size:13px;color:#f0ede8;outline:none;box-sizing:border-box;font-family:'DM Sans',sans-serif;">
+          </div>
+          <div id="dropdownOptions" style="max-height:220px;overflow-y:auto;"></div>
+        </div>
       </div>
+      <select id="alumnoSelector" style="display:none;"></select>
 
       <!-- Info plan -->
       <div class="plan-info-box hidden" id="profePlanBox">
@@ -1422,16 +1429,54 @@
   window.agregarAlumno     = agregarAlumno;
   window.eliminarAlumno    = eliminarAlumno;
   window.reactivarAlumno   = reactivarAlumno;
-  window.filtrarSelector = function() {
-    const q = document.getElementById('buscarAlumnoSelector')?.value.toLowerCase()||'';
-    const sel = document.getElementById('alumnoSelector');
-    if (!sel||!window._alumnosCache) return;
-    const filtered = window._alumnosCache.filter(a=>a.nombre.toLowerCase().includes(q));
-    sel.innerHTML = '<option value="">— Selecciona un alumno —</option>' +
-      filtered.map(a=>`<option value="${cleanRut(a.rut)}" data-nombre="${a.nombre}">${a.nombre}</option>`).join('');
+  window.filtrarSelector = function() {};
+
+  // ── Dropdown custom alumno ─────────────────────────────────────────────────
+  let _dropdownAlumnos = [];
+
+  function renderDropdownOptions(lista) {
+    const el = document.getElementById('dropdownOptions');
+    if (!lista.length) { el.innerHTML='<div style="padding:12px 16px;font-size:13px;color:#444;">Sin resultados</div>'; return; }
+    el.innerHTML = lista.map(a=>`
+      <div onclick="selectAlumno('${cleanRut(a.rut)}','${a.nombre.replace(/'/g,"\\'")}','${cleanRut(a.rut)}')" style="padding:11px 16px;font-size:14px;color:#f0ede8;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.04);" onmouseover="this.style.background='rgba(255,90,0,0.08)'" onmouseout="this.style.background='transparent'">
+        ${a.nombre}
+      </div>`).join('');
+  }
+
+  window.toggleAlumnoDropdown = function() {
+    const list = document.getElementById('alumnoDropdownList');
+    const isHidden = list.classList.contains('hidden');
+    list.classList.toggle('hidden', !isHidden);
+    if (isHidden) {
+      document.getElementById('dropdownSearch').value='';
+      renderDropdownOptions(_dropdownAlumnos);
+      setTimeout(()=>document.getElementById('dropdownSearch').focus(), 50);
+    }
   };
 
-  window.loadAlumnos = loadAlumnos;
+  window.filtrarDropdown = function() {
+    const q = document.getElementById('dropdownSearch').value.toLowerCase();
+    renderDropdownOptions(_dropdownAlumnos.filter(a=>a.nombre.toLowerCase().includes(q)));
+  };
+
+  window.selectAlumno = function(rut, nombre) {
+    document.getElementById('alumnoDropdownLabel').textContent = nombre;
+    document.getElementById('alumnoDropdownLabel').style.color = '#f0ede8';
+    document.getElementById('alumnoDropdownList').classList.add('hidden');
+    // Simular selección
+    _alumnoSeleccionado = { rut, nombre };
+    // Llamar onAlumnoChange con los datos
+    const fakeChange = { rut, nombre };
+    onAlumnoChangeWith(rut, nombre);
+  };
+
+  // Cerrar dropdown al click fuera
+  document.addEventListener('click', e => {
+    const wrap = document.getElementById('alumnoDropdownWrap');
+    if (wrap && !wrap.contains(e.target)) {
+      document.getElementById('alumnoDropdownList')?.classList.add('hidden');
+    }
+  });
   window.openHistorial     = openHistorial;
   window.handleInstall       = handleInstall;
   window.closeHistorial    = closeHistorial;
