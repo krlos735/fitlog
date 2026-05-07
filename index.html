@@ -479,6 +479,11 @@
       <div class="rut-hint">Sin puntos, con guión</div>
       <div class="error-msg" id="rutError"></div>
       <button class="btn btn-primary inactivo" id="btnValidate" onclick="validateRut()">CONTINUAR</button>
+      <div id="installBanner" class="hidden" style="margin-top:20px;text-align:center;">
+        <button onclick="handleInstall()" style="background:none;border:none;color:#f0ede8;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;letter-spacing:1px;">
+          📲 Instalar como app
+        </button>
+      </div>
     </div>
 
     <div id="viewCheckin" class="checkin-card hidden fadeUp">
@@ -529,11 +534,6 @@
       <!-- Ver asistencia -->
       <button class="btn-stats" onclick="openHistorial()" style="margin-bottom:8px;">📊 VER MI ASISTENCIA</button>
       <button class="btn btn-ghost" id="btnNotMe" onclick="changeName()" style="color:#666;border-color:rgba(255,255,255,0.1);margin-top:0;">—</button>
-      <div id="installBanner" class="hidden" style="margin-top:16px;text-align:center;">
-        <button id="btnInstall" onclick="handleInstall()" style="background:none;border:none;color:#333;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;letter-spacing:1px;">
-          📲 Agregar a pantalla de inicio
-        </button>
-      </div>
     </div>
 
     <div id="viewSuccess" class="hidden" style="text-align:center;animation:fadeUp 0.3s ease both;position:relative;">
