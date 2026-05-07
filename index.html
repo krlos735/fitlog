@@ -469,8 +469,9 @@
 
     <div id="viewRut" class="hidden fadeUp">
       <!-- Header con logo -->
-      <div style="display:flex;justify-content:flex-start;align-items:center;margin-bottom:32px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
         <div class="logo" style="margin:0;">FITMOTION</div>
+        <button onclick="openPin()" style="background:rgba(255,255,255,0.06);border:none;color:#555;font-size:18px;width:36px;height:36px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;">☰</button>
       </div>
       <div class="section-title">Bienvenido</div>
       <div class="big-text">INGRESA<br>TU RUT</div>
@@ -488,9 +489,8 @@
 
     <div id="viewCheckin" class="checkin-card hidden fadeUp">
       <!-- Header -->
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+      <div style="display:flex;justify-content:flex-start;align-items:center;margin-bottom:24px;">
         <div class="logo" style="margin:0;font-size:36px;">FITMOTION</div>
-        <button onclick="openPin()" style="background:rgba(255,255,255,0.06);border:none;color:#555;font-size:18px;width:36px;height:36px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;">☰</button>
       </div>
 
       <!-- Avatar centrado con dot -->
@@ -1421,7 +1421,6 @@
   window.eliminarAlumno    = eliminarAlumno;
   window.reactivarAlumno   = reactivarAlumno;
   window.loadAlumnos       = loadAlumnos;
-  window.filtrarListaAlumnos = () => { if(window.filtrarListaAlumnos) window.filtrarListaAlumnos(); };
   window.openHistorial     = openHistorial;
   window.handleInstall       = handleInstall;
   window.closeHistorial    = closeHistorial;
