@@ -287,6 +287,7 @@
 
       <!-- Selector alumno con loading -->
       <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:8px;">Alumno</div>
+      <input id="buscarAlumnoSelector" type="text" placeholder="🔍 Buscar alumno..." oninput="filtrarSelector()" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 14px;font-size:13px;color:#f0ede8;outline:none;margin-bottom:6px;box-sizing:border-box;font-family:'DM Sans',sans-serif;" />
       <div style="position:relative;">
         <select class="alumno-selector" id="alumnoSelector" onchange="onAlumnoChange()" disabled>
           <option value="">⏳ Cargando alumnos...</option>
@@ -959,6 +960,7 @@
       const snap=await getDocs(collection(db,`alumnos_${_profeActual}`));
       const activos=[], inactivos=[];
       snap.forEach(d=>{ const a={...d.data()}; if (a.estado==='inactivo') inactivos.push(a); else activos.push(a); _alumnoInfoCache[cleanRut(a.rut)]=a; });
+      window._alumnosCache = activos;
       const sel=document.getElementById('alumnoSelector');
       sel.disabled=false;
       sel.innerHTML='<option value="">— Selecciona un alumno —</option>'+
@@ -1420,7 +1422,16 @@
   window.agregarAlumno     = agregarAlumno;
   window.eliminarAlumno    = eliminarAlumno;
   window.reactivarAlumno   = reactivarAlumno;
-  window.loadAlumnos       = loadAlumnos;
+  window.filtrarSelector = function() {
+    const q = document.getElementById('buscarAlumnoSelector')?.value.toLowerCase()||'';
+    const sel = document.getElementById('alumnoSelector');
+    if (!sel||!window._alumnosCache) return;
+    const filtered = window._alumnosCache.filter(a=>a.nombre.toLowerCase().includes(q));
+    sel.innerHTML = '<option value="">— Selecciona un alumno —</option>' +
+      filtered.map(a=>`<option value="${cleanRut(a.rut)}" data-nombre="${a.nombre}">${a.nombre}</option>`).join('');
+  };
+
+  window.loadAlumnos = loadAlumnos;
   window.openHistorial     = openHistorial;
   window.handleInstall       = handleInstall;
   window.closeHistorial    = closeHistorial;
