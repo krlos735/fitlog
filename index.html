@@ -377,6 +377,7 @@
         <div class="success-msg" id="agregarMsg"></div>
       </div>
       <div class="historial-section-title">Lista de alumnos</div>
+      <input id="buscarAlumno" type="text" placeholder="🔍 Buscar alumno..." oninput="filtrarListaAlumnos()" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 14px;font-size:13px;color:#f0ede8;outline:none;margin-bottom:10px;box-sizing:border-box;font-family:'DM Sans',sans-serif;" />
       <button class="btn-accion btn-accion-ghost" style="margin-bottom:12px;" onclick="loadAlumnos()">👥 VER LISTA DE ALUMNOS</button>
       <div id="listaAlumnos"></div>
       <div id="listaInactivos"></div>
@@ -469,8 +470,13 @@
     <div id="viewRut" class="hidden fadeUp">
       <!-- Header con logo -->
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
-        <div class="logo" style="margin:0;">FITMOTION</div>
-        <button onclick="openPin()" style="background:rgba(255,255,255,0.06);border:none;color:#555;font-size:18px;width:38px;height:38px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;">☰</button>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:36px;height:36px;border:1.5px solid #fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;letter-spacing:1px;">FM</div>
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;color:#fff;line-height:1;">FITMOTION</div>
+            <div style="font-size:9px;letter-spacing:4px;color:#333;text-transform:uppercase;">Asistencia</div>
+          </div>
+        </div>
       </div>
       <div class="section-title">Bienvenido</div>
       <div class="big-text">INGRESA<br>TU RUT</div>
@@ -487,9 +493,16 @@
     </div>
 
     <div id="viewCheckin" class="checkin-card hidden fadeUp">
-      <!-- Header: solo FITMOTION -->
-      <div style="display:flex;justify-content:flex-start;align-items:center;margin-bottom:24px;">
-        <div class="logo" style="margin:0;font-size:36px;">FITMOTION</div>
+      <!-- Header: solo FITMOTION + ☰ -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:36px;height:36px;border:1.5px solid #fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;letter-spacing:1px;">FM</div>
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;color:#fff;line-height:1;">FITMOTION</div>
+            <div style="font-size:9px;letter-spacing:4px;color:#333;text-transform:uppercase;">Asistencia</div>
+          </div>
+        </div>
+        <button onclick="openPin()" style="background:rgba(255,255,255,0.06);border:none;color:#555;font-size:18px;width:36px;height:36px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;">☰</button>
       </div>
 
       <!-- Avatar centrado con dot -->
@@ -1022,22 +1035,36 @@
 
   function _renderAlumnosSinRecords(alumnos,inactivos=[]) {
     document.getElementById('newFechaInicio').value=todayKey();
-    document.getElementById('listaAlumnos').innerHTML=!alumnos||!alumnos.length
-      ?'<div class="empty-state">Sin alumnos activos</div>'
-      :alumnos.map(a=>`<div class="alumno-row">
-          <div class="alumno-info">
-            <span class="alumno-nombre">${a.nombre}</span>
-            <span class="alumno-rut">${a.rut}</span>
-            <span class="alumno-plan">${PLAN_NOMBRES[a.plan]||'Plan '+a.plan}</span>
+    window._alumnosActivos = alumnos;
+
+    function renderFiltered(lista) {
+      if (!lista||!lista.length) { document.getElementById('listaAlumnos').innerHTML='<div class="empty-state">Sin alumnos activos</div>'; return; }
+      document.getElementById('listaAlumnos').innerHTML=lista.map(a=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;background:rgba(255,255,255,0.03);border-radius:9px;border:1px solid rgba(255,255,255,0.04);margin-bottom:4px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,90,0,0.15);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#ff9500;flex-shrink:0;">${a.nombre.charAt(0)}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:13px;color:#f0ede8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${a.nombre}</div>
+            <div style="font-size:11px;color:#555;margin-top:1px;">${PLAN_NOMBRES[a.plan]||'Plan '+a.plan}</div>
           </div>
-          <button class="btn-eliminar" onclick="eliminarAlumno('${cleanRut(a.rut)}','${a.nombre}')">✕</button>
+          <button class="btn-eliminar" onclick="eliminarAlumno('${cleanRut(a.rut)}','${a.nombre}')" style="flex-shrink:0;padding:5px 9px;font-size:11px;">✕</button>
         </div>`).join('');
+    }
+
+    renderFiltered(alumnos);
+
+    window.filtrarListaAlumnos = function() {
+      const q=document.getElementById('buscarAlumno')?.value.toLowerCase()||'';
+      renderFiltered((window._alumnosActivos||[]).filter(a=>a.nombre.toLowerCase().includes(q)));
+    };
+
     document.getElementById('listaInactivos').innerHTML=inactivos&&inactivos.length?`
-      <div class="historial-section-title" style="margin-top:24px;color:#555;">Alumnos inactivos (${inactivos.length})</div>
-      ${inactivos.map(a=>`<div class="alumno-row" style="opacity:0.5;">
-        <div class="alumno-info"><span class="alumno-nombre">${a.nombre}</span><span class="alumno-rut">${a.rut}</span></div>
-        <button style="background:rgba(0,200,80,0.1);border:1px solid rgba(0,200,80,0.3);color:#00c851;font-size:12px;padding:6px 10px;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="reactivarAlumno('${cleanRut(a.rut)}','${a.nombre}')">↩ Reactivar</button>
-      </div>`).join('')}`:'';
+      <div class="historial-section-title" style="margin-top:20px;color:#555;">Inactivos (${inactivos.length})</div>
+      ${inactivos.map(a=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;background:rgba(255,255,255,0.02);border-radius:9px;margin-bottom:4px;opacity:0.5;">
+          <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#555;flex-shrink:0;">${a.nombre.charAt(0)}</div>
+          <div style="flex:1;min-width:0;"><div style="font-size:13px;color:#f0ede8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${a.nombre}</div></div>
+          <button onclick="reactivarAlumno('${cleanRut(a.rut)}','${a.nombre}')" style="background:rgba(0,200,80,0.1);border:1px solid rgba(0,200,80,0.3);color:#00c851;font-size:11px;padding:5px 9px;border-radius:7px;cursor:pointer;font-family:'DM Sans',sans-serif;flex-shrink:0;">↩</button>
+        </div>`).join('')}`:'';
   }
 
   async function loadAlumnos() {
@@ -1406,6 +1433,7 @@
   window.eliminarAlumno    = eliminarAlumno;
   window.reactivarAlumno   = reactivarAlumno;
   window.loadAlumnos       = loadAlumnos;
+  window.filtrarListaAlumnos = () => { if(window.filtrarListaAlumnos) window.filtrarListaAlumnos(); };
   window.openHistorial     = openHistorial;
   window.handleInstall       = handleInstall;
   window.closeHistorial    = closeHistorial;
