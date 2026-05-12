@@ -1,7 +1,7 @@
-const CACHE_NAME = 'fitmotion-v1';
+const CACHE_NAME = 'fitmotion-v2';
 const ASSETS = [
   '/fitlog/',
-  '/fitlog/fitlog.html',
+  '/fitlog/index.html',
   'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap'
 ];
 
