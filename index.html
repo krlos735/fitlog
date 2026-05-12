@@ -632,8 +632,9 @@
 
   document.addEventListener('click', e => {
     const wrap = document.getElementById('alumnoDropdownWrap');
-    if (wrap && !wrap.contains(e.target)) document.getElementById('alumnoDropdownList')?.classList.add('hidden');
-  });
+    if (!wrap) return;
+    if (!wrap.contains(e.target)) document.getElementById('alumnoDropdownList')?.classList.add('hidden');
+  }, true);
 
   // ── Helpers Firebase ───────────────────────────────────────────────────────
   const cleanRut = v => String(v).replace(/\./g,'').trim().toLowerCase();
@@ -1483,7 +1484,6 @@
   window.reactivarAlumno   = reactivarAlumno;
   window.filtrarSelector = function() {};
   window.openHistorial     = openHistorial;
-  window.handleInstall       = handleInstall;
   window.closeHistorial    = closeHistorial;
   window.closeNuevoAlumno  = closeNuevoAlumno;
 
