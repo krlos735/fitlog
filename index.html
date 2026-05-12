@@ -614,7 +614,7 @@
     if (isHidden) {
       document.getElementById('dropdownSearch').value='';
       renderDropdownOptions(_dropdownAlumnos);
-      setTimeout(()=>document.getElementById('dropdownSearch').focus(), 50);
+      // No auto-focus para evitar que el teclado aparezca automáticamente en móvil
     }
   };
 
