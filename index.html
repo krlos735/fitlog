@@ -614,7 +614,7 @@
     if (isHidden) {
       document.getElementById('dropdownSearch').value='';
       renderDropdownOptions(_dropdownAlumnos);
-      setTimeout(()=>document.getElementById('dropdownSearch').focus(), 50);
+      // No auto-focus para evitar que el teclado aparezca automáticamente en móvil
     }
   };
 
@@ -1448,7 +1448,7 @@
     showInstallBanner();
   });
 
-  // iOS: mostrar banner siempre (no hay evento beforeinstallprompt en Safari)
+  // iOS: mostrar banner siempre (Safari no tiene beforeinstallprompt)
   if (isIOS && !isStandalone) {
     setTimeout(showInstallBanner, 800);
   }
@@ -1463,7 +1463,6 @@
       const banner = document.getElementById('installBanner');
       if (banner) banner.classList.add('hidden');
     } else {
-      // Fallback con instrucciones según navegador
       const isChrome = /chrome/i.test(navigator.userAgent) && !/edg/i.test(navigator.userAgent);
       const isSafari = /safari/i.test(navigator.userAgent) && !/chrome/i.test(navigator.userAgent);
       let msg = 'Para instalar: abre el menú del navegador y busca "Agregar a pantalla de inicio".';
