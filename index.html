@@ -399,6 +399,32 @@
   </div>
 </div>
 
+<!-- OVERLAY INSTALAR ANDROID -->
+<div class="overlay hidden" id="androidInstallOverlay" style="display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,0.7);">
+  <div style="width:100%;max-width:420px;background:#1a1a1a;border-radius:24px 24px 0 0;padding:28px 24px 40px;border-top:1px solid rgba(255,90,0,0.2);">
+    <div style="text-align:center;margin-bottom:20px;">
+      <div style="font-size:32px;margin-bottom:8px;">📲</div>
+      <p style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:#ff5a00;margin:0 0 6px;">INSTALAR FITMOTION</p>
+      <p style="font-size:13px;color:#555;margin:0;">Agrega la app a tu pantalla de inicio</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:24px;">
+      <div style="display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;">
+        <div style="font-size:24px;flex-shrink:0;">1️⃣</div>
+        <p style="font-size:14px;color:#f0ede8;margin:0;">Toca los <strong style="color:#ff9500;">3 puntos (⋮)</strong> arriba a la derecha en Chrome</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;">
+        <div style="font-size:24px;flex-shrink:0;">2️⃣</div>
+        <p style="font-size:14px;color:#f0ede8;margin:0;">Toca <strong style="color:#ff9500;">"Agregar a pantalla de inicio"</strong></p>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;">
+        <div style="font-size:24px;flex-shrink:0;">3️⃣</div>
+        <p style="font-size:14px;color:#f0ede8;margin:0;">Toca <strong style="color:#ff9500;">"Instalar"</strong> — ¡listo!</p>
+      </div>
+    </div>
+    <button onclick="document.getElementById('androidInstallOverlay').classList.add('hidden')" style="width:100%;padding:14px;border:none;border-radius:12px;background:#ff5a00;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;">ENTENDIDO</button>
+  </div>
+</div>
+
 <!-- OVERLAY INSTALAR iOS -->
 <div class="overlay hidden" id="iosInstallOverlay" style="display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,0.7);">
   <div style="width:100%;max-width:420px;background:#1a1a1a;border-radius:24px 24px 0 0;padding:28px 24px 40px;border-top:1px solid rgba(255,90,0,0.2);">
@@ -1436,13 +1462,13 @@
   const isAndroid = /android/i.test(navigator.userAgent);
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
-  // Capturar el prompt nativo si el navegador lo ofrece
+  // Capturar prompt nativo (Chrome Android con SW funcionando)
   window.addEventListener('beforeinstallprompt', e => {
     e.preventDefault();
     _deferredPrompt = e;
   });
 
-  // Mostrar banner en móviles que no están en modo standalone
+  // Mostrar banner en móviles no instalados
   if (!isStandalone && (isIOS || isAndroid)) {
     setTimeout(() => {
       const banner = document.getElementById('installBanner');
@@ -1452,7 +1478,7 @@
 
   window.handleInstall = async function() {
     if (_deferredPrompt) {
-      // Chrome Android con SW funcionando: prompt nativo
+      // Chrome Android con SW OK: prompt nativo del sistema
       _deferredPrompt.prompt();
       const { outcome } = await _deferredPrompt.userChoice;
       _deferredPrompt = null;
@@ -1461,11 +1487,11 @@
         if (banner) banner.classList.add('hidden');
       }
     } else if (isIOS) {
-      // iOS Safari: instrucciones paso a paso
+      // Safari iOS
       document.getElementById('iosInstallOverlay').classList.remove('hidden');
     } else {
-      // Android sin prompt (SW con error, ya instalada, etc): instrucciones manuales
-      document.getElementById('iosInstallOverlay').classList.remove('hidden');
+      // Android sin prompt nativo: instrucciones manuales
+      document.getElementById('androidInstallOverlay').classList.remove('hidden');
     }
   };
   window.formatRut         = formatRut;
