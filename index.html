@@ -614,7 +614,7 @@
     if (isHidden) {
       document.getElementById('dropdownSearch').value='';
       renderDropdownOptions(_dropdownAlumnos);
-      // No auto-focus para evitar que el teclado aparezca automáticamente en móvil
+      setTimeout(()=>document.getElementById('dropdownSearch').focus(), 50);
     }
   };
 
@@ -1435,10 +1435,23 @@
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
+  function showInstallBanner() {
+    if (isStandalone) return;
+    const banner = document.getElementById('installBanner');
+    if (banner) banner.classList.remove('hidden');
+  }
+
+  // Android/Chrome: mostrar banner cuando el navegador esté listo para instalar
   window.addEventListener('beforeinstallprompt', e => {
     e.preventDefault();
     _deferredPrompt = e;
+    showInstallBanner();
   });
+
+  // iOS: mostrar banner siempre (no hay evento beforeinstallprompt en Safari)
+  if (isIOS && !isStandalone) {
+    setTimeout(showInstallBanner, 800);
+  }
 
   window.handleInstall = async function() {
     if (isIOS) {
@@ -1447,16 +1460,18 @@
       _deferredPrompt.prompt();
       const { outcome } = await _deferredPrompt.userChoice;
       _deferredPrompt = null;
+      const banner = document.getElementById('installBanner');
+      if (banner) banner.classList.add('hidden');
+    } else {
+      // Fallback con instrucciones según navegador
+      const isChrome = /chrome/i.test(navigator.userAgent) && !/edg/i.test(navigator.userAgent);
+      const isSafari = /safari/i.test(navigator.userAgent) && !/chrome/i.test(navigator.userAgent);
+      let msg = 'Para instalar: abre el menú del navegador y busca "Agregar a pantalla de inicio".';
+      if (isChrome) msg = 'En Chrome: toca los 3 puntos (⋮) arriba a la derecha → "Agregar a pantalla de inicio".';
+      if (isSafari) msg = 'En Safari: toca el botón Compartir (⬆️) → "Agregar a pantalla de inicio".';
+      alert(msg);
     }
   };
-
-  // Mostrar banner solo si no está instalada
-  if (!isStandalone) {
-    setTimeout(() => {
-      const banner = document.getElementById('installBanner');
-      if (banner) banner.classList.remove('hidden');
-    }, 500);
-  }
   window.formatRut         = formatRut;
   window.formatRutInput    = input => formatRut(input);
   window.checkRutInput     = checkRutInput;
