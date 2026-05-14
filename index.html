@@ -606,7 +606,7 @@
 
 <script type="module">
   import { initializeApp }                                          from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js';
-  import { getFirestore, doc, getDoc, getDocs, setDoc, updateDoc,
+  import { getFirestore, doc, getDoc, getDocs, setDoc, updateDoc, addDoc,
            collection, query, where, orderBy }                     from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js';
 
   const firebaseConfig = {
@@ -1365,8 +1365,17 @@
     const msg=document.getElementById('renovarMsg');
     if (!fecha) { msg.style.color='#ff3b3b'; msg.textContent='Selecciona fecha de inicio'; return; }
     try {
+      const alumnoCache = _alumnoInfoCache[_alumnoSeleccionado.rut];
+      const planAnterior = alumnoCache ? alumnoCache.plan : null;
       await updateDoc(doc(db,`alumnos_${_profeActual}`,_alumnoSeleccionado.rut),{plan,fechaInicio:fecha});
-      if (_alumnoInfoCache[_alumnoSeleccionado.rut]) { _alumnoInfoCache[_alumnoSeleccionado.rut].plan=plan; _alumnoInfoCache[_alumnoSeleccionado.rut].fechaInicio=fecha; }
+      const renovRef = collection(db, `alumnos_${_profeActual}`, _alumnoSeleccionado.rut, 'renovaciones');
+      await addDoc(renovRef, {
+        fecha,
+        plan,
+        planAnterior: planAnterior || null,
+        renovadoEn: new Date().toISOString()
+      });
+      if (alumnoCache) { alumnoCache.plan=plan; alumnoCache.fechaInicio=fecha; }
       msg.style.color='#00c851'; msg.textContent='✓ Plan renovado';
       setTimeout(()=>{ toggleRenovar(false); onAlumnoChange(); },1200);
     } catch { msg.style.color='#ff3b3b'; msg.textContent='Sin conexión'; }
