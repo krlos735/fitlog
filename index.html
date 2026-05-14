@@ -1058,9 +1058,9 @@
       // ── Alertas planes por vencer ──────────────────────────────────────────
       const alertas = [];
       for (const a of activos) {
-        if (!a.plan || !a.fechaInicioPlan) continue;
+        if (!a.plan || !a.fechaInicio) continue;
         const totalClases = PLAN_CLASES[a.plan] || 8;
-        const usadas = await fbContarClases(cleanRut(a.rut), _profeActual, a.fechaInicioPlan);
+        const usadas = await fbContarClases(cleanRut(a.rut), _profeActual, a.fechaInicio);
         const restantes = Math.max(0, totalClases - usadas);
         if (restantes <= 2) alertas.push({ nombre: a.nombre, plan: PLAN_NOMBRES[a.plan] || `Plan ${a.plan}`, restantes });
       }
