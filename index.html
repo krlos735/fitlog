@@ -295,6 +295,15 @@
         <div id="alertasPlanList"></div>
       </div>
 
+      <!-- Alertas planes por vencer -->
+      <div id="alertasPlanBox" class="hidden" style="background:rgba(255,90,0,0.07);border:1px solid rgba(255,90,0,0.25);border-radius:12px;padding:12px 14px;margin-bottom:14px;">
+        <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+          <span style="width:6px;height:6px;border-radius:50%;background:#ff5a00;display:inline-block;animation:blink 1.4s ease infinite;"></span>
+          Planes por vencer
+        </div>
+        <div id="alertasPlanList"></div>
+      </div>
+
       <!-- Selector alumno con loading -->
       <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:8px;">Alumno</div>
       <div style="position:relative;" id="alumnoDropdownWrap">
@@ -614,7 +623,9 @@
           <div style="font-size:12px;color:#666;margin-top:2px;">Renueva tu plan con él</div>
         </div>
       </div>
-      <button onclick="verificarRenovacion()" style="width:100%;padding:16px;border:none;border-radius:14px;background:#ff5a00;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;">VERIFICAR RENOVACIÓN</button>
+      <button id="btnVerificar" onclick="verificarRenovacion()" style="width:100%;padding:16px;border:none;border-radius:14px;background:#ff5a00;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;margin-bottom:10px;">VERIFICAR RENOVACIÓN</button>
+      <div id="verificarMsg" style="font-size:13px;color:#ff3b3b;min-height:20px;margin-bottom:8px;"></div>
+      <button onclick="changeName()" id="btnNoSoyAgotado" style="background:none;border:none;color:#555;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;letter-spacing:0.5px;padding:8px;">No soy <span id="agotadoPrimerNombre">yo</span></button>
     </div>
   </div>
 </div>
@@ -906,7 +917,6 @@
     const badge=document.getElementById('planBadge');
     if (planInfo) {
       const {plan,restantes,total,clasesUsadas,planAgotado}=planInfo;
-
       if (planAgotado) {
         const primerNombre = name.split(' ')[0];
         const profe = localStorage.getItem(PROF_KEY) || '—';
@@ -915,10 +925,13 @@
         document.getElementById('agotadoProfeNombre').textContent = profe;
         document.getElementById('agotadoProfeLabel').textContent = profe;
         document.getElementById('agotadoProfeAvatar').textContent = profe.charAt(0).toUpperCase();
+        document.getElementById('agotadoPrimerNombre').textContent = primerNombre;
+        document.getElementById('verificarMsg').textContent = '';
+        const btn = document.getElementById('btnVerificar');
+        if (btn) { btn.textContent = 'VERIFICAR RENOVACIÓN'; btn.disabled = false; }
         showOnly('viewAgotado');
         return;
       }
-
       const pct=Math.min(100,Math.round(((clasesUsadas||0)/total)*100));
       document.getElementById('checkinPlanTitle').textContent=PLAN_NOMBRES[plan]||'Plan';
       document.getElementById('checkinPlanSubtitle').textContent=(PLAN_CLASES[plan]||8)+' clases totales';
@@ -950,15 +963,19 @@
   window.changeName=changeName;
 
   async function verificarRenovacion() {
-    const btn = document.querySelector('#viewAgotado button');
+    const btn = document.getElementById('btnVerificar');
+    const msg = document.getElementById('verificarMsg');
     if (btn) { btn.textContent = 'Verificando...'; btn.disabled = true; }
+    if (msg) msg.textContent = '';
     const rut = localStorage.getItem(RUT_KEY);
     const name = localStorage.getItem(NAME_KEY);
     const profesor = localStorage.getItem(PROF_KEY);
-    if (!rut || !name || !profesor) { if (btn) { btn.textContent = 'VERIFICAR RENOVACIÓN'; btn.disabled = false; } return; }
+    if (!rut || !name || !profesor) {
+      if (btn) { btn.textContent = 'VERIFICAR RENOVACIÓN'; btn.disabled = false; }
+      return;
+    }
     try {
-      const alumnoRef = doc(db, `alumnos_${profesor}`, cleanRut(rut));
-      const alumnoSnap = await getDoc(alumnoRef);
+      const alumnoSnap = await getDoc(doc(db, `alumnos_${profesor}`, cleanRut(rut)));
       if (!alumnoSnap.exists()) { if (btn) { btn.textContent = 'VERIFICAR RENOVACIÓN'; btn.disabled = false; } return; }
       const alumno = alumnoSnap.data();
       const total = PLAN_CLASES[alumno.plan] || 8;
@@ -967,8 +984,14 @@
       const planAgotado = restantes === 0;
       const planInfo = { plan: alumno.plan, restantes, total, clasesUsadas: usadas, planAgotado };
       localStorage.setItem(PLAN_KEY, JSON.stringify(planInfo));
-      loadCheckinView(name, planInfo);
+      if (planAgotado) {
+        if (msg) msg.textContent = 'Tu plan aún no ha sido renovado. Habla con tu profe.';
+        if (btn) { btn.textContent = 'VERIFICAR RENOVACIÓN'; btn.disabled = false; }
+      } else {
+        loadCheckinView(name, planInfo);
+      }
     } catch {
+      if (msg) msg.textContent = 'Sin conexión. Intenta de nuevo.';
       if (btn) { btn.textContent = 'VERIFICAR RENOVACIÓN'; btn.disabled = false; }
     }
   }
