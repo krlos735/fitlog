@@ -1129,42 +1129,45 @@
       document.getElementById('alumnoDropdownLabel').style.color = '#888';
       renderDropdownOptions(activos);
       _renderAlumnosSinRecords(activos,inactivos);
-
-      // ── Alertas planes por vencer ──────────────────────────────────────────
-      const alertas = [];
-      for (const a of activos) {
-        if (!a.plan || !a.fechaInicio) continue;
-        const totalClases = PLAN_CLASES[a.plan] || 8;
-        const usadas = await fbContarClases(cleanRut(a.rut), _profeActual, a.fechaInicio);
-        const restantes = Math.max(0, totalClases - usadas);
-        if (restantes <= 2) alertas.push({ nombre: a.nombre, plan: PLAN_NOMBRES[a.plan] || `Plan ${a.plan}`, restantes });
-      }
-      const alertaBox = document.getElementById('alertasPlanBox');
-      const alertaList = document.getElementById('alertasPlanList');
-      if (alertas.length > 0) {
-        alertaList.innerHTML = alertas.map(a => `
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);" class="alerta-item">
-            <div>
-              <div style="font-size:13px;color:#f0ede8;font-weight:500;">${a.nombre}</div>
-              <div style="font-size:11px;color:#666;margin-top:1px;">${a.plan}</div>
-            </div>
-            <span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;${
-              a.restantes <= 1
-                ? 'background:rgba(255,59,59,0.15);color:#ff3b3b;border:1px solid rgba(255,59,59,0.3);'
-                : 'background:rgba(255,149,0,0.15);color:#ff9500;border:1px solid rgba(255,149,0,0.3);'
-            }">${a.restantes === 0 ? 'Sin clases' : a.restantes === 1 ? '1 clase' : '2 clases'}</span>
-          </div>`).join('');
-        // Quitar borde al último item
-        const items = alertaList.querySelectorAll('.alerta-item');
-        if (items.length) items[items.length-1].style.borderBottom = 'none';
-        alertaBox.classList.remove('hidden');
-      } else {
-        alertaBox.classList.add('hidden');
-      }
+      await recalcularAlertas();
     } catch {}
     switchTab('historial');
   }
   window.openProfe=openProfe;
+
+  async function recalcularAlertas() {
+    const activos = window._alumnosCache || [];
+    const alertas = [];
+    for (const a of activos) {
+      if (!a.plan || !a.fechaInicio) continue;
+      const totalClases = PLAN_CLASES[a.plan] || 8;
+      const usadas = await fbContarClases(cleanRut(a.rut), _profeActual, a.fechaInicio);
+      const restantes = Math.max(0, totalClases - usadas);
+      if (restantes <= 2) alertas.push({ nombre: a.nombre, plan: PLAN_NOMBRES[a.plan] || `Plan ${a.plan}`, restantes });
+    }
+    const alertaBox = document.getElementById('alertasPlanBox');
+    const alertaList = document.getElementById('alertasPlanList');
+    if (!alertaBox || !alertaList) return;
+    if (alertas.length > 0) {
+      alertaList.innerHTML = alertas.map(a => `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);" class="alerta-item">
+          <div>
+            <div style="font-size:13px;color:#f0ede8;font-weight:500;">${a.nombre}</div>
+            <div style="font-size:11px;color:#666;margin-top:1px;">${a.plan}</div>
+          </div>
+          <span style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;${
+            a.restantes <= 1
+              ? 'background:rgba(255,59,59,0.15);color:#ff3b3b;border:1px solid rgba(255,59,59,0.3);'
+              : 'background:rgba(255,149,0,0.15);color:#ff9500;border:1px solid rgba(255,149,0,0.3);'
+          }">${a.restantes === 0 ? 'Sin clases' : a.restantes === 1 ? '1 clase' : '2 clases'}</span>
+        </div>`).join('');
+      const items = alertaList.querySelectorAll('.alerta-item');
+      if (items.length) items[items.length-1].style.borderBottom = 'none';
+      alertaBox.classList.remove('hidden');
+    } else {
+      alertaBox.classList.add('hidden');
+    }
+  }
 
   function closeProfe() { document.getElementById('profeOverlay').classList.add('hidden'); resetHistorialTab(); }
   window.closeProfe=closeProfe;
@@ -1486,7 +1489,7 @@
         restEl.textContent=agotado?'⚠️ Plan agotado':restantes+' clases restantes';
         restEl.className='plan-restantes'+(agotado?' agotado':restantes<=2?' pocas':'');
       }
-      setTimeout(()=>{ toggleFormClase(false); verAsistenciaPeriodo(); },1000);
+      setTimeout(()=>{ toggleFormClase(false); verAsistenciaPeriodo(); recalcularAlertas(); },1000);
     } catch { msg.style.color='#ff3b3b'; msg.textContent='Sin conexión'; }
     btn.textContent='GUARDAR'; btn.style.opacity='1'; btn.style.pointerEvents='auto';
   }
@@ -1514,7 +1517,7 @@
         restEl.textContent=agotado?'⚠️ Plan agotado':restantes+' clases restantes';
         restEl.className='plan-restantes'+(agotado?' agotado':restantes<=2?' pocas':'');
       }
-      verAsistenciaPeriodo();
+      verAsistenciaPeriodo(); recalcularAlertas();
     } catch { alert('Sin conexión'); verAsistenciaPeriodo(); }
   }
   window.eliminarClase=eliminarClase;
