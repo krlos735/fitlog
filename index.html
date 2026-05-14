@@ -595,11 +595,26 @@
       <div class="success-time">Ya marcaste asistencia hoy</div>
     </div>
 
-    <div id="viewAgotado" class="hidden" style="text-align:center;animation:fadeUp 0.3s ease both">
-      <div class="agotado-icon">⚠️</div>
-      <div class="section-title" style="color:#ff3b3b;">Plan terminado</div>
-      <div class="success-name" id="agotadoName">—</div>
-      <div class="success-time">Contacta a tu profe para renovar</div>
+    <div id="viewAgotado" class="hidden" style="text-align:center;animation:fadeUp 0.4s ease both;padding:8px 0;">
+      <div style="font-size:60px;margin-bottom:12px;animation:popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275) both;">🏆</div>
+      <div style="display:flex;justify-content:center;gap:6px;margin-bottom:16px;">
+        <span style="color:#ff5a00;font-size:22px;animation:popIn 0.3s ease 0.1s both;">★</span>
+        <span style="color:#ff5a00;font-size:22px;animation:popIn 0.3s ease 0.2s both;">★</span>
+        <span style="color:#ff5a00;font-size:22px;animation:popIn 0.3s ease 0.3s both;">★</span>
+      </div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:3px;color:#ff5a00;margin-bottom:6px;">¡Felicidades!</div>
+      <div class="success-name" id="agotadoName" style="margin-bottom:12px;">—</div>
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,90,0,0.1);border:1px solid rgba(255,90,0,0.25);border-radius:20px;padding:6px 16px;font-size:12px;color:#ff9500;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;">✓ <span id="agotadoPlanNombre">Plan completado</span></div>
+      <p style="font-size:14px;color:#777;line-height:1.7;margin-bottom:24px;padding:0 8px;">Has completado todas tus clases de este período.<br>Habla con tu profe <strong style="color:#f0ede8;font-weight:500;" id="agotadoProfeNombre">tu profe</strong> para renovar y seguir entrenando.</p>
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+        <div style="width:44px;height:44px;border-radius:50%;background:#ff5a00;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;flex-shrink:0;" id="agotadoProfeAvatar">G</div>
+        <div style="text-align:left;">
+          <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#555;margin-bottom:3px;">Tu profe</div>
+          <div style="font-size:15px;font-weight:500;color:#f0ede8;" id="agotadoProfeLabel">—</div>
+          <div style="font-size:12px;color:#666;margin-top:2px;">Renueva tu plan con él</div>
+        </div>
+      </div>
+      <button onclick="verificarRenovacion()" style="width:100%;padding:16px;border:none;border-radius:14px;background:#ff5a00;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;cursor:pointer;">VERIFICAR RENOVACIÓN</button>
     </div>
   </div>
 </div>
@@ -891,18 +906,30 @@
     const badge=document.getElementById('planBadge');
     if (planInfo) {
       const {plan,restantes,total,clasesUsadas,planAgotado}=planInfo;
+
+      if (planAgotado) {
+        const primerNombre = name.split(' ')[0];
+        const profe = localStorage.getItem(PROF_KEY) || '—';
+        document.getElementById('agotadoName').textContent = primerNombre;
+        document.getElementById('agotadoPlanNombre').textContent = PLAN_NOMBRES[plan] || 'Plan completado';
+        document.getElementById('agotadoProfeNombre').textContent = profe;
+        document.getElementById('agotadoProfeLabel').textContent = profe;
+        document.getElementById('agotadoProfeAvatar').textContent = profe.charAt(0).toUpperCase();
+        showOnly('viewAgotado');
+        return;
+      }
+
       const pct=Math.min(100,Math.round(((clasesUsadas||0)/total)*100));
       document.getElementById('checkinPlanTitle').textContent=PLAN_NOMBRES[plan]||'Plan';
       document.getElementById('checkinPlanSubtitle').textContent=(PLAN_CLASES[plan]||8)+' clases totales';
       document.getElementById('checkinPlanCount').textContent=`${clasesUsadas||0} / ${total}`;
       document.getElementById('checkinPlanFill').style.width=pct+'%';
-      document.getElementById('checkinPlanFill').className='plan-progress-fill'+(planAgotado?' agotado':'');
+      document.getElementById('checkinPlanFill').className='plan-progress-fill';
       const restEl=document.getElementById('checkinPlanRestantes');
-      restEl.textContent=planAgotado?'⚠️ Plan agotado — contacta a tu profe':restantes+' clases restantes';
-      restEl.className='plan-restantes'+(planAgotado?' agotado':restantes<=2?' pocas':'');
+      restEl.textContent=restantes+' clases restantes';
+      restEl.className='plan-restantes'+(restantes<=2?' pocas':'');
       planBox.classList.remove('hidden'); badge.classList.add('hidden');
-      if (planAgotado) disableSlider('PLAN AGOTADO');
-      else if (getLock()) disableSlider('done');
+      if (getLock()) disableSlider('done');
       else resetSlider();
     } else {
       planBox.classList.add('hidden'); badge.classList.remove('hidden');
@@ -921,6 +948,31 @@
     showOnly('viewRut');
   }
   window.changeName=changeName;
+
+  async function verificarRenovacion() {
+    const btn = document.querySelector('#viewAgotado button');
+    if (btn) { btn.textContent = 'Verificando...'; btn.disabled = true; }
+    const rut = localStorage.getItem(RUT_KEY);
+    const name = localStorage.getItem(NAME_KEY);
+    const profesor = localStorage.getItem(PROF_KEY);
+    if (!rut || !name || !profesor) { if (btn) { btn.textContent = 'VERIFICAR RENOVACIÓN'; btn.disabled = false; } return; }
+    try {
+      const alumnoRef = doc(db, `alumnos_${profesor}`, cleanRut(rut));
+      const alumnoSnap = await getDoc(alumnoRef);
+      if (!alumnoSnap.exists()) { if (btn) { btn.textContent = 'VERIFICAR RENOVACIÓN'; btn.disabled = false; } return; }
+      const alumno = alumnoSnap.data();
+      const total = PLAN_CLASES[alumno.plan] || 8;
+      const usadas = await fbContarClases(cleanRut(rut), profesor, alumno.fechaInicio);
+      const restantes = Math.max(0, total - usadas);
+      const planAgotado = restantes === 0;
+      const planInfo = { plan: alumno.plan, restantes, total, clasesUsadas: usadas, planAgotado };
+      localStorage.setItem(PLAN_KEY, JSON.stringify(planInfo));
+      loadCheckinView(name, planInfo);
+    } catch {
+      if (btn) { btn.textContent = 'VERIFICAR RENOVACIÓN'; btn.disabled = false; }
+    }
+  }
+  window.verificarRenovacion = verificarRenovacion;
 
   async function validateRut() {
     const btn=document.getElementById('btnValidate');
