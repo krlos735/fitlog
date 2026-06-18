@@ -1036,10 +1036,12 @@
     const sheet=document.getElementById('colorSheet');
     const overlay=document.getElementById('colorOverlay');
     if(!sheet||!overlay) return;
-    const show=!sheet.classList.contains('show');
-    sheet.classList.toggle('show',show);
-    overlay.classList.toggle('show',show);
-    document.getElementById('colorMsg').textContent='';
+    const isOpen=sheet.style.transform==='translateY(0%)';
+    sheet.style.transform=isOpen?'translateY(100%)':'translateY(0%)';
+    overlay.style.opacity=isOpen?'0':'1';
+    overlay.style.pointerEvents=isOpen?'none':'all';
+    const msg=document.getElementById('colorMsg');
+    if(msg) msg.textContent='';
   }
   window.toggleColorSheet=toggleColorSheet;
 
