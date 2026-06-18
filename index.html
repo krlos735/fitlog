@@ -36,6 +36,7 @@
     @keyframes popIn  { from{opacity:0;transform:scale(0.3)} to{opacity:1;transform:scale(1)} }
     @keyframes pulse  { 0%,100%{opacity:0.3;transform:scale(0.8)} 50%{opacity:1;transform:scale(1.2)} }
     @keyframes shake  { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)} }
+    @keyframes spin { to{transform:rotate(360deg)} }
     @keyframes blink  { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
     .fadeUp { animation:fadeUp 0.45s ease both; }
@@ -418,6 +419,29 @@
   </div>
 </div>
 
+<!-- BG GLOW CHECKIN -->
+<div id="checkinBgGlow" style="position:fixed;top:0;left:0;right:0;height:320px;pointer-events:none;z-index:0;transition:background .5s;"></div>
+
+<!-- OVERLAY COLOR -->
+<div id="colorOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:100;opacity:0;pointer-events:none;transition:opacity .3s;" onclick="toggleColorSheet()"></div>
+
+<!-- SHEET COLOR -->
+<div id="colorSheet" style="position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:#141414;border-radius:24px 24px 0 0;border-top:1px solid rgba(255,255,255,0.08);padding:0 0 36px;z-index:101;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);">
+  <div style="width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:14px auto 18px;"></div>
+  <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:#f0ede8;padding:0 20px;margin-bottom:2px;">Tu color</div>
+  <div style="font-size:12px;color:#555;padding:0 20px;margin-bottom:18px;">Personaliza la app a tu estilo</div>
+  <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:18px;"></div>
+  <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:8px;padding:0 20px;margin-bottom:16px;" id="colorPresetsGrid"></div>
+  <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:10px 14px;margin:0 20px 20px;">
+    <div id="colorSwatch" style="width:30px;height:30px;border-radius:50%;background:#ff5a00;border:2px solid rgba(255,255,255,0.12);flex-shrink:0;"></div>
+    <div id="colorHexVal" style="font-size:12px;color:rgba(255,255,255,0.4);font-family:monospace;flex:1;">#ff5a00</div>
+    <button id="colorElegirBtn" onclick="document.getElementById('colorPickerInput').click()" style="padding:6px 12px;border:none;border-radius:8px;background:#ff5a00;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;">ELEGIR</button>
+    <input type="color" id="colorPickerInput" value="#ff5a00" style="opacity:0;position:absolute;width:0;height:0;">
+  </div>
+  <button id="colorSaveBtn" onclick="saveColor()" style="width:calc(100% - 40px);margin:0 20px;padding:14px;border:none;border-radius:14px;background:#ff5a00;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:3px;cursor:pointer;">GUARDAR</button>
+  <div id="colorMsg" style="text-align:center;font-size:12px;color:#4cd964;margin-top:10px;min-height:16px;padding:0 20px;"></div>
+</div>
+
 <!-- OVERLAY INSTALAR ANDROID -->
 <div class="overlay hidden" id="androidInstallOverlay" style="display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,0.7);">
   <div style="width:100%;max-width:420px;background:#1a1a1a;border-radius:24px 24px 0 0;padding:28px 24px 40px;border-top:1px solid rgba(255,90,0,0.2);">
@@ -542,52 +566,62 @@
 
     <div id="viewCheckin" class="checkin-card hidden fadeUp">
       <!-- Header -->
-      <div style="display:flex;justify-content:flex-start;align-items:center;margin-bottom:24px;">
-        <div class="logo" style="margin:0;font-size:36px;">FITMOTION</div>
-      </div>
-
-      <!-- Avatar centrado con dot -->
-      <div style="display:flex;justify-content:center;margin-bottom:14px;">
-        <div style="position:relative;width:72px;height:72px;">
-          <div class="avatar" id="avatarLetter" style="width:72px;height:72px;font-size:28px;margin:0;"></div>
-          <div style="position:absolute;bottom:2px;right:2px;width:16px;height:16px;background:#00c851;border-radius:50%;border:2.5px solid #0a0a0a;"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <div class="logo" style="margin:0;font-size:28px;">FITMOTION</div>
+        <div id="colorDotBtn" onclick="toggleColorSheet()" style="width:26px;height:26px;border-radius:50%;background:var(--ac,#ff5a00);border:2.5px solid rgba(255,255,255,0.18);cursor:pointer;position:relative;flex-shrink:0;">
+          <div style="position:absolute;inset:-5px;border-radius:50%;border:1.5px dashed rgba(255,255,255,0.15);animation:spin 6s linear infinite;pointer-events:none;"></div>
         </div>
       </div>
 
-      <!-- Nombre y fecha centrados -->
-      <div style="text-align:center;margin-bottom:22px;">
-        <div class="greeting" style="margin-bottom:4px;">Bienvenido de vuelta</div>
-        <div class="name-display" id="nameDisplay" style="font-size:40px;margin-bottom:3px;">—</div>
-        <div class="date-display" id="dateDisplay" style="margin-bottom:0;">—</div>
+      <!-- Avatar con anillo de progreso -->
+      <div style="display:flex;justify-content:center;margin-bottom:14px;">
+        <div style="position:relative;">
+          <canvas id="avatarRingCanvas" width="90" height="90" style="position:absolute;top:0;left:0;"></canvas>
+          <div style="width:90px;height:90px;display:flex;align-items:center;justify-content:center;position:relative;">
+            <div style="width:72px;height:72px;border-radius:50%;background:var(--ac,#ff5a00);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:30px;color:#fff;box-shadow:0 8px 24px rgba(var(--ac-rgb,255,90,0),0.35);" id="avatarLetter"></div>
+          </div>
+          <div style="position:absolute;bottom:4px;right:4px;width:13px;height:13px;background:#34c759;border-radius:50%;border:2px solid #0a0a0a;"></div>
+        </div>
       </div>
 
-      <!-- Plan card -->
-      <div class="plan-info-box hidden" id="checkinPlanBox" style="text-align:left;margin-bottom:18px;padding:16px 18px;">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+      <!-- Nombre y fecha -->
+      <div style="text-align:center;margin-bottom:20px;">
+        <div class="greeting" style="margin-bottom:4px;">Bienvenido de vuelta</div>
+        <div class="name-display" id="nameDisplay" style="font-size:36px;margin-bottom:4px;">—</div>
+        <div class="date-display" id="dateDisplay" style="margin-bottom:0;font-size:11px;color:rgba(255,255,255,0.25);letter-spacing:1px;">—</div>
+      </div>
+
+      <!-- Plan card rediseñada -->
+      <div class="plan-info-box hidden" id="checkinPlanBox" style="text-align:left;margin-bottom:14px;padding:16px 18px;border-radius:18px;overflow:hidden;position:relative;">
+        <div style="position:absolute;top:0;right:0;width:80px;height:80px;background:radial-gradient(circle,rgba(255,90,0,0.08) 0%,transparent 70%);pointer-events:none;"></div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
           <div>
-            <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:3px;" id="checkinPlanTitle">Plan —</div>
-            <div style="font-size:20px;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;color:#f0ede8;" id="checkinPlanSubtitle">— clases</div>
+            <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ac,#ff5a00);margin-bottom:4px;transition:color .3s;" id="checkinPlanTitle">Plan —</div>
+            <div style="font-size:14px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:rgba(255,255,255,0.4);" id="checkinPlanSubtitle">— clases totales</div>
           </div>
           <div style="text-align:right;">
-            <div style="font-size:11px;color:#555;margin-bottom:2px;">usadas</div>
-            <div style="font-size:26px;font-family:'Bebas Neue',sans-serif;line-height:1;color:#f0ede8;" id="checkinPlanCount">—</div>
+            <div style="font-family:'Bebas Neue',sans-serif;line-height:1;color:#fff;" id="checkinPlanCount" style="font-size:38px;">—</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:2px;">clases usadas</div>
           </div>
         </div>
-        <div class="plan-progress-bar" style="height:8px;margin-bottom:8px;"><div class="plan-progress-fill" id="checkinPlanFill" style="width:0%"></div></div>
-        <div class="plan-restantes" id="checkinPlanRestantes">—</div>
+        <div class="plan-progress-bar" style="height:5px;margin-bottom:8px;"><div class="plan-progress-fill" id="checkinPlanFill" style="width:0%"></div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div class="plan-restantes" id="checkinPlanRestantes">—</div>
+          <div id="checkinPlanPct" style="font-size:12px;color:#ff9500;font-weight:500;">0%</div>
+        </div>
       </div>
-      <div class="plan-badge hidden" id="planBadge" style="margin-bottom:18px;">— clases restantes</div>
+      <div class="plan-badge hidden" id="planBadge" style="margin-bottom:14px;">— clases restantes</div>
 
       <!-- Slider -->
-      <div class="slider-track" id="sliderTrack" style="margin-bottom:12px;">
+      <div class="slider-track" id="sliderTrack" style="margin-bottom:10px;border-radius:50px;border:1.5px solid rgba(255,90,0,0.4);background:rgba(255,90,0,0.05);">
         <div class="slider-fill" id="sliderFill"></div>
-        <div class="slider-thumb" id="sliderThumb">⚡</div>
-        <div class="slider-label" id="sliderLabel">DESLIZA PARA REGISTRAR →</div>
+        <div class="slider-thumb" id="sliderThumb" style="box-shadow:0 4px 14px rgba(255,90,0,0.5);">⚡</div>
+        <div class="slider-label" id="sliderLabel">DESLIZA PARA REGISTRAR</div>
       </div>
 
       <!-- Ver asistencia -->
-      <button class="btn-stats" onclick="openHistorial()" style="margin-bottom:8px;">📊 VER MI ASISTENCIA</button>
-      <button class="btn btn-ghost" id="btnNotMe" onclick="changeName()" style="color:#666;border-color:rgba(255,255,255,0.1);margin-top:0;">—</button>
+      <button class="btn-stats" onclick="openHistorial()" style="margin-bottom:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);color:rgba(255,255,255,0.4);font-size:13px;letter-spacing:2px;">📊 VER MI ASISTENCIA</button>
+      <button class="btn btn-ghost" id="btnNotMe" onclick="changeName()" style="color:rgba(255,255,255,0.2);border-color:transparent;margin-top:0;font-size:13px;">—</button>
     </div>
 
     <div id="viewSuccess" class="hidden" style="text-align:center;animation:fadeUp 0.3s ease both;position:relative;">
@@ -887,6 +921,7 @@
       try {
         const alumno=await fbGetAlumno(rut);
         if (!alumno||alumno.estado==='inactivo') { changeName(); return; }
+        if(alumno.colorAcento) applyAccentColor(alumno.colorAcento);
         const usadas=await fbContarClases(rut,alumno.profesor,alumno.fechaInicio);
         const total=PLAN_CLASES[alumno.plan]||8;
         const restantes=Math.max(0,total-usadas);
@@ -938,6 +973,9 @@
       document.getElementById('checkinPlanCount').textContent=`${clasesUsadas||0} / ${total}`;
       document.getElementById('checkinPlanFill').style.width=pct+'%';
       document.getElementById('checkinPlanFill').className='plan-progress-fill';
+      const pctEl=document.getElementById('checkinPlanPct');
+      if(pctEl) pctEl.textContent=pct+'%';
+      drawAvatarRing(pct);
       const restEl=document.getElementById('checkinPlanRestantes');
       restEl.textContent=restantes+' clases restantes';
       restEl.className='plan-restantes'+(restantes<=2?' pocas':'');
@@ -961,6 +999,117 @@
     showOnly('viewRut');
   }
   window.changeName=changeName;
+
+  // ── Sistema de color personalizado ────────────────────────────────────────
+  const COLOR_KEY = 'fitmotion_color';
+
+  function hexToRgb(hex){
+    return{r:parseInt(hex.slice(1,3),16),g:parseInt(hex.slice(3,5),16),b:parseInt(hex.slice(5,7),16)};
+  }
+
+  function applyAccentColor(hex){
+    const{r,g,b}=hexToRgb(hex);
+    document.documentElement.style.setProperty('--ac',hex);
+    const glow=document.getElementById('checkinBgGlow');
+    if(glow) glow.style.background=`radial-gradient(ellipse 160% 55% at 50% 0%, rgba(${r},${g},${b},0.11) 0%, transparent 70%)`;
+    const dot=document.getElementById('colorDotBtn');
+    if(dot) dot.style.background=hex;
+    const av=document.getElementById('avatarLetter');
+    if(av) av.style.background=hex;
+    const thumb=document.getElementById('sliderThumb');
+    if(thumb){ thumb.style.background=hex; thumb.style.boxShadow=`0 4px 14px rgba(${r},${g},${b},0.5)`; }
+    const saveBtn=document.getElementById('colorSaveBtn');
+    if(saveBtn) saveBtn.style.background=hex;
+    const swatch=document.getElementById('colorSwatch');
+    if(swatch) swatch.style.background=hex;
+    const hexEl=document.getElementById('colorHexVal');
+    if(hexEl) hexEl.textContent=hex;
+    const elegir=document.getElementById('colorElegirBtn');
+    if(elegir) elegir.style.background=hex;
+    document.querySelectorAll('.color-preset').forEach(p=>{
+      p.style.border=p.dataset.hex===hex?'2.5px solid #fff':'2px solid transparent';
+    });
+    localStorage.setItem(COLOR_KEY,hex);
+  }
+
+  function toggleColorSheet(){
+    const sheet=document.getElementById('colorSheet');
+    const overlay=document.getElementById('colorOverlay');
+    if(!sheet||!overlay) return;
+    const show=!sheet.classList.contains('show');
+    sheet.classList.toggle('show',show);
+    overlay.classList.toggle('show',show);
+    document.getElementById('colorMsg').textContent='';
+  }
+  window.toggleColorSheet=toggleColorSheet;
+
+  function drawAvatarRing(pct){
+    const canvas=document.getElementById('avatarRingCanvas');
+    if(!canvas) return;
+    const ctx=canvas.getContext('2d');
+    const W=canvas.width,cx=W/2,cy=W/2,R=43;
+    ctx.clearRect(0,0,W,W);
+    ctx.beginPath(); ctx.arc(cx,cy,R,-Math.PI/2,Math.PI*2-Math.PI/2);
+    ctx.strokeStyle='rgba(255,255,255,0.07)'; ctx.lineWidth=4; ctx.lineCap='round'; ctx.stroke();
+    if(pct>0){
+      const end=-Math.PI/2+(Math.PI*2*(pct/100));
+      ctx.beginPath(); ctx.arc(cx,cy,R,-Math.PI/2,end);
+      ctx.strokeStyle=localStorage.getItem(COLOR_KEY)||'#ff5a00';
+      ctx.lineWidth=4; ctx.lineCap='round'; ctx.stroke();
+    }
+  }
+  window.drawAvatarRing=drawAvatarRing;
+
+  // Inicializar color guardado
+  const savedColor=localStorage.getItem(COLOR_KEY)||'#ff5a00';
+  applyAccentColor(savedColor);
+
+  const colorInput=document.getElementById('colorPickerInput');
+  if(colorInput){
+    colorInput.value=savedColor;
+    colorInput.addEventListener('input',function(){ applyAccentColor(this.value); });
+  }
+
+  document.querySelectorAll('.color-preset').forEach(p=>{
+    p.addEventListener('click',()=>applyAccentColor(p.dataset.hex));
+  });
+
+  // Generar presets en el sheet
+  const presetsGrid=document.getElementById('colorPresetsGrid');
+  if(presetsGrid){
+    ['#ff5a00','#ef4444','#8b5cf6','#3b82f6','#06b6d4','#10b981','#f59e0b','#ec4899'].forEach(hex=>{
+      const d=document.createElement('div');
+      d.className='color-preset';
+      d.dataset.hex=hex;
+      d.style.cssText=`width:28px;height:28px;border-radius:50%;background:${hex};cursor:pointer;border:${hex===savedColor?'2.5px solid #fff':'2px solid transparent'};transition:transform .15s,border .15s;`;
+      d.addEventListener('click',()=>applyAccentColor(hex));
+      d.addEventListener('mouseover',()=>d.style.transform='scale(1.2)');
+      d.addEventListener('mouseout',()=>d.style.transform='scale(1)');
+      presetsGrid.appendChild(d);
+    });
+  }
+
+  async function saveColor(){
+    const hex=localStorage.getItem(COLOR_KEY)||'#ff5a00';
+    const btn=document.getElementById('colorSaveBtn');
+    const msg=document.getElementById('colorMsg');
+    btn.textContent='GUARDANDO...';
+    try {
+      const rut=localStorage.getItem(RUT_KEY);
+      const profesor=localStorage.getItem(PROF_KEY);
+      if(rut && profesor){
+        await updateDoc(doc(db,`alumnos_${profesor}`,cleanRut(rut)),{colorAcento:hex});
+      }
+      btn.textContent='GUARDAR';
+      msg.textContent='✓ Color guardado';
+      setTimeout(()=>toggleColorSheet(),800);
+    } catch {
+      btn.textContent='GUARDAR';
+      msg.textContent='✓ Color guardado localmente';
+      setTimeout(()=>toggleColorSheet(),800);
+    }
+  }
+  window.saveColor=saveColor;
 
   async function verificarRenovacion() {
     const btn = document.getElementById('btnVerificar');
