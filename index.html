@@ -36,8 +36,9 @@
     @keyframes popIn  { from{opacity:0;transform:scale(0.3)} to{opacity:1;transform:scale(1)} }
     @keyframes pulse  { 0%,100%{opacity:0.3;transform:scale(0.8)} 50%{opacity:1;transform:scale(1.2)} }
     @keyframes shake  { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)} }
-    @keyframes spin { to{transform:rotate(360deg)} }
     @keyframes blink  { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    @keyframes spin   { to{transform:rotate(360deg)} }
+    @keyframes popIn  { from{transform:scale(0);opacity:0} 80%{transform:scale(1.1)} to{transform:scale(1);opacity:1} }
 
     .fadeUp { animation:fadeUp 0.45s ease both; }
     .logo { font-family:'Bebas Neue',sans-serif; font-size:42px; letter-spacing:4px; color:#ff5a00; line-height:1; user-select:none; text-shadow:0 0 40px rgba(255,90,0,0.4); margin-bottom:2px; }
@@ -433,12 +434,12 @@
   <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:18px;"></div>
   <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:8px;padding:0 20px;margin-bottom:16px;" id="colorPresetsGrid"></div>
   <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:10px 14px;margin:0 20px 20px;">
-    <div id="colorSwatch" style="width:30px;height:30px;border-radius:50%;background:#ff5a00;border:2px solid rgba(255,255,255,0.12);flex-shrink:0;"></div>
+    <div id="colorSwatch" style="width:30px;height:30px;border-radius:50%;background:#ff5a00;border:2px solid rgba(255,255,255,0.12);flex-shrink:0;transition:background .2s;"></div>
     <div id="colorHexVal" style="font-size:12px;color:rgba(255,255,255,0.4);font-family:monospace;flex:1;">#ff5a00</div>
-    <button id="colorElegirBtn" onclick="document.getElementById('colorPickerInput').click()" style="padding:6px 12px;border:none;border-radius:8px;background:#ff5a00;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;">ELEGIR</button>
+    <button id="colorElegirBtn" onclick="document.getElementById('colorPickerInput').click()" style="padding:6px 12px;border:none;border-radius:8px;background:#ff5a00;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;cursor:pointer;transition:background .3s;">ELEGIR</button>
     <input type="color" id="colorPickerInput" value="#ff5a00" style="opacity:0;position:absolute;width:0;height:0;">
   </div>
-  <button id="colorSaveBtn" onclick="saveColor()" style="width:calc(100% - 40px);margin:0 20px;padding:14px;border:none;border-radius:14px;background:#ff5a00;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:3px;cursor:pointer;">GUARDAR</button>
+  <button id="colorSaveBtn" onclick="saveColor()" style="width:calc(100% - 40px);margin:0 20px;padding:14px;border:none;border-radius:14px;background:#ff5a00;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:3px;cursor:pointer;transition:background .3s;">GUARDAR</button>
   <div id="colorMsg" style="text-align:center;font-size:12px;color:#4cd964;margin-top:10px;min-height:16px;padding:0 20px;"></div>
 </div>
 
@@ -567,61 +568,63 @@
     <div id="viewCheckin" class="checkin-card hidden fadeUp">
       <!-- Header -->
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-        <div class="logo" style="margin:0;font-size:28px;">FITMOTION</div>
-        <div id="colorDotBtn" onclick="toggleColorSheet()" style="width:26px;height:26px;border-radius:50%;background:var(--ac,#ff5a00);border:2.5px solid rgba(255,255,255,0.18);cursor:pointer;position:relative;flex-shrink:0;">
+        <div class="logo" style="margin:0;font-size:26px;">FITMOTION</div>
+        <div id="colorDotBtn" onclick="toggleColorSheet()" style="width:26px;height:26px;border-radius:50%;background:#ff5a00;border:2.5px solid rgba(255,255,255,0.18);cursor:pointer;position:relative;flex-shrink:0;">
           <div style="position:absolute;inset:-5px;border-radius:50%;border:1.5px dashed rgba(255,255,255,0.15);animation:spin 6s linear infinite;pointer-events:none;"></div>
         </div>
       </div>
 
-      <!-- Avatar con anillo de progreso -->
-      <div style="display:flex;justify-content:center;margin-bottom:14px;">
-        <div style="position:relative;">
+      <!-- Avatar con anillo canvas -->
+      <div style="display:flex;justify-content:center;margin-bottom:12px;">
+        <div style="position:relative;width:90px;height:90px;">
           <canvas id="avatarRingCanvas" width="90" height="90" style="position:absolute;top:0;left:0;"></canvas>
-          <div style="width:90px;height:90px;display:flex;align-items:center;justify-content:center;position:relative;">
-            <div style="width:72px;height:72px;border-radius:50%;background:var(--ac,#ff5a00);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:30px;color:#fff;box-shadow:0 8px 24px rgba(var(--ac-rgb,255,90,0),0.35);" id="avatarLetter"></div>
+          <div style="position:absolute;inset:6px;border-radius:50%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;">
+            <div id="avatarLetter" style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:#ff5a00;line-height:1;"></div>
           </div>
           <div style="position:absolute;bottom:4px;right:4px;width:13px;height:13px;background:#34c759;border-radius:50%;border:2px solid #0a0a0a;"></div>
         </div>
       </div>
 
-      <!-- Nombre y fecha -->
-      <div style="text-align:center;margin-bottom:20px;">
+      <!-- Nombre, fecha y medallas -->
+      <div style="text-align:center;margin-bottom:18px;">
         <div class="greeting" style="margin-bottom:4px;">Bienvenido de vuelta</div>
-        <div class="name-display" id="nameDisplay" style="font-size:36px;margin-bottom:4px;">—</div>
-        <div class="date-display" id="dateDisplay" style="margin-bottom:0;font-size:11px;color:rgba(255,255,255,0.25);letter-spacing:1px;">—</div>
+        <div class="name-display" id="nameDisplay" style="font-size:34px;margin-bottom:4px;">—</div>
+        <div class="date-display" id="dateDisplay" style="margin-bottom:12px;font-size:11px;color:rgba(255,255,255,0.22);letter-spacing:1px;">—</div>
+        <!-- Medallas de renovación -->
+        <div id="medallasWrap" style="display:flex;align-items:center;justify-content:center;gap:6px;min-height:36px;"></div>
       </div>
 
-      <!-- Plan card rediseñada -->
-      <div class="plan-info-box hidden" id="checkinPlanBox" style="text-align:left;margin-bottom:14px;padding:16px 18px;border-radius:18px;overflow:hidden;position:relative;">
-        <div style="position:absolute;top:0;right:0;width:80px;height:80px;background:radial-gradient(circle,rgba(255,90,0,0.08) 0%,transparent 70%);pointer-events:none;"></div>
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
+      <!-- Plan card -->
+      <div class="plan-info-box hidden" id="checkinPlanBox" style="text-align:left;margin-bottom:12px;padding:16px 18px;border-radius:18px;overflow:hidden;position:relative;">
+        <div style="position:absolute;top:0;right:0;width:80px;height:80px;background:radial-gradient(circle,rgba(255,90,0,0.07) 0%,transparent 70%);pointer-events:none;"></div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
           <div>
-            <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ac,#ff5a00);margin-bottom:4px;transition:color .3s;" id="checkinPlanTitle">Plan —</div>
-            <div style="font-size:14px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:rgba(255,255,255,0.4);" id="checkinPlanSubtitle">— clases totales</div>
+            <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#ff5a00;margin-bottom:3px;" id="checkinPlanTitle">Plan —</div>
+            <div style="font-size:13px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:rgba(255,255,255,0.35);" id="checkinPlanSubtitle">— clases</div>
           </div>
           <div style="text-align:right;">
-            <div style="font-family:'Bebas Neue',sans-serif;line-height:1;color:#fff;" id="checkinPlanCount" style="font-size:38px;">—</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:2px;">clases usadas</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:34px;line-height:1;color:#fff;" id="checkinPlanCount">—</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.25);margin-top:1px;">clases usadas</div>
           </div>
         </div>
-        <div class="plan-progress-bar" style="height:5px;margin-bottom:8px;"><div class="plan-progress-fill" id="checkinPlanFill" style="width:0%"></div></div>
+        <div class="plan-progress-bar" style="height:5px;margin-bottom:7px;"><div class="plan-progress-fill" id="checkinPlanFill" style="width:0%"></div></div>
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <div class="plan-restantes" id="checkinPlanRestantes">—</div>
-          <div id="checkinPlanPct" style="font-size:12px;color:#ff9500;font-weight:500;">0%</div>
+          <div id="checkinPlanPct" style="font-size:11px;color:#ff9500;font-weight:500;">0%</div>
         </div>
       </div>
-      <div class="plan-badge hidden" id="planBadge" style="margin-bottom:14px;">— clases restantes</div>
+      <div class="plan-badge hidden" id="planBadge" style="margin-bottom:12px;">— clases restantes</div>
 
       <!-- Slider -->
-      <div class="slider-track" id="sliderTrack" style="margin-bottom:10px;border-radius:50px;border:1.5px solid rgba(255,90,0,0.4);background:rgba(255,90,0,0.05);">
+      <div class="slider-track" id="sliderTrack" style="margin-bottom:10px;border-radius:50px;border:1.5px solid rgba(255,90,0,0.35);background:rgba(255,90,0,0.04);">
         <div class="slider-fill" id="sliderFill"></div>
-        <div class="slider-thumb" id="sliderThumb" style="box-shadow:0 4px 14px rgba(255,90,0,0.5);">⚡</div>
+        <div class="slider-thumb" id="sliderThumb" style="box-shadow:0 4px 14px rgba(255,90,0,0.45);">⚡</div>
         <div class="slider-label" id="sliderLabel">DESLIZA PARA REGISTRAR</div>
       </div>
 
-      <!-- Ver asistencia -->
-      <button class="btn-stats" onclick="openHistorial()" style="margin-bottom:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);color:rgba(255,255,255,0.4);font-size:13px;letter-spacing:2px;">📊 VER MI ASISTENCIA</button>
-      <button class="btn btn-ghost" id="btnNotMe" onclick="changeName()" style="color:rgba(255,255,255,0.2);border-color:transparent;margin-top:0;font-size:13px;">—</button>
+      <!-- Acciones secundarias -->
+      <button class="btn-stats" onclick="openHistorial()" style="margin-bottom:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.35);font-size:12px;letter-spacing:2px;">📊 VER MI ASISTENCIA</button>
+      <button class="btn btn-ghost" id="btnNotMe" onclick="changeName()" style="color:rgba(255,255,255,0.18);border-color:transparent;margin-top:0;font-size:12px;">—</button>
     </div>
 
     <div id="viewSuccess" class="hidden" style="text-align:center;animation:fadeUp 0.3s ease both;position:relative;">
@@ -933,6 +936,7 @@
         localStorage.setItem(PROF_KEY,alumno.profesor);
         const cached2=JSON.parse(localStorage.getItem(PLAN_KEY)||'null');
         if (!cached||JSON.stringify(cached)!==JSON.stringify(cached2)) loadCheckinView(alumno.nombre,planInfo);
+        cargarMedallas(rut,alumno.profesor);
       } catch {}
     } else { showOnly('viewRut'); }
   }
@@ -1000,8 +1004,9 @@
   }
   window.changeName=changeName;
 
-  // ── Sistema de color personalizado ────────────────────────────────────────
-  const COLOR_KEY = 'fitmotion_color';
+  // ── Color personalizado ───────────────────────────────────────────────────
+  const COLOR_KEY='fitmotion_color';
+  const COLOR_PRESETS=['#ff5a00','#ef4444','#8b5cf6','#3b82f6','#06b6d4','#10b981','#f59e0b','#ec4899'];
 
   function hexToRgb(hex){
     return{r:parseInt(hex.slice(1,3),16),g:parseInt(hex.slice(3,5),16),b:parseInt(hex.slice(5,7),16)};
@@ -1015,19 +1020,20 @@
     const dot=document.getElementById('colorDotBtn');
     if(dot) dot.style.background=hex;
     const av=document.getElementById('avatarLetter');
-    if(av) av.style.background=hex;
+    if(av) av.style.color=hex;
     const thumb=document.getElementById('sliderThumb');
-    if(thumb){ thumb.style.background=hex; thumb.style.boxShadow=`0 4px 14px rgba(${r},${g},${b},0.5)`; }
-    const saveBtn=document.getElementById('colorSaveBtn');
-    if(saveBtn) saveBtn.style.background=hex;
+    if(thumb){ thumb.style.background=hex; thumb.style.boxShadow=`0 4px 14px rgba(${r},${g},${b},0.45)`; }
     const swatch=document.getElementById('colorSwatch');
     if(swatch) swatch.style.background=hex;
     const hexEl=document.getElementById('colorHexVal');
     if(hexEl) hexEl.textContent=hex;
     const elegir=document.getElementById('colorElegirBtn');
     if(elegir) elegir.style.background=hex;
-    document.querySelectorAll('.color-preset').forEach(p=>{
-      p.style.border=p.dataset.hex===hex?'2.5px solid #fff':'2px solid transparent';
+    const saveBtn=document.getElementById('colorSaveBtn');
+    if(saveBtn) saveBtn.style.background=hex;
+    document.querySelectorAll('.color-preset-dot').forEach(p=>{
+      p.style.outline=p.dataset.hex===hex?'2.5px solid #fff':'none';
+      p.style.outlineOffset='2px';
     });
     localStorage.setItem(COLOR_KEY,hex);
   }
@@ -1045,45 +1051,34 @@
   }
   window.toggleColorSheet=toggleColorSheet;
 
-  function drawAvatarRing(pct){
-    const canvas=document.getElementById('avatarRingCanvas');
-    if(!canvas) return;
-    const ctx=canvas.getContext('2d');
-    const W=canvas.width,cx=W/2,cy=W/2,R=43;
-    ctx.clearRect(0,0,W,W);
-    ctx.beginPath(); ctx.arc(cx,cy,R,-Math.PI/2,Math.PI*2-Math.PI/2);
-    ctx.strokeStyle='rgba(255,255,255,0.07)'; ctx.lineWidth=4; ctx.lineCap='round'; ctx.stroke();
-    if(pct>0){
-      const end=-Math.PI/2+(Math.PI*2*(pct/100));
-      ctx.beginPath(); ctx.arc(cx,cy,R,-Math.PI/2,end);
-      ctx.strokeStyle=localStorage.getItem(COLOR_KEY)||'#ff5a00';
-      ctx.lineWidth=4; ctx.lineCap='round'; ctx.stroke();
+  async function saveColor(){
+    const hex=localStorage.getItem(COLOR_KEY)||'#ff5a00';
+    const btn=document.getElementById('colorSaveBtn');
+    const msg=document.getElementById('colorMsg');
+    if(btn) btn.textContent='GUARDANDO...';
+    try{
+      const rut=localStorage.getItem(RUT_KEY);
+      const profesor=localStorage.getItem(PROF_KEY);
+      if(rut&&profesor) await updateDoc(doc(db,`alumnos_${profesor}`,cleanRut(rut)),{colorAcento:hex});
+      if(btn) btn.textContent='GUARDAR';
+      if(msg) msg.textContent='✓ Color guardado';
+      setTimeout(()=>toggleColorSheet(),800);
+    }catch{
+      if(btn) btn.textContent='GUARDAR';
+      if(msg) msg.textContent='✓ Guardado localmente';
+      setTimeout(()=>toggleColorSheet(),800);
     }
   }
-  window.drawAvatarRing=drawAvatarRing;
-
-  // Inicializar color guardado
-  const savedColor=localStorage.getItem(COLOR_KEY)||'#ff5a00';
-  applyAccentColor(savedColor);
-
-  const colorInput=document.getElementById('colorPickerInput');
-  if(colorInput){
-    colorInput.value=savedColor;
-    colorInput.addEventListener('input',function(){ applyAccentColor(this.value); });
-  }
-
-  document.querySelectorAll('.color-preset').forEach(p=>{
-    p.addEventListener('click',()=>applyAccentColor(p.dataset.hex));
-  });
+  window.saveColor=saveColor;
 
   // Generar presets en el sheet
   const presetsGrid=document.getElementById('colorPresetsGrid');
   if(presetsGrid){
-    ['#ff5a00','#ef4444','#8b5cf6','#3b82f6','#06b6d4','#10b981','#f59e0b','#ec4899'].forEach(hex=>{
+    COLOR_PRESETS.forEach(hex=>{
       const d=document.createElement('div');
-      d.className='color-preset';
+      d.className='color-preset-dot';
       d.dataset.hex=hex;
-      d.style.cssText=`width:28px;height:28px;border-radius:50%;background:${hex};cursor:pointer;border:${hex===savedColor?'2.5px solid #fff':'2px solid transparent'};transition:transform .15s,border .15s;`;
+      d.style.cssText=`width:28px;height:28px;border-radius:50%;background:${hex};cursor:pointer;transition:transform .15s;`;
       d.addEventListener('click',()=>applyAccentColor(hex));
       d.addEventListener('mouseover',()=>d.style.transform='scale(1.2)');
       d.addEventListener('mouseout',()=>d.style.transform='scale(1)');
@@ -1091,27 +1086,70 @@
     });
   }
 
-  async function saveColor(){
-    const hex=localStorage.getItem(COLOR_KEY)||'#ff5a00';
-    const btn=document.getElementById('colorSaveBtn');
-    const msg=document.getElementById('colorMsg');
-    btn.textContent='GUARDANDO...';
-    try {
-      const rut=localStorage.getItem(RUT_KEY);
-      const profesor=localStorage.getItem(PROF_KEY);
-      if(rut && profesor){
-        await updateDoc(doc(db,`alumnos_${profesor}`,cleanRut(rut)),{colorAcento:hex});
-      }
-      btn.textContent='GUARDAR';
-      msg.textContent='✓ Color guardado';
-      setTimeout(()=>toggleColorSheet(),800);
-    } catch {
-      btn.textContent='GUARDAR';
-      msg.textContent='✓ Color guardado localmente';
-      setTimeout(()=>toggleColorSheet(),800);
+  const colorInput=document.getElementById('colorPickerInput');
+  if(colorInput) colorInput.addEventListener('input',function(){ applyAccentColor(this.value); });
+
+  // Aplicar color guardado al iniciar
+  const savedColor=localStorage.getItem(COLOR_KEY)||'#ff5a00';
+  applyAccentColor(savedColor);
+
+  // ── Anillo de progreso del avatar ────────────────────────────────────────
+  function drawAvatarRing(pct){
+    const canvas=document.getElementById('avatarRingCanvas');
+    if(!canvas) return;
+    const ctx=canvas.getContext('2d');
+    const W=canvas.width,cx=W/2,cy=W/2,R=42;
+    ctx.clearRect(0,0,W,W);
+    ctx.beginPath(); ctx.arc(cx,cy,R,-Math.PI/2,Math.PI*2-Math.PI/2);
+    ctx.strokeStyle='rgba(255,255,255,0.07)'; ctx.lineWidth=5; ctx.lineCap='round'; ctx.stroke();
+    if(pct>0){
+      const end=-Math.PI/2+(Math.PI*2*(pct/100));
+      ctx.beginPath(); ctx.arc(cx,cy,R,-Math.PI/2,end);
+      ctx.strokeStyle=localStorage.getItem(COLOR_KEY)||'#ff5a00';
+      ctx.lineWidth=5; ctx.lineCap='round'; ctx.stroke();
     }
   }
-  window.saveColor=saveColor;
+  window.drawAvatarRing=drawAvatarRing;
+
+  // ── Medallas de renovación ───────────────────────────────────────────────
+  const MEDALLAS_DEF=[
+    {min:1,icon:'🥉',label:'1 plan'},
+    {min:3,icon:'🥈',label:'3 planes'},
+    {min:5,icon:'🥇',label:'5 planes'},
+    {min:6,icon:'👑',label:'6+ planes'},
+  ];
+
+  function renderMedallas(n){
+    const wrap=document.getElementById('medallasWrap');
+    if(!wrap) return;
+    if(n===0){
+      wrap.innerHTML='<span style="font-size:11px;color:rgba(255,255,255,0.18);letter-spacing:1px;">Renueva tu plan para ganar medallas</span>';
+      return;
+    }
+    wrap.innerHTML='';
+    MEDALLAS_DEF.forEach((m,i)=>{
+      if(i>0){
+        const sep=document.createElement('div');
+        sep.style.cssText='width:1px;height:20px;background:rgba(255,255,255,0.06);';
+        wrap.appendChild(sep);
+      }
+      const activa=n>=m.min;
+      const div=document.createElement('div');
+      div.style.cssText=`display:flex;flex-direction:column;align-items:center;gap:3px;animation:popIn .4s cubic-bezier(.175,.885,.32,1.275) ${i*0.08}s both;${activa?'cursor:default;':'filter:grayscale(1) brightness(0.25);'}`;
+      div.title=activa?`¡Desbloqueada! ${m.label}`:`Renueva ${m.min-n} veces más para desbloquear`;
+      div.innerHTML=`<span style="font-size:20px;">${m.icon}</span><span style="font-size:9px;letter-spacing:1px;color:${activa?'rgba(255,255,255,0.4)':'rgba(255,255,255,0.1)'};text-transform:uppercase;">${m.label}</span>`;
+      wrap.appendChild(div);
+    });
+  }
+  window.renderMedallas=renderMedallas;
+
+  async function cargarMedallas(rut,profesor){
+    try{
+      const renovSnap=await getDocs(collection(db,`alumnos_${profesor}`,cleanRut(rut),'renovaciones'));
+      renderMedallas(renovSnap.size);
+    }catch{ renderMedallas(0); }
+  }
+  window.cargarMedallas=cargarMedallas;
 
   async function verificarRenovacion() {
     const btn = document.getElementById('btnVerificar');
