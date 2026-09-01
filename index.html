@@ -33,8 +33,6 @@
       50%      { box-shadow: 0 0 18px 4px rgba(255,90,0,0.45); border-color: rgba(255,90,0,0.6); }
     }
     @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-    .skeleton { background:linear-gradient(90deg,rgba(255,255,255,0.05) 25%,rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.05) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:6px;color:transparent!important; }
-    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
     @keyframes popIn  { from{opacity:0;transform:scale(0.3)} to{opacity:1;transform:scale(1)} }
     @keyframes pulse  { 0%,100%{opacity:0.3;transform:scale(0.8)} 50%{opacity:1;transform:scale(1.2)} }
     @keyframes shake  { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)} }
@@ -923,42 +921,22 @@
     if (rut&&name) {
       const cached=JSON.parse(localStorage.getItem(PLAN_KEY)||'null');
       loadCheckinView(name,cached);
-      // Skeleton mientras llegan datos frescos
-      if(!cached){
-        ['nameDisplay','dateDisplay','checkinPlanCount','checkinPlanRestantes'].forEach(id=>{
-          const el=document.getElementById(id); if(el) el.classList.add('skeleton');
-        });
-        const ring=document.getElementById('avatarRingCanvas');
-        if(ring) ring.style.opacity='0.3';
-        const mw=document.getElementById('medallasWrap');
-        if(mw) mw.innerHTML='<span style="font-size:11px;color:rgba(255,255,255,0.1);" class="skeleton">·····</span>';
-      }
       try {
         const alumno=await fbGetAlumno(rut);
         if (!alumno||alumno.estado==='inactivo') { changeName(); return; }
         if(alumno.colorAcento) applyAccentColor(alumno.colorAcento);
-        // Paralelizar consultas restantes
-        const [usadas, yaRegistrado, renovSnap] = await Promise.all([
-          fbContarClases(rut, alumno.profesor, alumno.fechaInicio),
-          fbYaRegistroHoy(rut, alumno.profesor),
-          getDocs(collection(db,`alumnos_${alumno.profesor}`,cleanRut(rut),'renovaciones')).catch(()=>({size:0}))
-        ]);
+        const usadas=await fbContarClases(rut,alumno.profesor,alumno.fechaInicio);
         const total=PLAN_CLASES[alumno.plan]||8;
         const restantes=Math.max(0,total-usadas);
         const planAgotado=restantes===0;
+        const yaRegistrado=await fbYaRegistroHoy(rut,alumno.profesor);
         if (yaRegistrado) setLock(); else clearLock();
         const planInfo={plan:alumno.plan,restantes,total,clasesUsadas:usadas,planAgotado};
         localStorage.setItem(PLAN_KEY,JSON.stringify(planInfo));
         localStorage.setItem(PROF_KEY,alumno.profesor);
         const cached2=JSON.parse(localStorage.getItem(PLAN_KEY)||'null');
         if (!cached||JSON.stringify(cached)!==JSON.stringify(cached2)) loadCheckinView(alumno.nombre,planInfo);
-        // Quitar skeleton y mostrar medallas
-        ['nameDisplay','dateDisplay','checkinPlanCount','checkinPlanRestantes'].forEach(id=>{
-          const el=document.getElementById(id); if(el) el.classList.remove('skeleton');
-        });
-        const ring=document.getElementById('avatarRingCanvas');
-        if(ring) ring.style.opacity='1';
-        renderMedallas(renovSnap.size||0);
+        cargarMedallas(rut,alumno.profesor);
       } catch {}
     } else { showOnly('viewRut'); }
   }
@@ -1264,9 +1242,7 @@
     document.getElementById('successTime').textContent=todayLabel()+' · '+timeNow();
     showOnly('viewSuccess');
     launchConfetti();
-    setTimeout(()=>{ disableSlider('done'); loadCheckinView(name,newPlan); },3000);
-
-    // Sincronizar en background
+    // Sincronizar en Firestore y luego actualizar con datos reales
     try {
       const hoy=todayKey();
       const hora=timeNow();
@@ -1274,7 +1250,23 @@
       await setDoc(doc(db,`asistencia_${profesor}`,id),{
         rut,nombre:name,fecha:hoy,hora,estado:'activa',info:'',manual:false,profesor
       });
-    } catch {}
+      // Recalcular desde Firestore para asegurarse que planAgotado es correcto
+      const alumnoSnap = await getDoc(doc(db,`alumnos_${profesor}`,cleanRut(rut)));
+      if(alumnoSnap.exists()){
+        const alumno=alumnoSnap.data();
+        const usadas=await fbContarClases(cleanRut(rut),profesor,alumno.fechaInicio);
+        const total=PLAN_CLASES[alumno.plan]||8;
+        const restantes=Math.max(0,total-usadas);
+        const planAgotado=restantes===0;
+        const planInfoReal={plan:alumno.plan,restantes,total,clasesUsadas:usadas,planAgotado};
+        localStorage.setItem(PLAN_KEY,JSON.stringify(planInfoReal));
+        setTimeout(()=>{ loadCheckinView(name,planInfoReal); },3000);
+      } else {
+        setTimeout(()=>{ disableSlider('done'); loadCheckinView(name,newPlan); },3000);
+      }
+    } catch {
+      setTimeout(()=>{ disableSlider('done'); loadCheckinView(name,newPlan); },3000);
+    }
   }
 
   // ── PIN ────────────────────────────────────────────────────────────────────
